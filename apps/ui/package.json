@@ -1,0 +1,43 @@
+{
+  "name": "@idim/ui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev --open --qr --public",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "lint-staged"
+  },
+  "dependencies": {
+    "@nuxt/devtools": "^1.0.8",
+    "@nuxtjs/i18n": "^8.1.1",
+    "@pinia/nuxt": "^0.5.1",
+    "@trpc/client": "npm:@trpc/client@next",
+    "@vicons/ionicons5": "^0.12.0",
+    "@vueuse/components": "^10.7.2",
+    "@vueuse/core": "^10.7.2",
+    "axios": "^1.6.7",
+    "dayjs": "^1.11.10",
+    "hash-wasm": "^4.11.0",
+    "naive-ui": "^2.37.3",
+    "nuxt": "^3.10.1",
+    "pinia": "^2.1.7",
+    "vue": "^3.4",
+    "vue-router": "^4.2"
+  },
+  "devDependencies": {
+    "@css-render/vue3-ssr": "^0.15.12",
+    "@idim/api": "workspace:*",
+    "@nuxtjs/eslint-module": "^4.1.0",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "@unocss/nuxt": "^0.58.5",
+    "unocss": "^0.58.5",
+    "unplugin-auto-import": "^0.17.5",
+    "unplugin-vue-components": "^0.26.0"
+  }
+}
