@@ -1,0 +1,14 @@
+{
+  "name": "@repo/locales",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "tsup ./src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup ./src/index.ts --format cjs,esm --dts"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*"
+  }
+}

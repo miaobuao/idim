@@ -1,5 +1,7 @@
-import * as log4js from 'log4js';
+import Logger from 'pino';
 
-export const logger = log4js.getLogger('API');
+import config from './config';
 
-logger.level = process.env.LOG_LEVEL ?? 'debug';
+export const logger = Logger();
+
+logger.level = config.LOG_LEVEL;

@@ -14,9 +14,6 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
       POSTGRES_DB: idim
-      # - APP_DB_USER=docker
-      # - APP_DB_PASS=docker
-      # - APP_DB_NAME=docker
     volumes:
       - ./db:/var/lib/postgresql/data
     ports:

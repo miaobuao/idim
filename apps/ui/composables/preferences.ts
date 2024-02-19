@@ -37,14 +37,16 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
     language: LanguageKind.OS,
   });
 
-  function update(newPreferences: Partial<GuiPreferences>) {
-    preferences.value = { ...preferences.value, ...newPreferences };
+  if (isClient) {
+    const value = localStorage.getItem('gui-preferences');
+    if (value) {
+      update(JSON.parse(value));
+    }
   }
 
-  function load() {
-    const value = localStorage.getItem('gui-preferences');
-    if (!value) return;
-    update(JSON.parse(value));
+  function update(newPreferences: Partial<GuiPreferences>) {
+    preferences.value = { ...preferences.value, ...newPreferences };
+    save();
   }
 
   function save() {
@@ -80,7 +82,7 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
         return SysLanguagePack.value;
     }
   });
-  return { theme, lang, update, load, save };
+  return { theme, lang, update, save, preferences };
 });
 
 export interface GuiPreferences {

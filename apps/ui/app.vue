@@ -5,13 +5,13 @@
         v-model:collapsed="collapsed"
         v-element-hover="(status) => (collapsed = !status)"
         collapse-mode="width"
-        :collapsed-width="56"
+        :collapsed-width="54"
         :width="220"
         bordered
       >
         <n-menu
           :value="$route.name?.toString()"
-          :collapsed-width="56"
+          :collapsed-width="54"
           :collapsed-icon-size="24"
           :options="menuOptions"
         />
@@ -35,11 +35,13 @@ import {
   PersonOutline as UserIcon,
 } from '@vicons/ionicons5';
 import { vElementHover } from '@vueuse/components';
-import { NIcon, NEllipsis } from 'naive-ui';
+import { NIcon, NEllipsis, NAvatar } from 'naive-ui';
 import { RouterLink } from 'vue-router';
 
 import { screen } from './utils/screen';
 
+const user = useUserStore();
+const token = useTokenStore();
 const editingCollapsed = ref(true);
 const collapsed = computed({
   get() {
@@ -55,12 +57,28 @@ const collapsed = computed({
 });
 const { $text } = useNuxtApp();
 const menuOptions = computed(() => [
-  renderMenuOption('me', 'me', UserIcon),
-  renderMenuOption($text.bookmark.title(), 'index', BookmarkIcon),
-  renderMenuOption($text.bbs.title(), 'bbs', BBSIcon),
-  renderMenuOption($text.minecraft.title(), 'mc', XboxIcon),
+  token.payload === undefined
+    ? renderMenuOption($text.login_or_register(), 'user-login', UserIcon)
+    : {
+        label: user.self.name,
+        key: 'me',
+        icon: () =>
+          h(
+            NAvatar,
+            {
+              size: 25,
+              color: '#18a058',
+            },
+            {
+              default: () => user.self.name.charAt(0).toUpperCase(),
+            }
+          ),
+      },
+  renderMenuOption($text.bookmark(), 'index', BookmarkIcon),
+  renderMenuOption($text.bbs(), 'bbs', BBSIcon),
+  renderMenuOption($text.minecraft(), 'mc', XboxIcon),
   renderMenuOption($text.video.player.title(), 'video-player', PlayerIcon),
-  renderMenuOption($text.settings.title(), 'settings', SettingsIcon),
+  renderMenuOption($text.settings(), 'settings', SettingsIcon),
 ]);
 
 function renderMenuOption(
@@ -70,8 +88,8 @@ function renderMenuOption(
 ): MenuOption {
   return {
     label: renderLabel(label, key),
-    key,
     icon: renderIcon(icon),
+    key,
   };
 }
 function renderIcon(icon: Component) {
