@@ -38,56 +38,37 @@ export default {
       handle: "Hmm, Truly Sad, Isn't It?",
     },
   },
+
   login_or_register: 'Login / Register',
-  bookmark: {
-    title: 'Bookmark',
-  },
-  minecraft: {
-    title: 'Minecraft',
-  },
-  bbs: {
-    title: 'BBS',
-  },
-  settings: {
-    title: 'Settings',
-  },
+  bookmark: 'Bookmark',
+  minecraft: 'Minecraft',
+  bbs: 'BBS',
+  settings: 'Settings',
   video: {
     player: {
       title: 'Video Player',
     },
   },
-  common: {
-    login: 'Login',
-    logout: 'Logout',
-    register: 'Register',
-    password: 'Password',
-    username: 'Username',
-    email: 'Email',
-    ok: 'OK',
-    cancel: 'Cancel',
-    settings: 'Settings',
-  },
-  login: {
-    form: {
-      retype_password: 'Retype Password',
-      retype_password_error: 'Retype Password Error',
-    },
-    message: {
-      login_success: 'Login Success',
-      whether_keep_logged_in: 'Whether Keep Logged In',
-    },
-    error: {},
-  },
-  backend: {
-    error: {
-      internal_server_error: 'Internal Server Error',
-      invalid_email_or_password: 'Invalid Email Or Password',
-      email_already_exist: 'Email Already Exist',
-    },
-  },
-  session: {
-    error: {
-      expired: 'Session Expired',
-    },
-  },
+  login: 'Login',
+  logout: 'Logout',
+  register: 'Register',
+  password: 'Password',
+  username: 'Username',
+  email: 'Email',
+  ok: 'OK',
+  cancel: 'Cancel',
+
+  retype_password: 'Retype Password',
+  retype_password_error: 'Retype Password Error',
+  login_success: 'Login Success',
+  reg_succ: 'Register Success',
+  whether_keep_logged_in: 'Whether Keep Logged In',
+
+  internal_server_error: 'Internal Server Error',
+  invalid_email_or_password: 'Invalid Email Or Password',
+  invalid_email: 'Invalid Email',
+  email_already_exists: 'Email Already Exists',
+  name_already_exists: 'Name Already Exists',
+
+  expired: 'Session Expired',
 };

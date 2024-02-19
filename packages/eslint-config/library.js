@@ -26,5 +26,6 @@ module.exports = defineConfig({
     'no-unused-vars': 'off',
     'promise/always-return': 0,
     'no-console': 'error',
+    'promise/no-nesting': 0,
   },
 });

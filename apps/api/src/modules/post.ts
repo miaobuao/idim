@@ -1,9 +1,9 @@
 import z from 'zod';
 
-import { procedure, router } from '../trpc';
+import { publicProcedure, router } from '../trpc';
 
 export default router({
   post: {
-    create: procedure.input(z.object({})).mutation(() => ''),
+    create: publicProcedure.input(z.object({})).mutation(() => ''),
   },
 });

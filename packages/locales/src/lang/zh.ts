@@ -36,56 +36,37 @@ export default {
       handle: '听起来有那么点悲伤，哈哈哈',
     },
   },
+
   login_or_register: '登录 / 注册',
-  bookmark: {
-    title: '书签',
-  },
-  minecraft: {
-    title: 'Minecraft',
-  },
-  bbs: {
-    title: '论坛',
-  },
-  settings: {
-    title: '设置',
-  },
+  bookmark: '书签',
+  minecraft: 'Minecraft',
+  bbs: '论坛',
+  settings: '设置',
   video: {
     player: {
       title: '视频播放器',
     },
   },
-  common: {
-    login: '登录',
-    logout: '登出',
-    register: '注册',
-    password: '密码',
-    username: '用户名',
-    email: '邮箱',
-    ok: '确定',
-    cancel: '取消',
-    settings: '设置',
-  },
-  login: {
-    form: {
-      retype_password: '重复密码',
-      retype_password_error: '重复密码错误',
-    },
-    message: {
-      login_success: '登录成功',
-      whether_keep_logged_in: '是否保持登录',
-    },
-    error: {},
-  },
-  backend: {
-    error: {
-      internal_server_error: '内部服务器错误',
-      invalid_email_or_password: '无效的邮箱或密码',
-      email_already_exist: '邮箱已存在',
-    },
-  },
-  session: {
-    error: {
-      expired: '会话已过期',
-    },
-  },
+  login: '登录',
+  logout: '登出',
+  register: '注册',
+  password: '密码',
+  username: '用户名',
+  email: '邮箱',
+  ok: '确定',
+  cancel: '取消',
+
+  retype_password: '重复密码',
+  retype_password_error: '重复密码错误',
+  login_success: '登录成功',
+  reg_succ: '注册成功',
+  whether_keep_logged_in: '是否保持登录',
+
+  internal_server_error: '内部服务器错误',
+  invalid_email_or_password: '无效的邮箱或密码',
+  invalid_email: '无效的邮箱',
+  email_already_exists: '邮箱已存在',
+  name_already_exists: '用户名已存在',
+
+  expired: '会话已过期',
 };

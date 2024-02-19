@@ -1,23 +1,22 @@
 import { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 
-function decodeAndVerifyJwtToken(token: string) {
-  return token;
-}
+import { Token } from './utils/jwt';
 
-export async function createContext({ req, res }: CreateFastifyContextOptions) {
-  async function getUserFromHeader() {
+export async function createContext({ req }: CreateFastifyContextOptions) {
+  async function getPayloadFromHeader() {
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer ')
     ) {
-      const user = await decodeAndVerifyJwtToken(
-        req.headers.authorization.substring(6)
-      );
-      return user;
+      const token = req.headers.authorization.substring(7);
+      const payload = await Token.verify(token)
+        .then((d) => d.data)
+        .catch(() => null);
+      return payload;
     }
     return null;
   }
-  const user = await getUserFromHeader();
+  const user = await getPayloadFromHeader();
 
   return {
     user,

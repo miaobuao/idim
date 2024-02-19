@@ -24,6 +24,8 @@
     "dev": {
       "cache": false,
       "persistent": true
-    }
+    },
+    "@idim/ui#build": {},
+    "@repo/db#migrate": {}
   }
 }

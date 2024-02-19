@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsup index.ts --format cjs,esm --dts",
     "dev": "pnpm run build -- --watch",
-    "gen": "prisma generate"
+    "gen": "prisma generate",
+    "migrate": "prisma migrate dev"
   },
   "devDependencies": {
     "prisma": "^5.9.1",

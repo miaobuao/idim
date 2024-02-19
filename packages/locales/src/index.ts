@@ -1,16 +1,19 @@
 import { isPlainObject } from 'lodash';
 
-import en from './src/en';
-import zh from './src/zh';
+import en from './lang/en';
+import zh from './lang/zh';
 export { zh, en };
 
 export function buildLanguagePack(t: TranslateFunc) {
   const text = Object.assign({}, clone(en), clone(zh));
-  const source = clone(text);
-
   ReplaceWithTranslateFunction(t)(text);
+  return text as unknown as StringToI18nText<typeof text>;
+}
+
+export function buildLanguageSource() {
+  const source = Object.assign({}, clone(en), clone(zh));
   ReplaceWithStringPath()(source);
-  return [text as unknown as StringToI18nText<typeof text>, source];
+  return source;
 }
 
 function DFS<T extends Function>(cb: T) {

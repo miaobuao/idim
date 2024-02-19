@@ -11,12 +11,9 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Currency" (
-    "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "soap" BIGINT NOT NULL DEFAULT 0,
-    "pants" BIGINT NOT NULL DEFAULT 0,
-
-    CONSTRAINT "Currency_pkey" PRIMARY KEY ("id")
+    "pants" BIGINT NOT NULL DEFAULT 0
 );
 
 -- CreateTable
@@ -52,6 +49,9 @@ CREATE TABLE "PostLike" (
 
     CONSTRAINT "PostLike_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_name_key" ON "User"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");

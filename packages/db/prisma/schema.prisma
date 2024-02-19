@@ -12,19 +12,18 @@ datasource db {
 
 model User {
   id       Int      @id @default(autoincrement())
-  name     String
+  name     String   @unique
   email    String   @unique
   password String
   ctime    DateTime @default(now())
 
-  Currency    Currency?
-  Post        Post[]
-  PostComment PostComment[]
-  PostLike    PostLike[]
+  currency Currency?
+  posts    Post[]
+  comments PostComment[]
+  likes    PostLike[]
 }
 
 model Currency {
-  id     Int  @id @default(autoincrement())
   userId Int  @unique
   user   User @relation(fields: [userId], references: [id])
 
@@ -37,11 +36,11 @@ model Post {
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  content     String
-  ctime       DateTime      @default(now())
-  mtime       DateTime      @updatedAt
-  PostComment PostComment[]
-  PostLike    PostLike[]
+  content  String
+  ctime    DateTime      @default(now())
+  mtime    DateTime      @updatedAt
+  comments PostComment[]
+  likes    PostLike[]
 }
 
 model PostComment {

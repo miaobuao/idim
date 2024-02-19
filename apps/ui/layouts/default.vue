@@ -4,16 +4,29 @@
     :locale="preferences.lang?.locale"
     :date-locale="preferences.lang?.date"
   >
-    <n-layout position="absolute">
-      <slot />
-    </n-layout>
+    <n-dialog-provider>
+      <n-notification-provider>
+        <n-layout position="absolute">
+          <slot />
+        </n-layout>
+      </n-notification-provider>
+    </n-dialog-provider>
   </n-config-provider>
 </template>
 
 <script setup lang="ts">
 const preferences = useGuiPreferencesStore();
-
-onMounted(() => {
-  preferences.load();
-});
+const { $i18n } = useNuxtApp();
+watch(
+  () => preferences.lang,
+  (value) => {
+    const locale = value?.locale.name.substring(0, 2);
+    if (locale) {
+      $i18n.setLocale(locale);
+    }
+  },
+  {
+    immediate: true,
+  }
+);
 </script>

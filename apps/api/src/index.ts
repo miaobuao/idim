@@ -6,17 +6,25 @@ import {
 import fastify from 'fastify';
 
 import { createContext } from './context';
+import post from './modules/post';
+import session from './modules/session';
 import user from './modules/user';
 import { t } from './trpc';
+import config from './utils/config';
+import { JwtPayload } from './utils/jwt';
 import { logger } from './utils/logger';
 
-const appRouter = t.mergeRouters(user);
+export { JwtPayload };
+
+const appRouter = t.mergeRouters(user, post, session);
 export type AppRouter = typeof appRouter;
 
 const server = fastify();
-server.register(cors, {});
+server.register(cors, {
+  origin: '*',
+});
 
-const API_PORT = Number(process.env.API_PORT ?? 8080);
+const API_PORT = Number(config.API_PORT);
 
 server.register(fastifyTRPCPlugin, {
   prefix: '/trpc',

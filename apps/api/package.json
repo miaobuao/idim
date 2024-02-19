@@ -6,11 +6,12 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch --onSuccess \"node dist/index.js\""
+    "build": "tsup ./src/index.ts --format cjs,esm --dts",
+    "dev": "tsup ./src/index.ts --format cjs,esm --dts --watch --onSuccess \"tsx src/index.ts\""
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
+    "@repo/locales": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.11.19",
     "ts-loader": "^9.5.1",
     "typescript": "^5.3.3"
