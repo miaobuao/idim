@@ -31,6 +31,7 @@
     "@css-render/vue3-ssr": "^0.15.12",
     "@idim/api": "workspace:*",
     "@nuxtjs/eslint-module": "^4.1.0",
+    "@repo/locales": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^6.17.0",

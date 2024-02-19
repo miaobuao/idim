@@ -11,8 +11,6 @@ declare module 'vue' {
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NLayout: typeof import('naive-ui')['NLayout']
     NLayoutContent: typeof import('naive-ui')['NLayoutContent']
-    NLayoutFoot: typeof import('naive-ui')['NLayoutFoot']
-    NLayoutFooter: typeof import('naive-ui')['NLayoutFooter']
     NLayoutSider: typeof import('naive-ui')['NLayoutSider']
     NMenu: typeof import('naive-ui')['NMenu']
     NResult: typeof import('naive-ui')['NResult']
