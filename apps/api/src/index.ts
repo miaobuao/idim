@@ -6,9 +6,12 @@ import {
 import fastify from 'fastify';
 
 import { createContext } from './context';
-import { appRouter, type AppRouter } from './router';
+import user from './modules/user';
+import { t } from './trpc';
 import { logger } from './utils/logger';
-export { AppRouter };
+
+const appRouter = t.mergeRouters(user);
+export type AppRouter = typeof appRouter;
 
 const server = fastify();
 server.register(cors, {});

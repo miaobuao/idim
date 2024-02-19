@@ -11,5 +11,60 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  password String
+  ctime    DateTime @default(now())
+
+  Currency    Currency?
+  Post        Post[]
+  PostComment PostComment[]
+  PostLike    PostLike[]
+}
+
+model Currency {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  soap  BigInt @default(0)
+  pants BigInt @default(0)
+}
+
+model Post {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  content     String
+  ctime       DateTime      @default(now())
+  mtime       DateTime      @updatedAt
+  PostComment PostComment[]
+  PostLike    PostLike[]
+}
+
+model PostComment {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
+
+  prevId   Int?
+  prev     PostComment?  @relation("PrevNext", fields: [prevId], references: [id])
+  children PostComment[] @relation("PrevNext")
+
+  content   String
+  ctime     DateTime @default(now())
+  mtime     DateTime @updatedAt
+  postTitle String
+}
+
+model PostLike {
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  postId Int
+  post   Post @relation(fields: [postId], references: [id])
 }
