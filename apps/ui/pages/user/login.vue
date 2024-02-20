@@ -59,12 +59,10 @@
 <script setup lang="ts">
 import type { FormInst, FormItemRule } from 'naive-ui';
 
-import { useDialog, useNotification } from 'naive-ui';
-
 const token = useTokenStore();
 const user = useUserStore();
-const dialog = useDialog();
-const notify = useNotification();
+// const dialog = useDialog();
+// const notify = useNotification();
 const { $text, $trpc } = useNuxtApp();
 enum Tabs {
   SIGNIN = 'signin',
@@ -99,7 +97,8 @@ function onLogin() {
         user.self.id = data.id;
         user.self.name = data.name;
 
-        dialog.success({
+        dialog({
+          type: 'success',
           title: $text.login_success(),
           content: $text.whether_keep_logged_in(),
           negativeText: $text.cancel(),
@@ -152,7 +151,8 @@ function onRegister() {
       .mutate(registerFormValue.value)
       .then(() => {
         tab.value = Tabs.SIGNIN;
-        notify.success({
+        notify({
+          type: 'success',
           content: $text.reg_succ(),
         });
       })

@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MenuOption } from 'naive-ui';
+import type { DialogOptions, MenuOption, NotificationOptions } from 'naive-ui';
 
 import {
   BookmarkOutline as BookmarkIcon,
@@ -36,9 +36,39 @@ import {
 } from '@vicons/ionicons5';
 import { vElementHover } from '@vueuse/components';
 import { NIcon, NEllipsis, NAvatar } from 'naive-ui';
+import { type ConfigProviderProps, createDiscreteApi } from 'naive-ui';
+import PubSub from 'pubsub-js';
 import { RouterLink } from 'vue-router';
 
 import { screen } from './utils/screen';
+
+const configProviderPropsRef = computed<ConfigProviderProps>(() => {
+  const preferences = useGuiPreferencesStore();
+  return {
+    theme: preferences.theme,
+  };
+});
+
+const { message, notification, dialog, loadingBar } = createDiscreteApi(
+  ['message', 'dialog', 'notification', 'loadingBar'],
+  {
+    configProviderProps: configProviderPropsRef,
+  }
+);
+
+PubSub.subscribe(PubSubEvents.Dialog, (_: string, opts: DialogOptions) => {
+  dialog.create(opts);
+});
+PubSub.subscribe(
+  PubSubEvents.Notification,
+  (_: string, opts: NotificationOptions) => notification.create(opts)
+);
+PubSub.subscribe(PubSubEvents.Message, (_: string, opts: MsgOptions) =>
+  message.create(opts.content, opts)
+);
+PubSub.subscribe(PubSubEvents.Loading, (_: string, status: boolean) =>
+  status ? loadingBar.start() : loadingBar.finish()
+);
 
 const user = useUserStore();
 const token = useTokenStore();

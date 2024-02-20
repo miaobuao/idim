@@ -22,11 +22,12 @@
     "dayjs": "^1.11.10",
     "hash-wasm": "^4.11.0",
     "jwt-decode": "^4.0.0",
-    "naive-ui": "^2.37.3",
-    "nuxt": "^3.10.1",
+    "naive-ui": "^2",
     "pinia": "^2.1.7",
-    "vue": "^3.4",
-    "vue-router": "^4.2"
+    "pubsub-js": "^1.9.4",
+    "nuxt": "^3.10.1",
+    "vue": "^3.4.15",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@css-render/vue3-ssr": "^0.15.12",
@@ -35,6 +36,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/locales": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@types/pubsub-js": "^1.8.6",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
     "@unocss/nuxt": "^0.58.5",

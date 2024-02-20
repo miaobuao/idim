@@ -13,7 +13,9 @@
         "^build"
       ],
       "outputs": [
-        "dist/**"
+        "dist/**",
+        ".nuxt/**",
+        ".output/**"
       ]
     },
     "lint": {
@@ -25,7 +27,6 @@
       "cache": false,
       "persistent": true
     },
-    "@idim/ui#build": {},
     "@repo/db#migrate": {}
   }
 }

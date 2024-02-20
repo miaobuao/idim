@@ -4,13 +4,9 @@
     :locale="preferences.lang?.locale"
     :date-locale="preferences.lang?.date"
   >
-    <n-dialog-provider>
-      <n-notification-provider>
-        <n-layout position="absolute">
-          <slot />
-        </n-layout>
-      </n-notification-provider>
-    </n-dialog-provider>
+    <n-layout position="absolute">
+      <slot />
+    </n-layout>
   </n-config-provider>
 </template>
 
