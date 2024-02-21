@@ -7,7 +7,7 @@ export interface SettingsPageProps {
   children: OptionsListCardProps[];
 }
 
-export type OptionProps = ButtonType | RadioType | LabelType;
+export type OptionProps = ButtonProps | RadioProps | LabelProps;
 
 export interface OptionsListCardProps {
   hidden?: HiddenField;
@@ -21,7 +21,7 @@ export enum OptionType {
   Radio,
 }
 
-export interface LabelType {
+export interface LabelProps {
   type: OptionType.Label;
   hidden?: HiddenField;
   title: string;
@@ -29,7 +29,7 @@ export interface LabelType {
   to?: RouteLocationNamedRaw | string;
 }
 
-export interface ButtonType {
+export interface ButtonProps {
   type: OptionType.Btn;
   hidden?: HiddenField;
   text: string;
@@ -52,7 +52,7 @@ export type RadioOptionsType = {
   [props: string]: any;
 }[];
 
-export interface RadioType {
+export interface RadioProps {
   type: OptionType.Radio;
   hidden?: HiddenField;
   options: RadioOptionsType;

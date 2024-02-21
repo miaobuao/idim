@@ -29,9 +29,9 @@ import {
   type OptionProps,
   type OptionsListCardProps,
   type SettingsPageProps,
-  type LabelType,
-  type ButtonType,
-  type RadioType,
+  type LabelProps,
+  type ButtonProps,
+  type RadioProps,
 } from './types';
 
 defineProps<{
@@ -76,7 +76,7 @@ function Option(props: OptionProps) {
   return hidden || <NListItem>{render()}</NListItem>;
 }
 
-function LabelOption(props: LabelType) {
+function LabelOption(props: LabelProps) {
   return (
     <div
       onClick={() => {
@@ -94,7 +94,7 @@ function LabelOption(props: LabelType) {
     </div>
   );
 }
-function BtnOption(props: ButtonType) {
+function BtnOption(props: ButtonProps) {
   return (
     <NButton type={props.btnType} onClick={props.click} color={props.color}>
       {props.text}
@@ -102,7 +102,7 @@ function BtnOption(props: ButtonType) {
   );
 }
 
-function RadioOption(props: RadioType) {
+function RadioOption(props: RadioProps) {
   const value = computed(props.value);
   return (
     <NSelect
