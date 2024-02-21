@@ -87,6 +87,7 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
     lang,
     update,
     save,
+    load,
     value: computed(() => preferences.value),
   };
 });

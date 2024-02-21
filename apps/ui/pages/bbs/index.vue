@@ -1,1 +1,4 @@
-<template>bbs</template>
+<template>
+  bbs
+  <activity-view />
+</template>
