@@ -84,6 +84,7 @@ export default {
   switch_theme: '主题',
   switch_theme_caption: '切换主题, 可以选择深色, 浅色或自动',
   main: '设置',
+  logout_confirm: '确定要退出登录吗?',
 
   theme: {
     dark: '黑暗模式',

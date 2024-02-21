@@ -86,6 +86,7 @@ export default {
   switch_theme: 'Switch theme',
   switch_theme_caption: 'Switch theme in Dark, Light or Auto',
   main: 'Main',
+  logout_confirm: 'Do you want to logout?',
 
   theme: {
     dark: 'Dark Theme',

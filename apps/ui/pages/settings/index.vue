@@ -87,14 +87,32 @@ const SwicthThemePage: SettingsPageProps = {
   ],
 };
 
-function logout() {}
+const token = useTokenStore();
 const pagesMap = new Map([MainPage, SwicthThemePage].map((d) => [d.id, d]));
 const settingsRouter = reactive<string[]>([]);
 const currentPage = computed(
   () => pagesMap.get(last(settingsRouter) ?? 'main') ?? MainPage
 );
+const route = useRoute();
+const router = useRouter();
+
+function logout() {
+  dialog({
+    type: 'warning',
+    title: $text.logout(),
+    content: $text.logout_confirm(),
+    positiveText: $text.logout(),
+    onPositiveClick() {
+      token.clearJwtToken();
+      user.clear();
+    },
+  });
+}
 function popRouter() {
   settingsRouter.pop();
+}
+function pushRouter(v: string) {
+  settingsRouter.push(v);
 }
 </script>
 
@@ -103,7 +121,7 @@ function popRouter() {
     <settings-view
       :pop="settingsRouter.length > 0 ? popRouter : undefined"
       :page="currentPage"
-      @push="(v) => settingsRouter.push(v)"
+      @push="pushRouter"
     />
   </div>
 </template>
