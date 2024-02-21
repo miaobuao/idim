@@ -31,13 +31,15 @@ const SysLanguagePack = computed(() => {
   }
 });
 
+const osThemeRef = useOsTheme();
+
 export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
   const preferences = ref<GuiPreferences>({
     theme: ThemeKind.OS,
     language: LanguageKind.OS,
   });
 
-  if (isClient) {
+  function load() {
     const value = localStorage.getItem('gui-preferences');
     if (value) {
       update(JSON.parse(value));
@@ -56,8 +58,6 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
         JSON.stringify(preferences.value)
       );
   }
-
-  const osThemeRef = useOsTheme();
 
   const theme = computed(() => {
     switch (preferences.value.theme) {

@@ -25,4 +25,7 @@ watch(
     immediate: true,
   }
 );
+onMounted(() => {
+  preferences.load();
+});
 </script>
