@@ -3,7 +3,12 @@ export const useUserStore = defineStore('user', () => {
     id: 0,
     name: '',
   });
+  function clear() {
+    self.id = 0;
+    self.name = '';
+  }
   return {
     self,
+    clear,
   };
 });
