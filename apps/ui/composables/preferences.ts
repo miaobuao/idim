@@ -82,13 +82,7 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
         return SysLanguagePack.value;
     }
   });
-  return {
-    theme,
-    lang,
-    update,
-    save,
-    value: computed(() => preferences.value),
-  };
+  return { theme, lang, update, save, load, preferences };
 });
 
 export interface GuiPreferences {

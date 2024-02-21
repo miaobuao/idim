@@ -61,6 +61,8 @@ import type { FormInst, FormItemRule } from 'naive-ui';
 
 const token = useTokenStore();
 const user = useUserStore();
+// const dialog = useDialog();
+// const notify = useNotification();
 const { $text, $trpc } = useNuxtApp();
 enum Tabs {
   SIGNIN = 'signin',
@@ -94,6 +96,7 @@ function onLogin() {
         token.updateJwtToken(data.token);
         user.self.id = data.id;
         user.self.name = data.name;
+
         dialog({
           type: 'success',
           title: $text.login_success(),
