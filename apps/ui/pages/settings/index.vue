@@ -87,14 +87,24 @@ const SwicthThemePage: SettingsPageProps = {
   ],
 };
 
+const route = useRoute();
+const router = useRouter();
 const token = useTokenStore();
 const pagesMap = new Map([MainPage, SwicthThemePage].map((d) => [d.id, d]));
-const settingsRouter = reactive<string[]>([]);
+const settingsRouter = reactive(
+  (function () {
+    const path = route.query?.path;
+    if (path) {
+      if (typeof path === 'string') {
+        return [path];
+      }
+    }
+    return [];
+  })()
+);
 const currentPage = computed(
   () => pagesMap.get(last(settingsRouter) ?? 'main') ?? MainPage
 );
-const route = useRoute();
-const router = useRouter();
 
 function logout() {
   dialog({
@@ -108,11 +118,20 @@ function logout() {
     },
   });
 }
+
 function popRouter() {
   settingsRouter.pop();
+  router.replace({
+    name: route.name!,
+    query: { path: settingsRouter },
+  });
 }
 function pushRouter(v: string) {
   settingsRouter.push(v);
+  router.replace({
+    name: route.name!,
+    query: { path: settingsRouter },
+  });
 }
 </script>
 
