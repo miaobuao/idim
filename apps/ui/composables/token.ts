@@ -26,9 +26,9 @@ export const useTokenStore = defineStore('token', () => {
   }
 
   function clearJwtToken() {
-    localStorage.removeItem(JWT_TOKEN_KEY);
-    sessionStorage.removeItem(JWT_TOKEN_KEY);
-    token.value = undefined;
+    // localStorage.removeItem(JWT_TOKEN_KEY);
+    // sessionStorage.removeItem(JWT_TOKEN_KEY);
+    // token.value = undefined;
   }
 
   function updateJwtToken(jwt: string) {
@@ -60,7 +60,6 @@ export const useTokenStore = defineStore('token', () => {
     saveInLocalStorage,
     saveInSessionStorage,
     load,
-    clearJwtToken,
     value: computed(() => token.value),
   };
 });

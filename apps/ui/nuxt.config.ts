@@ -1,4 +1,3 @@
-import ReactivityTransform from '@vue-macros/reactivity-transform/vite';
 import { defineNuxtConfig, type NuxtConfig } from 'nuxt/config';
 import AutoImport from 'unplugin-auto-import/vite';
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
@@ -25,7 +24,6 @@ const modules: NuxtConfig['modules'] = [
       },
     },
   ],
-  '@vue-macros/nuxt',
   (_options, nuxt) => {
     nuxt.hooks.hook('vite:extendConfig', (config) => {
       // @ts-expect-error
@@ -35,8 +33,7 @@ const modules: NuxtConfig['modules'] = [
         }),
         Components({
           resolvers: [NaiveUiResolver()],
-        }),
-        ReactivityTransform()
+        })
       );
     });
   },
