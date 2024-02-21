@@ -56,6 +56,6 @@ export interface RadioType {
   type: OptionType.Radio;
   hidden?: HiddenField;
   options: RadioOptionsType;
-  value: any;
+  value: () => any;
   select: (value: any) => void;
 }

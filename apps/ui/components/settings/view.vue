@@ -8,13 +8,16 @@
 </template>
 
 <script setup lang="tsx">
-import { NCard, NList, NListItem, NButton, NThing } from 'naive-ui';
+import { NCard, NList, NListItem, NButton, NThing, NSelect } from 'naive-ui';
 
 import {
   OptionType,
   type OptionProps,
   type OptionsListCardProps,
   type SettingsPageProps,
+  type LabelType,
+  type ButtonType,
+  type RadioType,
 } from './types';
 
 defineProps<{
@@ -48,36 +51,50 @@ function Option(props: OptionProps) {
   function render() {
     switch (props.type) {
       case OptionType.Label:
-        return (
-          <div
-            onClick={() => {
-              if (!props.to) return;
-              if (typeof props.to === 'string') {
-                emits('push', props.to);
-              } else {
-                router.push(props.to);
-              }
-            }}
-          >
-            <NThing title={props.title} contentClass="m-0!">
-              {props.caption}
-            </NThing>
-          </div>
-        );
+        return <LabelOption {...props} />;
       case OptionType.Btn:
-        return (
-          <NButton
-            type={props.btnType}
-            onClick={props.click}
-            color={props.color}
-          >
-            {props.text}
-          </NButton>
-        );
-      default:
-        throw new Error('Unknown option type: ' + props.type);
+        return <BtnOption {...props} />;
+      case OptionType.Radio:
+        return <RadioOption {...props} />;
     }
   }
   return hidden || <NListItem>{render()}</NListItem>;
+}
+
+function LabelOption(props: LabelType) {
+  return (
+    <div
+      onClick={() => {
+        if (!props.to) return;
+        if (typeof props.to === 'string') {
+          emits('push', props.to);
+        } else {
+          router.push(props.to);
+        }
+      }}
+    >
+      <NThing title={props.title} contentClass="m-0!">
+        {props.caption}
+      </NThing>
+    </div>
+  );
+}
+function BtnOption(props: ButtonType) {
+  return (
+    <NButton type={props.btnType} onClick={props.click} color={props.color}>
+      {props.text}
+    </NButton>
+  );
+}
+
+function RadioOption(props: RadioType) {
+  const value = computed(props.value);
+  return (
+    <NSelect
+      value={value.value}
+      options={props.options}
+      onUpdate:value={(e) => props.select(e)}
+    />
+  );
 }
 </script>

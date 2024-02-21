@@ -75,9 +75,8 @@ const SwicthThemePage: SettingsPageProps = {
               value: ThemeKind.OS,
             },
           ],
-          value: preferences.value.theme,
+          value: () => preferences.value.theme,
           select(v: ThemeKindType) {
-            this.value = v;
             preferences.update({
               theme: v,
             });
@@ -98,6 +97,6 @@ const currentPage = computed(
 
 <template>
   <div class="flex flex-col gap-y-1 m-1">
-    <settings-view :page="currentPage" />
+    <settings-view :page="currentPage" @push="(v) => settingsRouter.push(v)" />
   </div>
 </template>
