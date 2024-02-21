@@ -93,10 +93,17 @@ const settingsRouter = reactive<string[]>([]);
 const currentPage = computed(
   () => pagesMap.get(last(settingsRouter) ?? 'main') ?? MainPage
 );
+function popRouter() {
+  settingsRouter.pop();
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-y-1 m-1">
-    <settings-view :page="currentPage" @push="(v) => settingsRouter.push(v)" />
+    <settings-view
+      :pop="settingsRouter.length > 0 ? popRouter : undefined"
+      :page="currentPage"
+      @push="(v) => settingsRouter.push(v)"
+    />
   </div>
 </template>

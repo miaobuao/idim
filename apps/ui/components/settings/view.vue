@@ -1,5 +1,18 @@
 <template>
-  <n-card :title="page.label" size="small"></n-card>
+  <n-card size="small">
+    <n-flex>
+      <n-button v-if="pop" text circle @click="pop">
+        <template #icon>
+          <n-icon>
+            <back-icon />
+          </n-icon>
+        </template>
+      </n-button>
+      <div class="text-lg font-600">
+        {{ page.label }}
+      </div>
+    </n-flex>
+  </n-card>
   <setting-isolated-card
     v-for="(card, i) in page.children"
     :key="i"
@@ -8,6 +21,7 @@
 </template>
 
 <script setup lang="tsx">
+import { ChevronBack as BackIcon } from '@vicons/ionicons5';
 import { NCard, NList, NListItem, NButton, NThing, NSelect } from 'naive-ui';
 
 import {
@@ -22,6 +36,7 @@ import {
 
 defineProps<{
   page: SettingsPageProps;
+  pop?: () => void;
 }>();
 
 const emits = defineEmits<{
