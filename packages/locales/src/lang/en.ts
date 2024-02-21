@@ -71,4 +71,26 @@ export default {
   name_already_exists: 'Name Already Exists',
 
   expired: 'Session Expired',
+
+  header: {
+    user: 'User',
+    general: 'General',
+  },
+
+  verify_mail: 'Verify Mail',
+  verify_mail_caption:
+    'We will send a verification code to your email address.',
+  change_psw: 'Change password',
+  change_psw_caption: 'Change your password.',
+
+  switch_theme: 'Switch theme',
+  switch_theme_caption: 'Switch theme in Dark, Light or Auto',
+  main: 'Main',
+  logout_confirm: 'Do you want to logout?',
+
+  theme: {
+    dark: 'Dark Theme',
+    light: 'Light Theme',
+    auto: 'Follow System',
+  },
 };

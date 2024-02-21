@@ -69,4 +69,26 @@ export default {
   name_already_exists: '用户名已存在',
 
   expired: '会话已过期',
+
+  header: {
+    user: '用户',
+    general: '通用',
+  },
+
+  verify_mail: '验证邮箱',
+
+  verify_mail_caption: '我们会发送一个验证码到你填写的邮箱地址.',
+  change_psw: '修改密码',
+  change_psw_caption: '你可以修改密码',
+
+  switch_theme: '主题',
+  switch_theme_caption: '切换主题, 可以选择深色, 浅色或自动',
+  main: '设置',
+  logout_confirm: '确定要退出登录吗?',
+
+  theme: {
+    dark: '黑暗模式',
+    light: '浅色模式',
+    auto: '跟随系统',
+  },
 };
