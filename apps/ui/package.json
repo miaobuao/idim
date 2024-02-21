@@ -23,9 +23,9 @@
     "hash-wasm": "^4.11.0",
     "jwt-decode": "^4.0.0",
     "naive-ui": "^2",
+    "nuxt": "^3.10.1",
     "pinia": "^2.1.7",
     "pubsub-js": "^1.9.4",
-    "nuxt": "^3.10.1",
     "vue": "^3.4.15",
     "vue-router": "^4.2.5"
   },
@@ -40,6 +40,8 @@
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
     "@unocss/nuxt": "^0.58.5",
+    "@vue-macros/nuxt": "^1.9.21",
+    "@vue-macros/reactivity-transform": "^0.4.3",
     "unocss": "^0.58.5",
     "unplugin-auto-import": "^0.17.5",
     "unplugin-vue-components": "^0.26.0"

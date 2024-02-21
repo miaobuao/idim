@@ -3,11 +3,13 @@ import { last } from 'lodash-es';
 
 import { type ThemeKind as ThemeKindType } from '#imports';
 const { $text } = useNuxtApp();
-// import {/
 import {
   type SettingsPageProps,
   OptionType,
 } from '../../components/settings/types';
+
+const user = useUserStore();
+const preferences = useGuiPreferencesStore();
 
 const MainPage: SettingsPageProps = {
   id: 'main',
@@ -26,34 +28,29 @@ const MainPage: SettingsPageProps = {
     },
     {
       label: $text.header.user(),
-      // hidden: () => !user.id,
+      hidden: () => !user.self.id,
       children: [
         {
           type: OptionType.Label,
           // hidden: () => user.activated,
           title: $text.verify_mail(),
           caption: $text.verify_mail_caption(),
-          to: { name: 'me' },
         },
         {
           type: OptionType.Label,
           title: $text.change_psw(),
           caption: $text.change_psw_caption(),
-          to: { name: 'me' },
         },
         {
           type: OptionType.Btn,
           text: $text.logout(),
-          color: 'negative',
-          class: 'full-width',
+          btnType: 'error',
           click: logout,
         },
       ],
     },
   ],
 };
-
-const preferences = useGuiPreferencesStore();
 
 const SwicthThemePage: SettingsPageProps = {
   id: 'switch theme',

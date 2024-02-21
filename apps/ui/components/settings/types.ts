@@ -22,21 +22,27 @@ export enum OptionType {
 }
 
 export interface LabelType {
-  hidden?: HiddenField;
   type: OptionType.Label;
+  hidden?: HiddenField;
   title: string;
   caption: string;
-  // 只能RouteLocationPathRaw, 用RouteLocationNamedRaw会出错!
-  to: RouteLocationNamedRaw | string;
+  to?: RouteLocationNamedRaw | string;
 }
 
 export interface ButtonType {
-  hidden?: HiddenField;
   type: OptionType.Btn;
+  hidden?: HiddenField;
   text: string;
-  color?: string;
   click: () => void;
-  class?: string;
+  color?: string;
+  btnType?:
+    | 'default'
+    | 'tertiary'
+    | 'primary'
+    | 'info'
+    | 'success'
+    | 'warning'
+    | 'error';
 }
 
 export type RadioOptionsType = {
