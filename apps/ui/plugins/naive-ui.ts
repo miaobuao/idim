@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { setup } from '@css-render/vue3-ssr';
 
 import { defineNuxtPlugin } from '#app';
@@ -7,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     const { collect } = setup(nuxtApp.vueApp);
     const originalRenderMeta = nuxtApp.ssrContext?.renderMeta;
     nuxtApp.ssrContext = nuxtApp.ssrContext || {};
-    nuxtApp.ssrContext!.renderMeta = () => {
+    nuxtApp.ssrContext.renderMeta = () => {
       if (!originalRenderMeta) {
         return {
           headTags: collect(),
@@ -15,7 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
       const originalMeta = originalRenderMeta();
       if ('then' in originalMeta) {
-        return originalMeta.then((resolvedOriginalMeta: any) => {
+        return originalMeta.then((resolvedOriginalMeta) => {
           return {
             ...resolvedOriginalMeta,
             headTags: resolvedOriginalMeta['headTags'] + collect(),
