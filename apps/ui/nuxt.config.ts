@@ -28,7 +28,6 @@ const modules: NuxtConfig['modules'] = [
   '@vue-macros/nuxt',
   (_options, nuxt) => {
     nuxt.hooks.hook('vite:extendConfig', (config) => {
-      // @ts-expect-error
       config.plugins.push(
         AutoImport({
           imports: ['vue', 'vue-router', '@vueuse/core'],
