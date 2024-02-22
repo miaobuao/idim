@@ -5,6 +5,7 @@
     "build": "dotenv -- turbo build",
     "dev": "dotenv -e .env.devel -- turbo dev",
     "lint": "turbo lint",
+    "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky",
     "db:migrate": "turbo @repo/db#migrate",
@@ -19,9 +20,11 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "prettier": "^3.1.1",
+    "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
-    "turbo": "latest"
+    "turbo": "latest",
+    "typescript": "^5.3.3"
   },
   "packageManager": "pnpm@8.15.3",
   "engines": {

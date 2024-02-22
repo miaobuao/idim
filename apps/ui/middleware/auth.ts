@@ -1,8 +1,8 @@
 const { $pinia } = useNuxtApp();
 
 export default defineNuxtRouteMiddleware(async () => {
-  const session = useSessionStore($pinia);
-  if (session.payload === undefined) {
+  const token = useTokenStore($pinia);
+  if (!token.payload) {
     return navigateTo({ name: 'user-login' });
   }
   return true;

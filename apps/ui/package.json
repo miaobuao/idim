@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "lint-staged"
+    "lint": "lint-staged",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@nuxt/devtools": "^1.0.8",

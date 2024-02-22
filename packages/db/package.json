@@ -9,13 +9,11 @@
     "build": "tsup index.ts --format cjs,esm --dts",
     "dev": "pnpm run build -- --watch",
     "gen": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "prisma": "^5.9.1",
-    "ts-node": "^10.9.2",
-    "tsup": "^8.0.2",
-    "typescript": "^5.3.3"
+    "prisma": "^5.9.1"
   },
   "dependencies": {
     "@prisma/client": "5.9.1",

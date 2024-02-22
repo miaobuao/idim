@@ -53,6 +53,12 @@ export default defineNuxtConfig({
   vite,
   modules,
   ssr: true,
+  components: [
+    {
+      path: '~/components',
+      extensions: ['.vue'],
+    },
+  ],
   build: {
     transpile:
       process.env.NODE_ENV === 'production'
