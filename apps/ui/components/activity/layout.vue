@@ -11,21 +11,19 @@
   >
     <slot name="trigger"></slot>
   </div>
-  <draggable
-    v-show="!hidden"
-    class="fixed select-none z-31 w-300px"
-    :handle="draggableBarRef"
-    :prevent-default="true"
-    storage-key="activity-window-position"
-    storage-type="local"
-    :initial-value="windowInitialPosition"
+  <div
+    ref="windowRef"
+    class="fixed select-none z-31 md:w-300px lg:w-400px xl:w-500px min-w-200px"
+    :style="windowStyle"
+    style="touch-action: none"
   >
-    <n-card ref="windowRef" class="h-full w-full" content-class="p-0!">
+    <n-card class="h-full w-full" content-class="p-0!">
       <n-layout-header class="flex justify-around">
         <div></div>
         <div
           ref="draggableBarRef"
-          class="h-2 mt-1.5 rounded bg-green w-180px cursor-move"
+          style="touch-action: none"
+          class="h-2 mt-1.5 rounded bg-green w-80% cursor-move"
         ></div>
         <n-button text @click="hidden = true">
           <template #icon> <MinimizeIcon /> </template>
@@ -35,12 +33,11 @@
         <slot name="window"></slot>
       </n-layout-content>
     </n-card>
-  </draggable>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ChevronDownOutline as MinimizeIcon } from '@vicons/ionicons5';
-import { UseDraggable as Draggable } from '@vueuse/components';
 import { useDraggable } from '@vueuse/core';
 const hidden = ref(true);
 
@@ -61,34 +58,38 @@ const {
   },
 });
 
-const draggableBarRef = ref<HTMLElement>();
 const windowRef = ref<HTMLElement>();
+const draggableBarRef = ref<HTMLElement>();
+const { x: windowX, y: windowY } = useDraggable(windowRef, {
+  handle: draggableBarRef,
+});
+const windowStyle = computed(
+  () => `left: ${windowX.value}px; top: ${windowY.value}px`
+);
 
-// const { style: windowStyle, x: windowX, y: windowY } = useDraggable(windowRef);
-// watch(
-//   hidden,
-//   (hidden) => {
-//     if (hidden) return;
-//     nextTick(() => {
-//       if (!windowRef.value) return;
-//       const { clientHeight, clientWidth } = windowRef.value;
-//       windowX.value = (window.innerWidth - clientWidth) / 2;
-//       windowY.value = (window.innerHeight - clientHeight) / 2;
-//     });
-//   },
-//   {
-//     immediate: true,
-//   }
-// );
-
-const windowInitialPosition = reactive({ x: 100, y: 100 });
 onMounted(() => {
   const { innerHeight, innerWidth } = window;
   triggerX.value = innerWidth - triggerRef.value!.clientWidth;
   triggerY.value = (innerHeight * 2) / 3;
 
   const { clientHeight, clientWidth } = windowRef.value!;
-  windowInitialPosition.x = (window.innerWidth - clientWidth) / 2;
-  windowInitialPosition.y = (window.innerHeight - clientHeight) / 2;
+  windowX.value = (innerWidth - clientWidth) / 2;
+  windowY.value = (innerHeight - clientHeight) / 2;
+
+  window.addEventListener('resize', () => {
+    if (!windowRef.value) return;
+    const { innerHeight, innerWidth } = window;
+    const { clientWidth: windowWidth, clientHeight: windowHeight } =
+      windowRef.value;
+
+    const windowRight = windowX.value + windowWidth;
+    const windowBottom = windowY.value + windowHeight;
+    if (windowRight > innerWidth) {
+      windowX.value = innerWidth - windowRef.value!.clientWidth;
+    }
+    if (windowBottom > innerHeight) {
+      windowY.value = innerHeight - windowRef.value!.clientHeight;
+    }
+  });
 });
 </script>
