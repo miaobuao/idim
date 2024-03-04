@@ -71,10 +71,4 @@ export default defineNuxtConfig({
         : ['@juggle/resize-observer'],
     ],
   },
-  runtimeConfig: {
-    public: {
-      API_PORT: process.env.API_PORT,
-      API_HOST: process.env.API_HOST,
-    },
-  },
 })
