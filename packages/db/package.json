@@ -2,12 +2,8 @@
   "name": "@repo/db",
   "version": "1.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "index.ts",
   "scripts": {
-    "build": "tsup index.ts --format cjs,esm --dts",
-    "dev": "pnpm run build -- --watch",
     "gen": "prisma generate",
     "migrate": "prisma migrate dev",
     "type-check": "tsc --noEmit"
