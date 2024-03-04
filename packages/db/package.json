@@ -4,7 +4,8 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "gen": "prisma generate",
+    "build": "prisma generate",
+    "dev": "prisma generate",
     "migrate": "prisma migrate dev",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --fix"
