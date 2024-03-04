@@ -1,7 +1,7 @@
-import Logger from 'pino';
+import Logger from 'pino'
 
-import config from './config';
+import config from './config'
 
-export const logger = Logger();
+export const logger = Logger()
 
-logger.level = config.LOG_LEVEL;
+logger.level = config.LOG_LEVEL

@@ -3,4 +3,4 @@ export default {
   '*.{html,vue,vss,sass,less}': ['prettier --write'],
   'package.json': ['prettier --write'],
   '*.md': ['prettier --write'],
-};
+}

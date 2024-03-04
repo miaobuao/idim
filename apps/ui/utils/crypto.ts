@@ -1,4 +1,4 @@
-import { argon2id } from 'hash-wasm';
+import { argon2id } from 'hash-wasm'
 
 export function argon2idEncrypt(text: string) {
   return argon2id({
@@ -8,5 +8,5 @@ export function argon2idEncrypt(text: string) {
     iterations: 16,
     password: text,
     salt: 'let-flow @miaobuao',
-  });
+  })
 }

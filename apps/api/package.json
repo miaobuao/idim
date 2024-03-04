@@ -5,7 +5,8 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "lint": "eslint . --ext .ts --fix",
+    "lint-staged": "lint-staged",
+    "lint": "eslint . --fix",
     "type-check": "tsc --noEmit",
     "build": "tsup ./src/index.ts --format cjs,esm --dts",
     "dev": "tsup ./src/index.ts --format cjs,esm --dts --watch --onSuccess \"tsx src/index.ts\""

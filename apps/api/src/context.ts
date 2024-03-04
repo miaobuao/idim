@@ -1,25 +1,25 @@
-import { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
+import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify'
 
-import { Token } from './utils/jwt';
+import { Token } from './utils/jwt'
 
 export async function createContext({ req }: CreateFastifyContextOptions) {
   async function getPayloadFromHeader() {
     if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer ')
+      req.headers.authorization
+      && req.headers.authorization.startsWith('Bearer ')
     ) {
-      const token = req.headers.authorization.substring(7);
+      const token = req.headers.authorization.substring(7)
       const payload = await Token.verify(token)
-        .then((d) => d.data)
-        .catch(() => null);
-      return payload;
+        .then(d => d.data)
+        .catch(() => null)
+      return payload
     }
-    return null;
+    return null
   }
-  const user = await getPayloadFromHeader();
+  const user = await getPayloadFromHeader()
 
   return {
     user,
-  };
+  }
 }
-export type Context = Awaited<ReturnType<typeof createContext>>;
+export type Context = Awaited<ReturnType<typeof createContext>>

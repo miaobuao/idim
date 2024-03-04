@@ -1,1 +1,3 @@
-<template>mc design</template>
+<template>
+  mc design
+</template>

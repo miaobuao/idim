@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import { BulbOutline as SendIcon } from '@vicons/ionicons5'
+import { type FormInst, useThemeVars } from 'naive-ui'
+
+import { screen } from '#imports'
+
+const themeVars = useThemeVars()
+const triggerSize = computed(() => (screen.gt.sm.value ? 'large' : 'small'))
+
+const formRef = ref<FormInst | null>(null)
+const model = ref<Partial<PostForm>>({
+  title: undefined,
+  content: undefined,
+})
+const formRules = {
+  title: {
+    required: true,
+    trigger: ['input', 'blur'],
+    message: 'Please input title',
+  },
+  content: {
+    required: true,
+    trigger: ['input', 'blur'],
+    message: 'Please input content',
+  },
+}
+
+function submit() {}
+</script>
+
+<script lang="ts">
+interface PostForm {
+  title: string
+  content: string
+}
+</script>
+
 <template>
   bbs
   <activity-view
@@ -24,7 +61,9 @@
           <n-input v-model="model.content" />
         </n-form-item>
         <div class="flex justify-end gap-x-2">
-          <n-button round>reset</n-button>
+          <n-button round>
+            reset
+          </n-button>
           <n-button
             :disabled="!model.content"
             round
@@ -38,40 +77,3 @@
     </n-card>
   </activity-view>
 </template>
-
-<script setup lang="ts">
-import { BulbOutline as SendIcon } from '@vicons/ionicons5';
-import { useThemeVars, type FormInst } from 'naive-ui';
-
-import { screen } from '#imports';
-
-const themeVars = useThemeVars();
-const triggerSize = computed(() => (screen.gt.sm.value ? 'large' : 'small'));
-
-const formRef = ref<FormInst | null>(null);
-const model = ref<Partial<PostForm>>({
-  title: undefined,
-  content: undefined,
-});
-const formRules = {
-  title: {
-    required: true,
-    trigger: ['input', 'blur'],
-    message: 'Please input title',
-  },
-  content: {
-    required: true,
-    trigger: ['input', 'blur'],
-    message: 'Please input content',
-  },
-};
-
-function submit() {}
-</script>
-
-<script lang="ts">
-interface PostForm {
-  title: string;
-  content: string;
-}
-</script>

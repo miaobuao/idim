@@ -11,9 +11,9 @@ export default {
       handle: 'Find Something Funny',
     },
     418: {
-      title: "418 I'm a teapot",
+      title: '418 I\'m a teapot',
       description:
-        "In Chinese, teapot is a kind of 'Beiju', which means 'tragedy'.",
+        'In Chinese, teapot is a kind of \'Beiju\', which means \'tragedy\'.',
       handle: 'It Is Easy to Take the Truth',
     },
     500: {
@@ -35,7 +35,7 @@ export default {
     warning: {
       title: 'Warning',
       description: 'People seldom see it until it comes true.',
-      handle: "Hmm, Truly Sad, Isn't It?",
+      handle: 'Hmm, Truly Sad, Isn\'t It?',
     },
   },
 
@@ -94,8 +94,8 @@ export default {
     auto: 'Follow System',
   },
 
-  send_post: "Send Post",
+  send_post: 'Send Post',
 
-  title: "Title",
-  content: "Content",
-};
+  title: 'Title',
+  content: 'Content',
+}

@@ -1,4 +1,4 @@
-import { zh, en } from '@repo/locales';
+import { en, zh } from '@repo/locales'
 
 export default defineI18nConfig(() => ({
   legacy: false,
@@ -7,4 +7,4 @@ export default defineI18nConfig(() => ({
     en,
     zh,
   },
-}));
+}))

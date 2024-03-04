@@ -2,9 +2,9 @@ import type {
   DialogOptions,
   MessageOptions,
   NotificationOptions,
-} from 'naive-ui';
+} from 'naive-ui'
 
-import PubSub from 'pubsub-js';
+import PubSub from 'pubsub-js'
 
 export enum PubSubEvents {
   Notification = 'notification',
@@ -14,23 +14,23 @@ export enum PubSubEvents {
 }
 
 export function notify(opt: NotificationOptions) {
-  PubSub.publish(PubSubEvents.Notification, opt);
+  PubSub.publish(PubSubEvents.Notification, opt)
 }
 
 export function dialog(opt: DialogOptions) {
-  PubSub.publish(PubSubEvents.Dialog, opt);
+  PubSub.publish(PubSubEvents.Dialog, opt)
 }
 
 export function message(opt: MsgOptions) {
-  PubSub.publish(PubSubEvents.Message, opt);
+  PubSub.publish(PubSubEvents.Message, opt)
 }
 
-export type MsgOptions = { content: string } & MessageOptions;
+export type MsgOptions = { content: string } & MessageOptions
 
 export function startLoading() {
-  PubSub.publish(PubSubEvents.Loading, true);
+  PubSub.publish(PubSubEvents.Loading, true)
 }
 
 export function stopLoading() {
-  PubSub.publish(PubSubEvents.Loading, false);
+  PubSub.publish(PubSubEvents.Loading, false)
 }

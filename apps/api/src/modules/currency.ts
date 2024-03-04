@@ -1,6 +1,6 @@
-import db from '@repo/db';
+import db from '@repo/db'
 
-import { protectedProcedure, router } from '../trpc';
+import { protectedProcedure, router } from '../trpc'
 
 export default router({
   currency: {
@@ -11,8 +11,8 @@ export default router({
           soap: true,
           pants: true,
         },
-      });
-      return currency || { soap: 0, pants: 0 };
+      })
+      return currency || { soap: 0, pants: 0 }
     }),
   },
-});
+})

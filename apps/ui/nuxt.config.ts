@@ -1,8 +1,9 @@
-import ReactivityTransform from '@vue-macros/reactivity-transform/vite';
-import { defineNuxtConfig, type NuxtConfig } from 'nuxt/config';
-import AutoImport from 'unplugin-auto-import/vite';
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
-import Components from 'unplugin-vue-components/vite';
+import ReactivityTransform from '@vue-macros/reactivity-transform/vite'
+import process from 'node:process'
+import { type NuxtConfig, defineNuxtConfig } from 'nuxt/config'
+import AutoImport from 'unplugin-auto-import/vite'
+import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 const vite: NuxtConfig['vite'] = {
@@ -12,7 +13,7 @@ const vite: NuxtConfig['vite'] = {
         ? ['naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone']
         : [],
   },
-};
+}
 
 const modules: NuxtConfig['modules'] = [
   '@nuxtjs/eslint-module',
@@ -35,9 +36,9 @@ const modules: NuxtConfig['modules'] = [
         Components({
           resolvers: [NaiveUiResolver()],
         }),
-        ReactivityTransform()
-      );
-    });
+        ReactivityTransform(),
+      )
+    })
   },
   [
     '@pinia/nuxt',
@@ -45,7 +46,7 @@ const modules: NuxtConfig['modules'] = [
       autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
     },
   ],
-];
+]
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -75,4 +76,4 @@ export default defineNuxtConfig({
       API_HOST: process.env.API_HOST,
     },
   },
-});
+})

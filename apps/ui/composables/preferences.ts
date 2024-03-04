@@ -1,33 +1,34 @@
-import { isClient } from '@vueuse/core';
-import { type NLocale, type NDateLocale } from 'naive-ui';
+import type { NDateLocale, NLocale } from 'naive-ui'
+
+import { isClient } from '@vueuse/core'
 
 export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
   const preferences = ref<GuiPreferences>({
     theme: ThemeKind.OS,
     language: LanguageKind.OS,
-  });
+  })
 
   function load() {
-    const value = localStorage.getItem('gui-preferences');
-    if (value) {
-      update(JSON.parse(value));
-    }
+    const value = localStorage.getItem('gui-preferences')
+    if (value)
+      update(JSON.parse(value))
   }
 
   function update(newPreferences: Partial<GuiPreferences>) {
     preferences.value = {
       ...preferences.value,
       ...newPreferences,
-    };
-    save();
+    }
+    save()
   }
 
   function save() {
-    if (isClient)
+    if (isClient) {
       localStorage.setItem(
         'gui-preferences',
-        JSON.stringify(preferences.value)
-      );
+        JSON.stringify(preferences.value),
+      )
+    }
   }
 
   return {
@@ -35,17 +36,17 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
     save,
     load,
     value: computed(() => preferences.value),
-  };
-});
+  }
+})
 
 export interface GuiPreferences {
-  theme: ThemeKind;
-  language: LanguageKind;
+  theme: ThemeKind
+  language: LanguageKind
 }
 
 export interface UserLanguage {
-  locale: NLocale;
-  date: NDateLocale;
+  locale: NLocale
+  date: NDateLocale
 }
 
 export enum ThemeKind {
@@ -60,14 +61,14 @@ export enum LanguageKind {
   OS = 'system',
 }
 
-function strToThemeKind(value: string): ThemeKind {
+export function strToThemeKind(value: string): ThemeKind {
   switch (value) {
     case 'light':
-      return ThemeKind.Light;
+      return ThemeKind.Light
     case 'dark':
-      return ThemeKind.Dark;
+      return ThemeKind.Dark
     case 'system':
     default:
-      return ThemeKind.OS;
+      return ThemeKind.OS
   }
 }

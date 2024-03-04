@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "./src/index.ts",
   "scripts": {
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "lint-staged": "lint-staged",
+    "lint": "eslint . --fix"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

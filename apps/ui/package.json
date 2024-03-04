@@ -1,14 +1,15 @@
 {
   "name": "@idim/ui",
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev --open --qr --public",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lint": "lint-staged"
+    "lint-staged": "lint-staged",
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",

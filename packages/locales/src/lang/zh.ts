@@ -95,4 +95,4 @@ export default {
   send_post: '发帖',
   title: '标题',
   content: '内容',
-};
+}

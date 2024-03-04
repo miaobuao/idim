@@ -1,1 +1,3 @@
-<template>me</template>
+<template>
+  me
+</template>

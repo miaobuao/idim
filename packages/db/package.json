@@ -6,14 +6,16 @@
   "scripts": {
     "gen": "prisma generate",
     "migrate": "prisma migrate dev",
-    "type-check": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "prisma": "^5.10.2",
-    "typescript": "^5.3.3"
+    "type-check": "tsc --noEmit",
+    "lint-staged": "lint-staged",
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@prisma/client": "5.9.1",
     "@repo/typescript-config": "workspace:*"
+  },
+  "devDependencies": {
+    "prisma": "^5.10.2",
+    "typescript": "^5.3.3"
   }
 }

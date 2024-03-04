@@ -1,1 +1,3 @@
-<template>player</template>
+<template>
+  player
+</template>

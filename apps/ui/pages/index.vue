@@ -1,1 +1,3 @@
-<template>bookmark</template>
+<template>
+  bookmark
+</template>

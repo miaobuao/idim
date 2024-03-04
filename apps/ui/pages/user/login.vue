@@ -1,3 +1,105 @@
+<script setup lang="ts">
+import type { FormInst, FormItemRule } from 'naive-ui'
+
+const token = useTokenStore()
+const user = useUserStore()
+const { $text, $trpc } = useNuxtApp()
+enum Tabs {
+  SIGNIN = 'signin',
+  SIGNUP = 'signup',
+}
+const tab = ref(Tabs.SIGNIN)
+
+const loginFormRef = ref<FormInst>()
+const loginFormValue = ref({
+  email: '',
+  password: '',
+})
+const loginFormRules = {
+  email: {
+    required: true,
+    trigger: ['blur'],
+  },
+  password: {
+    required: true,
+    trigger: ['blur'],
+  },
+}
+function onLogin() {
+  loginFormRef.value?.validate((errors) => {
+    if (errors)
+      return
+
+    $trpc.session.create
+      .mutate(loginFormValue.value)
+      .then((data) => {
+        token.updateJwtToken(data.token)
+        user.self.id = data.id
+        user.self.name = data.name
+        dialog({
+          type: 'success',
+          title: $text.login_success(),
+          content: $text.whether_keep_logged_in(),
+          negativeText: $text.cancel(),
+          positiveText: $text.ok(),
+          onPositiveClick() {
+            token.saveInLocalStorage()
+          },
+          onNegativeClick() {
+            token.saveInSessionStorage()
+          },
+          onAfterLeave() {
+            navigateTo('/')
+          },
+        })
+      })
+      .catch(errorHandler)
+  })
+}
+
+const registerFormRef = ref<FormInst>()
+const registerFormValue = ref({
+  ...loginFormValue.value,
+  name: '',
+  password2: '',
+})
+const registerFormRules = {
+  ...loginFormRules,
+  password2: {
+    required: true,
+    trigger: ['input', 'blur'],
+    validator(rule: FormItemRule, value: string) {
+      if (value !== registerFormValue.value.password)
+        return new Error($text.retype_password_error())
+
+      return true
+    },
+  },
+  name: {
+    required: true,
+    trigger: ['blur'],
+  },
+}
+
+function onRegister() {
+  registerFormRef.value?.validate((errors) => {
+    if (errors)
+      return
+
+    $trpc.user.create
+      .mutate(registerFormValue.value)
+      .then(() => {
+        tab.value = Tabs.SIGNIN
+        notify({
+          type: 'success',
+          content: $text.reg_succ(),
+        })
+      })
+      .catch(errorHandler)
+  })
+}
+</script>
+
 <template>
   <div class="hfull flex flex-col justify-center">
     <n-card class="w-[90%] max-w-[400px] my-0 mx-auto">
@@ -55,105 +157,3 @@
     </n-card>
   </div>
 </template>
-
-<script setup lang="ts">
-import type { FormInst, FormItemRule } from 'naive-ui';
-
-const token = useTokenStore();
-const user = useUserStore();
-const { $text, $trpc } = useNuxtApp();
-enum Tabs {
-  SIGNIN = 'signin',
-  SIGNUP = 'signup',
-}
-const tab = ref(Tabs.SIGNIN);
-
-const loginFormRef = ref<FormInst>();
-const loginFormValue = ref({
-  email: '',
-  password: '',
-});
-const loginFormRules = {
-  email: {
-    required: true,
-    trigger: ['blur'],
-  },
-  password: {
-    required: true,
-    trigger: ['blur'],
-  },
-};
-function onLogin() {
-  loginFormRef.value?.validate((errors) => {
-    if (errors) {
-      return;
-    }
-    $trpc.session.create
-      .mutate(loginFormValue.value)
-      .then((data) => {
-        token.updateJwtToken(data.token);
-        user.self.id = data.id;
-        user.self.name = data.name;
-        dialog({
-          type: 'success',
-          title: $text.login_success(),
-          content: $text.whether_keep_logged_in(),
-          negativeText: $text.cancel(),
-          positiveText: $text.ok(),
-          onPositiveClick() {
-            token.saveInLocalStorage();
-          },
-          onNegativeClick() {
-            token.saveInSessionStorage();
-          },
-          onAfterLeave() {
-            navigateTo('/');
-          },
-        });
-      })
-      .catch(errorHandler);
-  });
-}
-
-const registerFormRef = ref<FormInst>();
-const registerFormValue = ref({
-  ...loginFormValue.value,
-  name: '',
-  password2: '',
-});
-const registerFormRules = {
-  ...loginFormRules,
-  password2: {
-    required: true,
-    trigger: ['input', 'blur'],
-    validator(rule: FormItemRule, value: string) {
-      if (value !== registerFormValue.value.password) {
-        return new Error($text.retype_password_error());
-      }
-      return true;
-    },
-  },
-  name: {
-    required: true,
-    trigger: ['blur'],
-  },
-};
-
-function onRegister() {
-  registerFormRef.value?.validate((errors) => {
-    if (errors) {
-      return;
-    }
-    $trpc.user.create
-      .mutate(registerFormValue.value)
-      .then(() => {
-        tab.value = Tabs.SIGNIN;
-        notify({
-          type: 'success',
-          content: $text.reg_succ(),
-        });
-      })
-      .catch(errorHandler);
-  });
-}
-</script>

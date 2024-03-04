@@ -1,8 +1,8 @@
-import * as jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken'
 
-import config from './config';
+import config from './config'
 
-const { JWT_EXPIRES_IN, JWT_SECRET } = config;
+const { JWT_EXPIRES_IN, JWT_SECRET } = config
 
 export namespace Token {
   export function sign(data: JwtPayloadData) {
@@ -14,33 +14,31 @@ export namespace Token {
           expiresIn: JWT_EXPIRES_IN,
         },
         (err, token) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(token!);
-          }
-        }
-      );
-    });
+          if (err)
+            reject(err)
+          else
+            resolve(token!)
+        },
+      )
+    })
   }
 
   export function verify(token: string) {
     return new Promise<JwtPayload>((resolve, reject) => {
       jwt.verify(token, JWT_SECRET, (err, decoded) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(decoded as JwtPayload);
-        }
-      });
-    });
+        if (err)
+          reject(err)
+        else
+          resolve(decoded as JwtPayload)
+      })
+    })
   }
 }
 
 export interface JwtPayload extends jwt.JwtPayload {
-  data: JwtPayloadData;
+  data: JwtPayloadData
 }
 
 export interface JwtPayloadData {
-  id: number;
+  id: number
 }

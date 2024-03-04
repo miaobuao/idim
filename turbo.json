@@ -23,6 +23,7 @@
         "^lint"
       ]
     },
+    "lint-staged": {},
     "type-check": {
       "dependsOn": [
         "^type-check"

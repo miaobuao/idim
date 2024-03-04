@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import type { ThemeKind as ThemeKindType } from '#imports';
+import type { ThemeKind as ThemeKindType } from '#imports'
 
-import { last } from 'lodash-es';
-
-const { $text } = useNuxtApp();
+import { last } from 'lodash-es'
 
 import {
   CardBuilder,
   PageBuilder,
   createPages,
-} from '~/components/settings/utils';
+} from '~/components/settings/utils'
 
-const user = useUserStore();
-const preferences = useGuiPreferencesStore();
+const { $text } = useNuxtApp()
+
+const user = useUserStore()
+const preferences = useGuiPreferencesStore()
 const [_, pagesMap] = createPages(
   new PageBuilder('main', $text.settings())
     .addCard(
@@ -20,7 +20,7 @@ const [_, pagesMap] = createPages(
         title: $text.switch_theme(),
         caption: $text.switch_theme_caption(),
         to: 'switch theme',
-      })
+      }),
     )
     .addCard(
       new CardBuilder($text.header.user())
@@ -37,7 +37,7 @@ const [_, pagesMap] = createPages(
           text: $text.logout(),
           btnType: 'error',
           click: logout,
-        })
+        }),
     ),
   new PageBuilder('switch theme', $text.switch_theme()).addCard(
     new CardBuilder($text.switch_theme()).addRadio({
@@ -59,29 +59,28 @@ const [_, pagesMap] = createPages(
       select(v: ThemeKindType) {
         preferences.update({
           theme: v,
-        });
+        })
       },
-    })
-  )
-);
+    }),
+  ),
+)
 
-const route = useRoute();
-const router = useRouter();
-const token = useTokenStore();
+const route = useRoute()
+const router = useRouter()
+const token = useTokenStore()
 const settingsRouter = reactive(
   (function () {
-    const path = route.query?.path;
+    const path = route.query?.path
     if (path) {
-      if (typeof path === 'string') {
-        return [path];
-      }
+      if (typeof path === 'string')
+        return [path]
     }
-    return [];
-  })()
-);
+    return []
+  })(),
+)
 const currentPage = computed(
-  () => pagesMap.get(last(settingsRouter) ?? 'main')!
-);
+  () => pagesMap.get(last(settingsRouter) ?? 'main')!,
+)
 
 function logout() {
   dialog({
@@ -90,25 +89,25 @@ function logout() {
     content: $text.logout_confirm(),
     positiveText: $text.logout(),
     onPositiveClick() {
-      token.clearJwtToken();
-      user.clear();
+      token.clearJwtToken()
+      user.clear()
     },
-  });
+  })
 }
 
 function popRouter() {
-  settingsRouter.pop();
+  settingsRouter.pop()
   router.replace({
     name: route.name!,
     query: { path: settingsRouter },
-  });
+  })
 }
 function pushRouter(v: string) {
-  settingsRouter.push(v);
+  settingsRouter.push(v)
   router.replace({
     name: route.name!,
     query: { path: settingsRouter },
-  });
+  })
 }
 </script>
 
