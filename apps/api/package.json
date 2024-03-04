@@ -14,7 +14,6 @@
   "dependencies": {
     "@fastify/cors": "^9.0.1",
     "@repo/db": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
     "@repo/locales": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@trpc/server": "npm:@trpc/server@next",

@@ -23,7 +23,6 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.7.0",
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/lodash-es": "^4.17.12",
     "@unocss/eslint-plugin": "^0.58.5",

@@ -16,7 +16,6 @@ const vite: NuxtConfig['vite'] = {
 }
 
 const modules: NuxtConfig['modules'] = [
-  '@nuxtjs/eslint-module',
   '@unocss/nuxt',
   [
     '@nuxtjs/i18n',
