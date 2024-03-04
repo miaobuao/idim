@@ -7,7 +7,6 @@
     "gen": "prisma generate",
     "migrate": "prisma migrate dev",
     "type-check": "tsc --noEmit",
-    "lint-staged": "lint-staged",
     "lint": "eslint . --fix"
   },
   "dependencies": {

@@ -10,7 +10,7 @@ const vite: NuxtConfig['vite'] = {
   optimizeDeps: {
     include:
       process.env.NODE_ENV === 'development'
-        ? ['naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone']
+        ? [ 'naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone' ]
         : [],
   },
 }
@@ -30,10 +30,10 @@ const modules: NuxtConfig['modules'] = [
     nuxt.hooks.hook('vite:extendConfig', (config) => {
       config.plugins?.push(
         AutoImport({
-          imports: ['vue', 'vue-router', '@vueuse/core'],
+          imports: [ 'vue', 'vue-router', '@vueuse/core' ],
         }),
         Components({
-          resolvers: [NaiveUiResolver()],
+          resolvers: [ NaiveUiResolver() ],
         }),
         ReactivityTransform(),
       )
@@ -42,7 +42,7 @@ const modules: NuxtConfig['modules'] = [
   [
     '@pinia/nuxt',
     {
-      autoImports: ['defineStore', ['defineStore', 'definePiniaStore']],
+      autoImports: [ 'defineStore', [ 'defineStore', 'definePiniaStore' ] ],
     },
   ],
 ]
@@ -55,7 +55,7 @@ export default defineNuxtConfig({
   components: [
     {
       path: '~/components',
-      extensions: ['.vue'],
+      extensions: [ '.vue' ],
     },
   ],
   build: {
@@ -68,12 +68,13 @@ export default defineNuxtConfig({
             '@css-render/vue3-ssr',
             '@juggle/resize-observer',
           ]
-        : ['@juggle/resize-observer'],
+        : [ '@juggle/resize-observer' ],
     ],
   },
   runtimeConfig: {
-    public: {
-      WEB_HASH_SALT: process.env.WEB_HASH_SALT,
-    },
+    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
+    JWT_ISSUER: process.env.JWT_ISSUER,
+    public: { },
   },
 })

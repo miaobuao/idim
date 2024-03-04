@@ -14,8 +14,8 @@ export function createPages(...pages: PageBuilder[]) {
         throw new Error(`duplicated id: ${values[i].id}`)
     }
   }
-  const maps = new Map(values.map(d => [d.id, d]))
-  return [values, maps] as const
+  const maps = new Map(values.map(d => [ d.id, d ]))
+  return [ values, maps ] as const
 }
 
 export class PageBuilder {

@@ -15,12 +15,12 @@ const model = ref<Partial<PostForm>>({
 const formRules = {
   title: {
     required: true,
-    trigger: ['input', 'blur'],
+    trigger: [ 'input', 'blur' ],
     message: 'Please input title',
   },
   content: {
     required: true,
-    trigger: ['input', 'blur'],
+    trigger: [ 'input', 'blur' ],
     message: 'Please input content',
   },
 }

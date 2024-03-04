@@ -16,19 +16,31 @@ export default antfu(
     },
   },
   {
-    files: ['**/*.vue'],
+    files: [ '**/*.vue' ],
     rules: {
-      'vue/operator-linebreak': ['error', 'before'],
+      'vue/operator-linebreak': [
+        'error',
+        'before',
+      ],
     },
   },
   {
-    files: ['apps/web/**'],
+    files: [ 'apps/web/**' ],
     rules: {
       'node/prefer-global/process': 0,
     },
   },
   {
     rules: {
+      'style/array-bracket-newline': [
+        'error',
+        { multiline: true },
+      ],
+      'style/array-bracket-spacing': [
+        'error',
+        'always',
+      ],
+      'brace-style': [ 'error', 'stroustrup', { allowSingleLine: true } ],
       'ts/no-use-before-define': 0,
       'ts/ban-ts-comment': 0,
       'no-var': 0,
@@ -40,10 +52,20 @@ export default antfu(
         {
           'groups': [
             'type',
-            ['builtin', 'external'],
-            ['internal', 'parent', 'sibling', 'index', 'object', 'unknown'],
+            [
+              'builtin',
+              'external',
+            ],
+            [
+              'internal',
+              'parent',
+              'sibling',
+              'index',
+              'object',
+              'unknown',
+            ],
           ],
-          'pathGroupsExcludedImportTypes': ['builtin'],
+          'pathGroupsExcludedImportTypes': [ 'builtin' ],
           'newlines-between': 'always',
           'alphabetize': {
             order: 'asc',

@@ -19,11 +19,11 @@ export function buildLanguageSource() {
 
 function DFS<T extends Function>(cb: T) {
   function dfs(obj: any, prefix: string[] = []) {
-    for (const [key, value] of Object.entries(obj)) {
+    for (const [ key, value ] of Object.entries(obj)) {
       if (typeof value === 'string')
-        obj[key] = cb([...prefix, key])
+        obj[key] = cb([ ...prefix, key ])
       else if (isPlainObject(value))
-        dfs(value, [...prefix, key])
+        dfs(value, [ ...prefix, key ])
     }
   }
   return dfs
