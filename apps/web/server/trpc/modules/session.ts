@@ -1,9 +1,9 @@
 import db from '@repo/db'
 import { TRPCError } from '@trpc/server'
-import { compare as checkPwd } from 'bcrypt'
 import z from 'zod'
 
 import { protectedProcedure, publicProcedure, router } from '../trpc'
+import { bcryptVerify } from '../utils/bcrypt'
 import { signToken } from '../utils/jwt'
 import { ZEmail, source } from '../utils/z'
 
@@ -27,7 +27,7 @@ export default router({
             password: true,
           },
         })
-        if (user === null || !(await checkPwd(input.password, user.password))) {
+        if (user === null || !(await bcryptVerify(input.password, user.password))) {
           throw new TRPCError({
             code: 'FORBIDDEN',
             message: source.invalid_email_or_password,

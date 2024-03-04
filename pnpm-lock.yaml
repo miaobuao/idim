@@ -139,9 +139,6 @@ importers:
       '@trpc/server':
         specifier: npm:@trpc/server@next
         version: 11.0.0-next-beta.305
-      '@types/bcrypt':
-        specifier: ^5.0.2
-        version: 5.0.2
       '@types/node':
         specifier: ^20.11.20
         version: 20.11.20
@@ -157,9 +154,6 @@ importers:
       '@vue-macros/reactivity-transform':
         specifier: ^0.4.3
         version: 0.4.3(rollup@4.12.0)(vue@3.4.21)
-      bcrypt:
-        specifier: ^5.1.1
-        version: 5.1.1
       fastify:
         specifier: ^4.26.1
         version: 4.26.1
@@ -2391,12 +2385,6 @@ packages:
       '@tufjs/canonical-json': 2.0.0
       minimatch: 9.0.3
 
-  /@types/bcrypt@5.0.2:
-    resolution: {integrity: sha512-6atioO8Y75fNcbmj0G7UjI9lXN2pQ/IGJ2FWT4a/btd0Lk9lQalHLKhkgKVZ3r+spnmWUKfbMi1GEe9wyHQfNQ==}
-    dependencies:
-      '@types/node': 20.11.20
-    dev: true
-
   /@types/eslint-scope@3.7.7:
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==}
     dependencies:
@@ -4046,18 +4034,6 @@ packages:
 
   /base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
-    dev: true
-
-  /bcrypt@5.1.1:
-    resolution: {integrity: sha512-AGBHOG5hPYZ5Xl9KXzU5iKq9516yEmvCKDg3ecP5kX2aB6UqTeXZxk2ELnDgDm6BQSMlLt9rDB4LoSMx0rYwww==}
-    engines: {node: '>= 10.0.0'}
-    requiresBuild: true
-    dependencies:
-      '@mapbox/node-pre-gyp': 1.0.11
-      node-addon-api: 5.1.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
     dev: true
 
   /binary-extensions@2.2.0:
@@ -7033,10 +7009,6 @@ packages:
       - idb-keyval
       - supports-color
       - uWebSockets.js
-
-  /node-addon-api@5.1.0:
-    resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
-    dev: true
 
   /node-addon-api@7.1.0:
     resolution: {integrity: sha512-mNcltoe1R8o7STTegSOHdnJNN7s5EUvhoS7ShnTHDyOSd+8H+UdWODq6qSv67PjC8Zc5JRT8+oLAMCr0SIXw7g==}
