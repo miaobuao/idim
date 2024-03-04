@@ -7,7 +7,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "dotenv -- turbo build",
+    "build": "turbo build",
     "dev": "dotenv -e .env.devel -- turbo dev",
     "lint": "turbo lint",
     "lint-staged": "turbo lint-staged",
@@ -36,6 +36,7 @@
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
-    "turbo": "latest"
+    "turbo": "latest",
+    "unocss": "^0.58.5"
   }
 }
