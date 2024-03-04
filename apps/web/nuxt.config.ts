@@ -71,4 +71,9 @@ export default defineNuxtConfig({
         : ['@juggle/resize-observer'],
     ],
   },
+  runtimeConfig: {
+    public: {
+      WEB_HASH_SALT: process.env.WEB_HASH_SALT,
+    },
+  },
 })

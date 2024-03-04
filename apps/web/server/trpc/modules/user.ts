@@ -1,9 +1,9 @@
 import db from '@repo/db'
 import { TRPCError } from '@trpc/server'
-import * as bcrypt from 'bcrypt'
 import z from 'zod'
 
 import { publicProcedure, router } from '../trpc'
+import { bcryptEncrypt } from '../utils/bcrypt'
 import { ZEmail, source } from '../utils/z'
 
 export default router({
@@ -17,7 +17,7 @@ export default router({
         }),
       )
       .mutation(async (opts) => {
-        const password = await bcrypt.hash(opts.input.password, 10)
+        const password = await bcryptEncrypt(opts.input.password)
         return db.user
           .create({
             data: {
