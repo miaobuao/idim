@@ -5,7 +5,10 @@ export default antfu(
     typescript: true,
     vue: true,
     unocss: true,
-    ignores: [],
+    ignores: [
+      '**/.nuxt',
+      '**/.output',
+    ],
     formatters: {
       css: true,
       html: true,
@@ -17,6 +20,12 @@ export default antfu(
     rules: {
       'vue/operator-linebreak': ['error', 'before'],
     },
+  },
+  {
+    files:["apps/ui/**"],
+    rules: {
+      'node/prefer-global/process': 0,
+    }
   },
   {
     rules: {

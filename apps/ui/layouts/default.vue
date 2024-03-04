@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { type ConfigProviderProps, DialogOptions, NotificationOptions } from 'naive-ui'
+import type { ConfigProviderProps, DialogOptions, NotificationOptions } from 'naive-ui'
 
 import { useNavigatorLanguage } from '@vueuse/core'
 import {

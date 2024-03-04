@@ -1,6 +1,5 @@
 // @ts-nocheck
 import { setup } from '@css-render/vue3-ssr'
-import process from 'node:process'
 
 import { defineNuxtPlugin } from '#app'
 
