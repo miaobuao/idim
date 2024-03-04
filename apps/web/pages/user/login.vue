@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { FormInst, FormItemRule } from 'naive-ui'
 
+import { kdf } from '~/utils/crypto'
+
 const token = useTokenStore()
+const btnLoading = ref(false)
 const user = useUserStore()
 const { $text, $trpc } = useNuxtApp()
 enum Tabs {
@@ -18,20 +21,21 @@ const loginFormValue = ref({
 const loginFormRules = {
   email: {
     required: true,
-    trigger: ['blur'],
+    trigger: [ 'blur' ],
   },
   password: {
     required: true,
-    trigger: ['blur'],
+    trigger: [ 'blur' ],
   },
 }
-function onLogin() {
-  loginFormRef.value?.validate((errors) => {
+async function onLogin() {
+  btnLoading.value = true
+  loginFormRef.value?.validate(async (errors) => {
     if (errors)
-      return
-
+      return (btnLoading.value = false)
+    const hashed = await kdf(loginFormValue.value.password)
     $trpc.session.create
-      .mutate(loginFormValue.value)
+      .mutate({ ...loginFormValue.value, password: hashed })
       .then((data) => {
         token.updateJwtToken(data.token)
         user.self.id = data.id
@@ -54,6 +58,9 @@ function onLogin() {
         })
       })
       .catch(errorHandler)
+      .finally(() => {
+        btnLoading.value = false
+      })
   })
 }
 
@@ -67,7 +74,7 @@ const registerFormRules = {
   ...loginFormRules,
   password2: {
     required: true,
-    trigger: ['input', 'blur'],
+    trigger: [ 'input', 'blur' ],
     validator(rule: FormItemRule, value: string) {
       if (value !== registerFormValue.value.password)
         return new Error($text.retype_password_error())
@@ -77,31 +84,38 @@ const registerFormRules = {
   },
   name: {
     required: true,
-    trigger: ['blur'],
+    trigger: [ 'blur' ],
   },
 }
 
 function onRegister() {
-  registerFormRef.value?.validate((errors) => {
-    if (errors)
+  btnLoading.value = true
+  registerFormRef.value?.validate(async (errors) => {
+    if (errors) {
+      btnLoading.value = false
       return
-
-    $trpc.user.create
-      .mutate(registerFormValue.value)
+    }
+    const hashed = await kdf(registerFormValue.value.password)
+    await $trpc.user.create
+      .mutate({ ...registerFormValue.value, password: hashed })
       .then(() => {
         tab.value = Tabs.SIGNIN
         notify({
           type: 'success',
+          duration: 1500,
           content: $text.reg_succ(),
         })
       })
       .catch(errorHandler)
+      .finally(() => {
+        btnLoading.value = false
+      })
   })
 }
 </script>
 
 <template>
-  <div class="hfull flex flex-col justify-center">
+  <div class="flex flex-col hfull justify-center">
     <n-card class="w-[90%] max-w-[400px] my-0 mx-auto">
       <n-tabs v-model:value="tab" size="large" justify-content="space-evenly">
         <n-tab-pane name="signin" :tab="$text.login()">
@@ -120,7 +134,14 @@ function onRegister() {
               />
             </n-form-item-row>
           </n-form>
-          <n-button type="primary" block secondary strong @click="onLogin">
+          <n-button
+            :loading="btnLoading"
+            type="primary"
+            block
+            secondary
+            strong
+            @click="onLogin"
+          >
             {{ $text.login() }}
           </n-button>
         </n-tab-pane>
@@ -149,7 +170,14 @@ function onRegister() {
               />
             </n-form-item-row>
           </n-form>
-          <n-button type="primary" block secondary strong @click="onRegister">
+          <n-button
+            :loading="btnLoading"
+            type="primary"
+            block
+            secondary
+            strong
+            @click="onRegister"
+          >
             {{ $text.register() }}
           </n-button>
         </n-tab-pane>

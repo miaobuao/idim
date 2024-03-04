@@ -3,21 +3,7 @@ import type { Context } from './context'
 import db from '@repo/db'
 import { TRPCError, initTRPC } from '@trpc/server'
 
-export const t = initTRPC.context<Context>().create({
-  // errorFormatter(opts) {
-  //   const { shape, error } = opts;
-  //   return {
-  //     ...shape,
-  //     data: {
-  //       ...shape.data,
-  //       zodError:
-  //         error.code === 'BAD_REQUEST' && error.cause instanceof ZodError
-  //           ? error.cause.flatten()
-  //           : null,
-  //     },
-  //   };
-  // },
-})
+export const t = initTRPC.context<Context>().create({})
 export type TRPCErrorSchema = ReturnType<
   (typeof t)['_config']['errorFormatter']
 >
@@ -30,9 +16,7 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
     })
     if (user) {
       return next({
-        ctx: {
-          user,
-        },
+        ctx: { user },
       })
     }
   }

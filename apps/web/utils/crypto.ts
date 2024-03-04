@@ -1,13 +1,14 @@
-import { argon2id } from 'hash-wasm'
-
-export function argon2idEncrypt(text: string) {
-  const config = useRuntimeConfig()
-  return argon2id({
-    parallelism: 16,
-    memorySize: 1024 * 50,
-    hashLength: 256,
-    iterations: 24,
-    password: text,
-    salt: config.public.WEB_HASH_SALT,
+export async function kdf(text: string) {
+  const worker = new Worker(
+    new URL('./argon2id.worker.js', import.meta.url),
+    { type: 'module' },
+  )
+  return new Promise<string>((resolve, reject) => {
+    worker.postMessage(text)
+    worker.onmessage = ({ data }) => {
+      resolve(data)
+      worker.terminate()
+    }
+    worker.onerror = reject
   })
 }

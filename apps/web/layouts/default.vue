@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { ConfigProviderProps, DialogOptions, NotificationOptions } from 'naive-ui'
+import type {
+  ConfigProviderProps,
+  DialogOptions,
+  NotificationOptions,
+} from 'naive-ui'
 
 import { useNavigatorLanguage } from '@vueuse/core'
 import {
@@ -81,7 +85,7 @@ const configProviderPropsRef = computed<ConfigProviderProps>(() => {
 })
 
 const { message, notification, dialog, loadingBar } = createDiscreteApi(
-  ['message', 'dialog', 'notification', 'loadingBar'],
+  [ 'message', 'dialog', 'notification', 'loadingBar' ],
   {
     configProviderProps: configProviderPropsRef,
   },

@@ -13,7 +13,7 @@ const { $text } = useNuxtApp()
 
 const user = useUserStore()
 const preferences = useGuiPreferencesStore()
-const [_, pagesMap] = createPages(
+const [ _, pagesMap ] = createPages(
   new PageBuilder('main', $text.settings())
     .addCard(
       new CardBuilder($text.header.general()).addLabel({
@@ -73,8 +73,9 @@ const settingsRouter = reactive(
     const path = route.query?.path
     if (path) {
       if (typeof path === 'string')
-        return [path]
+        return [ path ]
     }
+
     return []
   })(),
 )
