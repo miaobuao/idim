@@ -13,7 +13,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "prisma": "^5.9.1",
+    "prisma": "^5.10.2",
     "typescript": "^5.3.3"
   },
   "dependencies": {

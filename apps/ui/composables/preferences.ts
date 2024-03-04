@@ -1,37 +1,5 @@
-import { isClient, useNavigatorLanguage } from '@vueuse/core';
-import {
-  type NLocale,
-  type NDateLocale,
-  useOsTheme,
-  darkTheme,
-  lightTheme,
-  enUS,
-  dateEnUS,
-  zhCN,
-  dateZhCN,
-} from 'naive-ui';
-
-const ZhLanguagePack = {
-  locale: zhCN,
-  date: dateZhCN,
-};
-
-const EnLanguagePack = {
-  locale: enUS,
-  date: dateEnUS,
-};
-
-const { language } = useNavigatorLanguage();
-const SysLanguagePack = computed(() => {
-  switch (language.value) {
-    case 'zh':
-      return ZhLanguagePack;
-    case 'en':
-      return EnLanguagePack;
-  }
-});
-
-const osThemeRef = useOsTheme();
+import { isClient } from '@vueuse/core';
+import { type NLocale, type NDateLocale } from 'naive-ui';
 
 export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
   const preferences = ref<GuiPreferences>({
@@ -47,7 +15,10 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
   }
 
   function update(newPreferences: Partial<GuiPreferences>) {
-    preferences.value = { ...preferences.value, ...newPreferences };
+    preferences.value = {
+      ...preferences.value,
+      ...newPreferences,
+    };
     save();
   }
 
@@ -59,32 +30,7 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
       );
   }
 
-  const theme = computed(() => {
-    switch (preferences.value.theme) {
-      case ThemeKind.Dark:
-        return darkTheme;
-      case ThemeKind.Light:
-        return lightTheme;
-      case ThemeKind.OS:
-      default:
-        return osThemeRef.value === ThemeKind.Dark ? darkTheme : lightTheme;
-    }
-  });
-
-  const lang = computed<UserLanguage | undefined>(() => {
-    switch (preferences.value.language) {
-      case LanguageKind.Zh:
-        return ZhLanguagePack;
-      case LanguageKind.En:
-        return EnLanguagePack;
-      case LanguageKind.OS:
-      default:
-        return SysLanguagePack.value;
-    }
-  });
   return {
-    theme,
-    lang,
     update,
     save,
     load,
@@ -105,11 +51,23 @@ export interface UserLanguage {
 export enum ThemeKind {
   Light = 'light',
   Dark = 'dark',
-  OS = 'os',
+  OS = 'system',
 }
 
 export enum LanguageKind {
   Zh = 'zh',
   En = 'en',
-  OS = 'os',
+  OS = 'system',
+}
+
+function strToThemeKind(value: string): ThemeKind {
+  switch (value) {
+    case 'light':
+      return ThemeKind.Light;
+    case 'dark':
+      return ThemeKind.Dark;
+    case 'system':
+    default:
+      return ThemeKind.OS;
+  }
 }

@@ -1,19 +1,18 @@
 <template>
   <div
     v-show="hidden"
-    ref="triggerRef"
-    p="x-4 y-2"
-    shadow="~ hover:lg"
-    class="fixed bg-$vp-c-bg select-none cursor-move z-31"
-    style="touch-action: none"
+    v-click="toggleHidden"
+    class="fixed select-none cursor-move z-31"
     :style="triggerStyle"
-    @click="hidden = false"
   >
-    <slot name="trigger"></slot>
+    <div ref="triggerRef" style="touch-action: none">
+      <slot name="trigger"></slot>
+    </div>
   </div>
   <div
+    v-show="!hidden"
     ref="windowRef"
-    class="fixed select-none z-31 md:w-300px lg:w-400px xl:w-500px min-w-200px"
+    class="fixed select-none z-31 md:w-300px lg:w-500px xl:w-600px min-w-200px"
     :style="windowStyle"
     style="touch-action: none"
   >
@@ -23,9 +22,10 @@
         <div
           ref="draggableBarRef"
           style="touch-action: none"
-          class="h-2 mt-1.5 rounded bg-green w-80% cursor-move"
+          :style="`background-color:${themeVars.primaryColor}`"
+          class="h-2.5 my-1 rounded w-80% cursor-move hover:pa-0.4"
         ></div>
-        <n-button text @click="hidden = true">
+        <n-button text @click="toggleHidden">
           <template #icon> <MinimizeIcon /> </template>
         </n-button>
       </n-layout-header>
@@ -37,26 +37,30 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDownOutline as MinimizeIcon } from '@vicons/ionicons5';
+import { CloseOutline as MinimizeIcon } from '@vicons/ionicons5';
 import { useDraggable } from '@vueuse/core';
-const hidden = ref(true);
+import { useThemeVars } from 'naive-ui';
+
+const hidden = ref(false);
+
+const themeVars = useThemeVars();
+
+function toggleHidden() {
+  hidden.value = !hidden.value;
+}
 
 const triggerRef = ref<HTMLElement>();
-const {
-  style: triggerStyle,
-  x: triggerX,
-  y: triggerY,
-} = useDraggable(triggerRef, {
+const { position: triggerPosition, y: triggerY } = useDraggable(triggerRef, {
   onMove({ y }) {
-    const { clientWidth: w, clientHeight: h } = triggerRef.value!;
-    const { innerWidth, innerHeight } = window;
-    triggerX.value = innerWidth - w;
-    if (y > innerHeight - h) {
-      triggerY.value = innerHeight - h;
-    }
+    const { clientHeight: h } = triggerRef.value!;
+    const { innerHeight } = window;
     triggerY.value = Math.max(Math.min(y, innerHeight - h), 0);
   },
 });
+
+const triggerStyle = computed(
+  () => `right:0px;top:${triggerPosition.value.y}px`
+);
 
 const windowRef = ref<HTMLElement>();
 const draggableBarRef = ref<HTMLElement>();
@@ -68,8 +72,10 @@ const windowStyle = computed(
 );
 
 onMounted(() => {
+  nextTick(() => {
+    hidden.value = true;
+  });
   const { innerHeight, innerWidth } = window;
-  triggerX.value = innerWidth - triggerRef.value!.clientWidth;
   triggerY.value = (innerHeight * 2) / 3;
 
   const { clientHeight, clientWidth } = windowRef.value!;

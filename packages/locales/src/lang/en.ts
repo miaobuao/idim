@@ -93,4 +93,9 @@ export default {
     light: 'Light Theme',
     auto: 'Follow System',
   },
+
+  send_post: "Send Post",
+
+  title: "Title",
+  content: "Content",
 };

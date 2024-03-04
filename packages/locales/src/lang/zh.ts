@@ -91,4 +91,8 @@ export default {
     light: '浅色模式',
     auto: '跟随系统',
   },
+
+  send_post: '发帖',
+  title: '标题',
+  content: '内容',
 };

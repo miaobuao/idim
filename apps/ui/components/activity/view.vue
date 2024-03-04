@@ -1,10 +1,26 @@
 <template>
   <ActivityLayout>
     <template #trigger>
-      <ActivityTrigger />
+      <ActivityTrigger v-bind="trigger">
+        <template #icon>
+          <slot name="icon"></slot>
+        </template>
+      </ActivityTrigger>
     </template>
     <template #window>
-      <ActivityWindow />
+      <slot></slot>
     </template>
   </ActivityLayout>
 </template>
+
+<script setup lang="ts">
+defineProps<{
+  trigger: {
+    label?: string;
+    color?: string;
+    bordered?: boolean;
+    size?: string;
+    class?: string;
+  };
+}>();
+</script>
