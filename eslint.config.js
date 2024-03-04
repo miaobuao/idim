@@ -22,10 +22,10 @@ export default antfu(
     },
   },
   {
-    files:["apps/ui/**"],
+    files: ['apps/web/**'],
     rules: {
       'node/prefer-global/process': 0,
-    }
+    },
   },
   {
     rules: {

@@ -51,7 +51,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   vite,
   modules,
-  ssr: true,
+  ssr: false,
   components: [
     {
       path: '~/components',
@@ -59,8 +59,9 @@ export default defineNuxtConfig({
     },
   ],
   build: {
-    transpile:
-      process.env.NODE_ENV === 'production'
+    transpile: [
+      'trpc-nuxt',
+      ...process.env.NODE_ENV === 'production'
         ? [
             'naive-ui',
             'vueuc',
@@ -68,6 +69,7 @@ export default defineNuxtConfig({
             '@juggle/resize-observer',
           ]
         : ['@juggle/resize-observer'],
+    ],
   },
   runtimeConfig: {
     public: {

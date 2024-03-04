@@ -4,7 +4,7 @@ import { compare as checkPwd } from 'bcrypt'
 import z from 'zod'
 
 import { protectedProcedure, publicProcedure, router } from '../trpc'
-import { Token } from '../utils/jwt'
+import { signToken } from '../utils/jwt'
 import { ZEmail, source } from '../utils/z'
 
 export default router({
@@ -36,11 +36,11 @@ export default router({
         return {
           id: user.id,
           name: user.name,
-          token: await Token.sign({ id: user.id }),
+          token: await signToken({ id: user.id }),
         }
       }),
-    renew: protectedProcedure.mutation(({ ctx }) => {
-      return Token.sign({ id: ctx.user.id })
+    renew: protectedProcedure.mutation(async ({ ctx }) => {
+      return await signToken({ id: ctx.user.id })
     }),
     getUserInfo: protectedProcedure.query(({ ctx }) => {
       return {

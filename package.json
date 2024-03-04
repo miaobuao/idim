@@ -14,8 +14,9 @@
     "type-check": "turbo type-check",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky",
-    "db:migrate": "turbo @repo/db#migrate",
-    "db:studio": "cd ./packages/db && pnpm prisma studio"
+    "db:migrate": "cd ./packages/db && pnpm prisma migrate",
+    "db:studio": "cd ./packages/db && pnpm prisma studio",
+    "db:generate": "cd ./packages/db && pnpm prisma generate"
   },
   "dependencies": {
     "lodash-es": "^4.17.21",

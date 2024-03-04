@@ -1,14 +1,14 @@
-import type { JwtPayload } from '@idim/api'
+import type { JwtPayload } from '~/server/trpc/utils/jwt'
 
 import { isClient } from '@vueuse/core'
-import { jwtDecode } from 'jwt-decode'
+import { decodeJwt } from 'jose'
 
 const JWT_TOKEN_KEY = 'user-token'
 
 export const useTokenStore = defineStore('token', () => {
   const token = ref<string>()
-  const payload = computed<JwtPayload | undefined>(
-    () => (token.value && jwtDecode(token.value)) || undefined,
+  const payload = computed(
+    () => (token.value && decodeJwt<JwtPayload>(token.value)) || undefined,
   )
 
   if (isClient) {
