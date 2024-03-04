@@ -23,6 +23,12 @@
         "^lint"
       ]
     },
+    "lint-staged": {},
+    "type-check": {
+      "dependsOn": [
+        "^type-check"
+      ]
+    },
     "dev": {
       "cache": false,
       "persistent": true
