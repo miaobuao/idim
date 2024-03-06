@@ -20,7 +20,7 @@ export const useTokenStore = defineStore('token', () => {
         .query()
         .then((data) => {
           user.self.id = data.id
-          user.self.name = data.name
+          user.self.username = data.username
         })
         .catch(clearJwtToken)
     }

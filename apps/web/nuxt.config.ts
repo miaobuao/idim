@@ -10,13 +10,14 @@ const vite: NuxtConfig['vite'] = {
   optimizeDeps: {
     include:
       process.env.NODE_ENV === 'development'
-        ? [ 'naive-ui', 'vueuc', 'date-fns-tz/esm/formatInTimeZone' ]
+        ? [ 'naive-ui', 'vueuc', 'date-fns-tz' ]
         : [],
   },
 }
 
 const modules: NuxtConfig['modules'] = [
   '@unocss/nuxt',
+  'nitro-cloudflare-dev',
   [
     '@nuxtjs/i18n',
     {

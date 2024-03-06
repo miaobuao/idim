@@ -32,6 +32,7 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240222.0",
     "@css-render/vue3-ssr": "^0.15.12",
     "@fastify/cors": "^9.0.1",
     "@nuxtjs/color-mode": "^3.3.2",
@@ -45,6 +46,7 @@
     "@vue-macros/nuxt": "^1.9.21",
     "@vue-macros/reactivity-transform": "^0.4.3",
     "fastify": "^4.26.1",
+    "nitro-cloudflare-dev": "^0.0.7",
     "pino": "^8.19.0",
     "trpc-nuxt": "0.11.0-beta.0",
     "ts-loader": "^9.5.1",

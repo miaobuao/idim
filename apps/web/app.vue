@@ -26,8 +26,7 @@ const collapsed = computed({
   set(value) {
     if (screen.lt.md.value)
       editingCollapsed.value = true
-    else
-      editingCollapsed.value = value
+    else editingCollapsed.value = value
   },
 })
 const { $text } = useNuxtApp()
@@ -35,7 +34,7 @@ const menuOptions = computed(() => [
   token.payload === undefined
     ? renderMenuOption($text.login_or_register(), 'user-login', UserIcon)
     : {
-        label: user.self.name,
+        label: user.self.username,
         key: 'me',
         icon: () =>
           h(
@@ -45,7 +44,7 @@ const menuOptions = computed(() => [
               color: themeVars.value.primaryColor,
             },
             {
-              default: () => user.self.name.charAt(0).toUpperCase(),
+              default: () => user.self.username.charAt(0).toUpperCase(),
             },
           ),
       },
