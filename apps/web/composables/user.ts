@@ -1,11 +1,11 @@
 export const useUserStore = defineStore('user', () => {
   const self = reactive({
     id: 0,
-    name: '',
+    username: '',
   })
   function clear() {
     self.id = 0
-    self.name = ''
+    self.username = ''
   }
   return {
     self,

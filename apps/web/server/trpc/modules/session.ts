@@ -1,5 +1,6 @@
-import db from '@repo/db'
+import { User } from '@repo/db'
 import { TRPCError } from '@trpc/server'
+import { eq } from 'drizzle-orm'
 import z from 'zod'
 
 import { protectedProcedure, publicProcedure, router } from '../trpc'
@@ -16,18 +17,18 @@ export default router({
           password: z.string(),
         }),
       )
-      .mutation(async ({ input }) => {
-        const user = await db.user.findUnique({
-          where: {
-            email: input.email,
-          },
-          select: {
-            id: true,
-            name: true,
-            password: true,
-          },
-        })
-        if (user === null || !(await bcryptVerify(input.password, user.password))) {
+      .mutation(async ({ input, ctx }) => {
+        const user = (
+          await ctx.db.select({
+            id: User.id,
+            password: User.pwd,
+            username: User.username,
+          })
+            .from(User)
+            .where(eq(User.email, input.email))
+            .limit(1)
+        ).pop()
+        if (!user || !(await bcryptVerify(input.password, user.password))) {
           throw new TRPCError({
             code: 'FORBIDDEN',
             message: source.invalid_email_or_password,
@@ -35,7 +36,7 @@ export default router({
         }
         return {
           id: user.id,
-          name: user.name,
+          username: user.username,
           token: await signToken({ id: user.id }),
         }
       }),
@@ -45,7 +46,7 @@ export default router({
     getUserInfo: protectedProcedure.query(({ ctx }) => {
       return {
         id: ctx.user.id,
-        name: ctx.user.name,
+        username: ctx.user.username,
       }
     }),
   },

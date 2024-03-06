@@ -39,7 +39,7 @@ async function onLogin() {
       .then((data) => {
         token.updateJwtToken(data.token)
         user.self.id = data.id
-        user.self.name = data.name
+        user.self.username = data.username
         dialog({
           type: 'success',
           title: $text.login_success(),
@@ -67,7 +67,7 @@ async function onLogin() {
 const registerFormRef = ref<FormInst>()
 const registerFormValue = ref({
   ...loginFormValue.value,
-  name: '',
+  username: '',
   password2: '',
 })
 const registerFormRules = {
@@ -82,7 +82,7 @@ const registerFormRules = {
       return true
     },
   },
-  name: {
+  username: {
     required: true,
     trigger: [ 'blur' ],
   },
@@ -151,8 +151,8 @@ function onRegister() {
             :model="registerFormValue"
             :rules="registerFormRules"
           >
-            <n-form-item-row :label="$text.username()" path="name">
-              <n-input v-model:value="registerFormValue.name" />
+            <n-form-item-row :label="$text.username()" path="username">
+              <n-input v-model:value="registerFormValue.username" />
             </n-form-item-row>
             <n-form-item-row :label="$text.email()" path="email">
               <n-input v-model:value="registerFormValue.email" />

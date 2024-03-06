@@ -1,7 +1,8 @@
 import type { Context } from './context'
 
-import db from '@repo/db'
+import { User } from '@repo/db'
 import { TRPCError, initTRPC } from '@trpc/server'
+import { eq } from 'drizzle-orm'
 
 export const t = initTRPC.context<Context>().create({})
 export type TRPCErrorSchema = ReturnType<
@@ -10,13 +11,21 @@ export type TRPCErrorSchema = ReturnType<
 export const router = t.router
 export const publicProcedure = t.procedure
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
-  if (ctx.user?.id) {
-    const user = await db.user.findUnique({
-      where: { id: ctx.user.id },
-    })
-    if (user) {
+  if (ctx.token?.id) {
+    const user = await ctx.db.select({
+      id: User.id,
+      username: User.username,
+      email: User.email,
+      ctime: User.ctime,
+    }).from(User).where(
+      eq(User.id, ctx.token.id),
+    ).limit(1)
+    if (user && user[0]) {
       return next({
-        ctx: { user },
+        ctx: {
+          user: user[0],
+          token: ctx.token,
+        },
       })
     }
   }

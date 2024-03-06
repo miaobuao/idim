@@ -25,3 +25,8 @@ logs
 
 components.d.ts
 auto-imports.d.ts
+
+# cloudflare
+wrangler.toml
+.wrangler
+.wrangler/state/v3

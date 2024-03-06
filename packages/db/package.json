@@ -2,20 +2,13 @@
   "name": "@repo/db",
   "version": "1.0.0",
   "private": true,
-  "main": "index.ts",
+  "main": "schema.ts",
   "scripts": {
-    "build": "prisma generate",
-    "dev": "prisma generate",
-    "migrate": "prisma migrate dev",
+    "migrate": "drizzle-kit generate:sqlite",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "@prisma/client": "5.9.1",
     "@repo/typescript-config": "workspace:*"
-  },
-  "devDependencies": {
-    "prisma": "^5.10.2",
-    "typescript": "^5.3.3"
   }
 }

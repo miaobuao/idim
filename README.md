@@ -12,23 +12,14 @@ pnpm i
 
 ```sh
 pnpm prepare
-cd ./packages/db
-pnpm gen
+pnpm run db:migrate:dev
 ```
 
-3. start PostgreSQL container [Optional]
-
-```sh
-cd docker
-docker-compose up -d
-```
-
-4. start dev server
+3. start dev server
 
 ```sh
 pnpm dev
 ```
-
 
 ## Build
 
