@@ -67,6 +67,7 @@ export default {
   invalid_email: '无效的邮箱',
   email_already_exists: '邮箱已存在',
   name_already_exists: '用户名已存在',
+  email_or_name_alreay_exists: '邮箱或用户名已存在',
 
   expired: '会话已过期',
 

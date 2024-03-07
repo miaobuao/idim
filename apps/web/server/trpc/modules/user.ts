@@ -1,11 +1,13 @@
 import { User } from '@repo/db'
+import { buildLanguageSource } from '@repo/locales'
+import { TRPCError } from '@trpc/server'
 import z from 'zod'
 
 import { publicProcedure, router } from '../trpc'
 import { bcryptEncrypt } from '../utils/bcrypt'
-import { logger } from '../utils/logger'
 import { ZEmail } from '../utils/z'
 
+const source = buildLanguageSource()
 export default router({
   user: {
     create: publicProcedure
@@ -16,28 +18,19 @@ export default router({
           password: z.string(),
         }),
       )
-      .mutation(async ({ input, ctx }) => {
+      .mutation(async ({ input, ctx: { db } }) => {
         const password = await bcryptEncrypt(input.password)
-        return ctx.db.insert(User).values({
+        return db.insert(User).values({
           ...input,
           pwd: password,
         }).onConflictDoNothing().then((res) => {
-          logger.info(res)
+          if (res.meta.changed_db)
+            return true
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: source.email_or_name_alreay_exists,
+          })
         })
-        // .then(() => true)
-        // .catch((err) => {
-        //   if (err.code === 'P2002') {
-        //     const field = err.meta.target[0] as string
-        //     throw new TRPCError({
-        //       code: 'CONFLICT',
-        //       message: `${field}_already_exists`,
-        //     })
-        //   }
-        //   throw new TRPCError({
-        //     code: 'INTERNAL_SERVER_ERROR',
-        //     message: source.internal_server_error,
-        //   })
-        // })
       }),
   },
 })

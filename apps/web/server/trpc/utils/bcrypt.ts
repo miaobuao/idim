@@ -1,18 +1,9 @@
-import { bcrypt, bcryptVerify as verify } from 'hash-wasm'
-import { randomBytes } from 'node:crypto'
+import bcrypt from 'bcryptjs'
 
-export function bcryptEncrypt(password: string) {
-  return bcrypt({
-    password,
-    salt: randomBytes(16),
-    costFactor: 13,
-    outputType: 'encoded',
-  })
+export async function bcryptEncrypt(password: string) {
+  return bcrypt.hash(password, await bcrypt.genSalt(13))
 }
 
 export function bcryptVerify(password: string, hashed: string) {
-  return verify({
-    password,
-    hash: hashed,
-  })
+  return bcrypt.compare(password, hashed)
 }

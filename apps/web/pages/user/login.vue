@@ -35,7 +35,10 @@ async function onLogin() {
       return (btnLoading.value = false)
     const hashed = await kdf(loginFormValue.value.password)
     $trpc.session.create
-      .mutate({ ...loginFormValue.value, password: hashed })
+      .mutate({
+        email: loginFormValue.value.email,
+        password: hashed,
+      })
       .then((data) => {
         token.updateJwtToken(data.token)
         user.self.id = data.id
@@ -97,7 +100,11 @@ function onRegister() {
     }
     const hashed = await kdf(registerFormValue.value.password)
     await $trpc.user.create
-      .mutate({ ...registerFormValue.value, password: hashed })
+      .mutate({
+        username: registerFormValue.value.username,
+        email: registerFormValue.value.email,
+        password: hashed,
+      })
       .then(() => {
         tab.value = Tabs.SIGNIN
         notify({

@@ -69,6 +69,7 @@ export default {
   invalid_email: 'Invalid Email',
   email_already_exists: 'Email Already Exists',
   name_already_exists: 'Name Already Exists',
+  email_or_name_alreay_exists: 'Email Or Name Already Exists',
 
   expired: 'Session Expired',
 
