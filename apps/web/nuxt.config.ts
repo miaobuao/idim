@@ -76,6 +76,13 @@ export default defineNuxtConfig({
     JWT_SECRET: process.env.JWT_SECRET,
     JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
     JWT_ISSUER: process.env.JWT_ISSUER,
-    public: { },
+    public: {
+      BBS: {
+        TITLE_MAX_LENGTH: 100,
+        TITLE_MIN_LENGTH: 2,
+        CONTENT_MAX_LENGTH: 10000,
+        CONTENT_MIN_LENGTH: 5,
+      },
+    },
   },
 })

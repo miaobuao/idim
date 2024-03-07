@@ -7,3 +7,7 @@ export async function bcryptEncrypt(password: string) {
 export function bcryptVerify(password: string, hashed: string) {
   return bcrypt.compare(password, hashed)
 }
+
+export function BcryptVerifier(password: string) {
+  return (hashed: string) => bcryptVerify(password, hashed)
+}

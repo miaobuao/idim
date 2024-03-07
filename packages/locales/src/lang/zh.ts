@@ -55,6 +55,10 @@ export default {
   email: '邮箱',
   ok: '确定',
   cancel: '取消',
+  reset: '重置',
+  clearAll: '清除全部',
+  send: '发送',
+  clearAllConfirmMsg: '是否清除全部?',
 
   retype_password: '重复密码',
   retype_password_error: '重复密码错误',
@@ -94,6 +98,12 @@ export default {
   },
 
   send_post: '发帖',
+  send_succ: '发帖成功',
   title: '标题',
   content: '内容',
+
+  titleMinLenError: '标题最少{length}个字符',
+  titleMaxLenError: '标题最多{length}个字符',
+  contentMinLenError: '内容最少{length}个字符',
+  contentMaxLenError: '内容最多{length}个字符',
 }

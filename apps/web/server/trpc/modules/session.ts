@@ -1,53 +1,45 @@
-import { User } from '@repo/db'
 import { buildLanguageSource } from '@repo/locales'
-import { TRPCError } from '@trpc/server'
-import { eq } from 'drizzle-orm'
+import { pipe } from 'fp-ts/function'
 import z from 'zod'
 
 import { protectedProcedure, publicProcedure, router } from '../trpc'
 import { bcryptVerify } from '../utils/bcrypt'
+import { InvalidEmailOrPasswordError } from '../utils/errors'
+import { FindOneUserByEmail, ThrowErrorIfPromiseNull } from '../utils/functions'
 import { signToken } from '../utils/jwt'
-import { ZEmail } from '../utils/z'
+import { EmailDto } from '../utils/z'
 
 export const source = buildLanguageSource()
 
+export const CreateSessionDto = z.object({
+  email: EmailDto,
+  password: z.string().min(1),
+})
+
+export type CreateSessionType = z.infer<typeof CreateSessionDto>
+
 export default router({
   session: {
-    create: publicProcedure.input(
-      z.object({
-        email: ZEmail,
-        password: z.string(),
-      }),
-    ).mutation(async ({ input, ctx }) => {
-      const user = (
-        await ctx.db.select({
-          id: User.id,
-          password: User.pwd,
-          username: User.username,
-        })
-          .from(User)
-          .where(eq(User.email, input.email))
-          .limit(1)
-          .then(async (records) => {
-            if (records.length === 0 || !(await bcryptVerify(input.password, records[0].password))) {
-              throw new TRPCError({
-                code: 'FORBIDDEN',
-                message: source.invalid_email_or_password,
-              })
-            }
-            return records[0]
-          })
-      )
-      return {
-        id: user.id,
-        username: user.username,
-        token: await signToken({ id: user.id }),
-      }
+    create: publicProcedure.input(CreateSessionDto).mutation(async ({ input, ctx }) => {
+      return await pipe(
+        input.email,
+        FindOneUserByEmail(ctx.db),
+        ThrowErrorIfPromiseNull(InvalidEmailOrPasswordError),
+      ).then(async ({ pwd, id, username }) => {
+        if (await bcryptVerify(input.password, pwd)) {
+          return {
+            id,
+            username,
+            token: await signToken({ id }),
+          }
+        }
+        throw InvalidEmailOrPasswordError
+      })
     }),
     renew: protectedProcedure.mutation(async ({ ctx }) => {
       return await signToken({ id: ctx.user.id })
     }),
-    getUserInfo: protectedProcedure.query(({ ctx }) => {
+    auth: protectedProcedure.query(({ ctx }) => {
       return {
         id: ctx.user.id,
         username: ctx.user.username,

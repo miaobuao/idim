@@ -13,24 +13,24 @@ export enum PubSubEvents {
   Loading = 'loading',
 }
 
-export function notify(opt: NotificationOptions) {
+export function pubNotify(opt: NotificationOptions) {
   PubSub.publish(PubSubEvents.Notification, opt)
 }
 
-export function dialog(opt: DialogOptions) {
+export function pubDialog(opt: DialogOptions) {
   PubSub.publish(PubSubEvents.Dialog, opt)
 }
 
-export function message(opt: MsgOptions) {
+export function pubMessage(opt: MsgOptions) {
   PubSub.publish(PubSubEvents.Message, opt)
 }
 
 export type MsgOptions = { content: string } & MessageOptions
 
-export function startLoading() {
+export function pubStartLoading() {
   PubSub.publish(PubSubEvents.Loading, true)
 }
 
-export function stopLoading() {
+export function pubStopLoading() {
   PubSub.publish(PubSubEvents.Loading, false)
 }

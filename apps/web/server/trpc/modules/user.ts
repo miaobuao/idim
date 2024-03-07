@@ -1,23 +1,23 @@
 import { User } from '@repo/db'
-import { buildLanguageSource } from '@repo/locales'
-import { TRPCError } from '@trpc/server'
-import z from 'zod'
+import { z } from 'zod'
 
 import { publicProcedure, router } from '../trpc'
 import { bcryptEncrypt } from '../utils/bcrypt'
-import { ZEmail } from '../utils/z'
+import { UserAlreadyExistsError } from '../utils/errors'
+import { EmailDto } from '../utils/z'
 
-const source = buildLanguageSource()
+export const CreateUserDto = z.object({
+  username: z.string().min(2),
+  email: EmailDto,
+  password: z.string().min(10),
+})
+
+export type CreateUserType = z.infer<typeof CreateUserDto>
+
 export default router({
   user: {
     create: publicProcedure
-      .input(
-        z.object({
-          username: z.string(),
-          email: ZEmail,
-          password: z.string(),
-        }),
-      )
+      .input(CreateUserDto)
       .mutation(async ({ input, ctx: { db } }) => {
         const password = await bcryptEncrypt(input.password)
         return db.insert(User).values({
@@ -26,10 +26,7 @@ export default router({
         }).onConflictDoNothing().then((res) => {
           if (res.meta.changed_db)
             return true
-          throw new TRPCError({
-            code: 'CONFLICT',
-            message: source.email_or_name_alreay_exists,
-          })
+          throw UserAlreadyExistsError
         })
       }),
   },

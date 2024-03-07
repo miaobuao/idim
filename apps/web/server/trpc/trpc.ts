@@ -1,8 +1,10 @@
 import type { Context } from './context'
 
 import { User } from '@repo/db'
-import { TRPCError, initTRPC } from '@trpc/server'
+import { initTRPC } from '@trpc/server'
 import { eq } from 'drizzle-orm'
+
+import { UnauthorizedError } from './utils/errors'
 
 export const t = initTRPC.context<Context>().create({})
 export type TRPCErrorSchema = ReturnType<
@@ -29,5 +31,5 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
       })
     }
   }
-  throw new TRPCError({ code: 'UNAUTHORIZED' })
+  throw UnauthorizedError
 })
