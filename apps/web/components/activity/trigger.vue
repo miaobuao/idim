@@ -18,14 +18,6 @@ function onLeave() {
 </script>
 
 <template>
-  <!-- <n-tag round v-bind="$attrs" @mouseenter="onHover" @mouseleave="onLeave">
-    <template v-if="!hideLabel">
-      {{ label }}
-    </template>
-    <template #avatar>
-      <slot name="icon"></slot>
-    </template>
-  </n-tag> -->
   <n-button v-bind="$attrs" @mouseenter="onHover" @mouseleave="onLeave">
     <template #icon>
       <n-icon>

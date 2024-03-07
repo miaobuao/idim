@@ -16,7 +16,7 @@ export const useTokenStore = defineStore('token', () => {
     if (token.value) {
       const { $trpc } = useNuxtApp()
       const user = useUserStore()
-      $trpc.session.getUserInfo
+      $trpc.session.auth
         .query()
         .then((data) => {
           user.self.id = data.id

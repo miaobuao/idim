@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type Layout from './layout.vue'
+
 defineProps<{
   trigger: {
     label?: string
@@ -8,10 +10,18 @@ defineProps<{
     class?: string
   }
 }>()
+
+const layoutRef = ref<InstanceType<typeof Layout>>()
+
+defineExpose({
+  toggle() {
+    layoutRef.value?.toggle()
+  },
+})
 </script>
 
 <template>
-  <ActivityLayout>
+  <ActivityLayout ref="layoutRef">
     <template #trigger>
       <ActivityTrigger v-bind="trigger">
         <template #icon>

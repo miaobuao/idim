@@ -43,7 +43,7 @@ async function onLogin() {
         token.updateJwtToken(data.token)
         user.self.id = data.id
         user.self.username = data.username
-        dialog({
+        pubDialog({
           type: 'success',
           title: $text.login_success(),
           content: $text.whether_keep_logged_in(),
@@ -107,7 +107,7 @@ function onRegister() {
       })
       .then(() => {
         tab.value = Tabs.SIGNIN
-        notify({
+        pubNotify({
           type: 'success',
           duration: 1500,
           content: $text.reg_succ(),

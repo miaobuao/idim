@@ -84,7 +84,7 @@ const currentPage = computed(
 )
 
 function logout() {
-  dialog({
+  pubDialog({
     type: 'warning',
     title: $text.logout(),
     content: $text.logout_confirm(),

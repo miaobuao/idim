@@ -57,6 +57,10 @@ export default {
   email: 'Email',
   ok: 'OK',
   cancel: 'Cancel',
+  reset: 'Reset',
+  clearAll: 'Clear All',
+  send: 'Send',
+  clearAllConfirmMsg: 'Do you want to clear all?',
 
   retype_password: 'Retype Password',
   retype_password_error: 'Retype Password Error',
@@ -96,7 +100,13 @@ export default {
   },
 
   send_post: 'Send Post',
-
+  send_succ: 'Send Success',
   title: 'Title',
   content: 'Content',
+
+  titleMinLenError: 'Title must be at least {length} characters',
+  titleMaxLenError: 'Title must not exceed {length} characters',
+  contentMinLenError: 'Content must be at least {length} characters',
+  contentMaxLenError: 'Content must not exceed {length} characters',
+
 }

@@ -5,4 +5,5 @@ export default {
   JWT_EXPIRES_IN: config.JWT_EXPIRES_IN,
   JWT_ISSUER: config.JWT_ISSUER,
   LOG_LEVEL: process.env.LOG_LEVEL ?? 'info',
+  ...config.public,
 } as const

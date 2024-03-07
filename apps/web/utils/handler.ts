@@ -1,8 +1,10 @@
-import type { AppRouter } from '@idim/api'
+import type { AppRouter } from '~/server/trpc/router'
 
 import { TRPCClientError } from '@trpc/client'
 import { AxiosError } from 'axios'
 import { isArray } from 'lodash-es'
+
+import { pubMessage, pubNotify } from './pubsub'
 
 type TRPCError = TRPCClientError<AppRouter>
 
@@ -18,7 +20,7 @@ export function errorHandler(err: AxiosError<string> | Error | TRPCError) {
 function axiosErrorHandler(err: AxiosError<string>) {
   const { $i18n } = useNuxtApp()
   const { t } = $i18n
-  message({
+  pubMessage({
     content: t(err.response?.data ?? 'error.unknown'),
     type: 'error',
   })
@@ -27,15 +29,13 @@ function axiosErrorHandler(err: AxiosError<string>) {
 function commonErrorHandler(err: Error) {
   const app = useNuxtApp()
   const { t } = app.$i18n
-  message({
+  pubMessage({
     content: t(err.message),
     type: 'error',
   })
 }
 
 function trpcErrorHandler(err: TRPCError) {
-  const app = useNuxtApp()
-  const { t } = app.$i18n
   if (!err.message)
     throw err
 
@@ -43,18 +43,19 @@ function trpcErrorHandler(err: TRPCError) {
     var msg = JSON.parse(err.message)
   }
   catch {
-    return notify({
-      content: t(err.message),
-      duration: 5000,
-    })
-  }
-  if (isArray(msg)) {
-    return msg.forEach((cell) => {
-      notify({
-        content: t(cell.message),
-        duration: 5000,
-      })
-    })
+    if (isArray(msg))
+      return msg.forEach(({ message }) => trpcErrorMessageHandler(message))
+    return trpcErrorMessageHandler(msg)
   }
   throw err
+}
+
+export function trpcErrorMessageHandler(msg: string) {
+  const app = useNuxtApp()
+  const { t } = app.$i18n
+  pubNotify({
+    type: 'error',
+    content: t(msg),
+    duration: 5000,
+  })
 }

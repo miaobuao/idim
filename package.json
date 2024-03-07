@@ -22,25 +22,26 @@
     "preview": "NITRO_PRESET=cloudflare-pages pnpm build && cd apps/web && wrangler pages dev dist"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21",
-    "sass": "^1.71.1"
-  },
-  "devDependencies": {
     "@antfu/eslint-config": "^2.7.0",
-    "@repo/typescript-config": "workspace:*",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.11.25",
+    "eslint": "^8.57.0",
+    "eslint-config-turbo": "^1.12.4",
+    "eslint-plugin-format": "^0.1.0",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5",
+    "prettier-eslint": "^16.3.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@unocss/eslint-plugin": "^0.58.5",
     "dotenv-cli": "latest",
     "drizzle-kit": "^0.20.14",
     "drizzle-orm": "^0.29.4",
-    "eslint": "^8.57.0",
-    "eslint-config-turbo": "^1.12.4",
-    "eslint-plugin-format": "^0.1.0",
     "fp-ts": "^2.16.2",
-    "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5",
+    "lodash-es": "^4.17.21",
+    "sass": "^1.71.1",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",

@@ -7,6 +7,12 @@ const hidden = ref(false)
 
 const themeVars = useThemeVars()
 
+defineExpose({
+  toggle() {
+    hidden.value = !hidden.value
+  },
+})
+
 function toggleHidden() {
   hidden.value = !hidden.value
 }
@@ -28,10 +34,13 @@ const windowRef = ref<HTMLElement>()
 const draggableBarRef = ref<HTMLElement>()
 const { x: windowX, y: windowY } = useDraggable(windowRef, {
   handle: draggableBarRef,
+  onMove({ x, y }) {
+    const { clientWidth: w, clientHeight: h } = windowRef.value!
+    const { innerWidth, innerHeight } = window
+    windowX.value = Math.max(Math.min(x, innerWidth - w), 0)
+    windowY.value = Math.max(Math.min(y, innerHeight - h), 0)
+  },
 })
-const windowStyle = computed(
-  () => `left: ${windowX.value}px; top: ${windowY.value}px`,
-)
 
 onMounted(() => {
   nextTick(() => {
@@ -77,7 +86,13 @@ onMounted(() => {
     v-show="!hidden"
     ref="windowRef"
     class="fixed select-none z-31 md:w-300px lg:w-500px xl:w-600px min-w-200px"
-    :style="windowStyle"
+    :style="{
+      left: `${windowX}px`,
+      top: `${windowY}px`,
+      ...(windowRef?.clientHeight === undefined
+        ? {}
+        : { maxHeight: `calc(100vh - ${windowY}px)` }),
+    }"
     style="touch-action: none"
   >
     <n-card class="h-full w-full" content-class="p-0!">
@@ -95,7 +110,7 @@ onMounted(() => {
           </template>
         </n-button>
       </n-layout-header>
-      <n-layout-content>
+      <n-layout-content :native-scrollbar="false">
         <slot name="window" />
       </n-layout-content>
     </n-card>
