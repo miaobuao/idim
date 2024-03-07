@@ -14,9 +14,17 @@ async function abstractPayloadFromHeaders(headers: Headers) {
 }
 
 export async function createContext(ctx: H3Event) {
-  return {
-    ...await abstractPayloadFromHeaders(ctx.headers),
-    db: ctx.context.db,
+  try {
+    return {
+      ...await abstractPayloadFromHeaders(ctx.headers),
+      ...ctx.context,
+    }
+  }
+  catch {
+    return {
+      token: null,
+      ...ctx.context,
+    }
   }
 }
 

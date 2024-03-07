@@ -1,7 +1,3 @@
-import Logger from 'pino'
+import { consola as logger } from 'consola'
 
-import config from './config'
-
-export const logger = Logger()
-
-logger.level = config.LOG_LEVEL
+export default logger

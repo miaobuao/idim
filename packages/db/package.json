@@ -6,7 +6,9 @@
   "scripts": {
     "migrate": "drizzle-kit generate:sqlite",
     "type-check": "tsc --noEmit",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "dev:studio": "DB_MDOE=dev drizzle-kit studio --verbose",
+    "prod:studio": "DB_MODE=prod drizzle-kit studio --verbose"
   },
   "dependencies": {
     "@repo/typescript-config": "workspace:*"
