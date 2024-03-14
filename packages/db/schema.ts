@@ -20,7 +20,7 @@ export const Currency = sqliteTable('currency', {
 })
 
 export const RelativeAccount = sqliteTable('relative_account', {
-  id: integer('id').primaryKey().references(() => User.id),
+  id: integer('id').primaryKey().references(() => User.id).notNull(),
   qq: text('qq'),
   tel: text('tel'),
   xbox: text('xbox'),
@@ -93,7 +93,7 @@ export const PostCommentLike = sqliteTable('bbs_post_comment_like', {
   }
 })
 
-export const forumDailyCheckinRecord = sqliteTable('bbs_daily_checkin_record', {
+export const ForumDailyCheckinRecord = sqliteTable('bbs_daily_checkin_record', {
   userId: integer('user_id').references(() => User.id).notNull(),
   ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
 }, (table) => {
@@ -107,7 +107,7 @@ export interface ForumBadgeMetadata {
   color: string
 }
 
-export const forumUserBadge = sqliteTable('bbs_user_badge', {
+export const ForumUserBadge = sqliteTable('bbs_user_badge', {
   id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
   userId: integer('user_id').references(() => User.id).notNull(),
   metadata: text('metadata').$type<ForumBadgeMetadata>().notNull(),
@@ -133,5 +133,18 @@ export const ActivityThrowSoap = sqliteTable('activity_throw_soap', {
 }, (table) => {
   return {
     pk: primaryKey({ columns: [ table.userId, table.ctime ] }),
+  }
+})
+
+export const VerifyCode = sqliteTable('verify_code', {
+  type: text('type').notNull(),
+  email: text('email').notNull(),
+  code: text('code').notNull(),
+  expiresAt: integer('expires_at').notNull(),
+}, (table) => {
+  return {
+    typeIdx: index('verify_code_type_idx').on(table.type),
+    emailIdx: index('verify_code_email_idx').on(table.email),
+    expiresAtIdx: index('verify_code_expires_at_idx').on(table.expiresAt),
   }
 })

@@ -53,6 +53,8 @@ export default {
   logout: 'Logout',
   register: 'Register',
   password: 'Password',
+  new_password: 'New Password',
+  forgot_password: 'Forgot Password',
   username: 'Username',
   email: 'Email',
   ok: 'OK',
@@ -69,13 +71,17 @@ export default {
   whether_keep_logged_in: 'Whether Keep Logged In',
 
   internal_server_error: 'Internal Server Error',
+  too_many_requests: 'Too Many Requests',
   invalid_email_or_password: 'Invalid Email Or Password',
   invalid_email: 'Invalid Email',
   email_already_exists: 'Email Already Exists',
   name_already_exists: 'Name Already Exists',
   email_or_name_alreay_exists: 'Email Or Name Already Exists',
+  email_not_registered: 'Email Not Registered',
 
   expired: 'Session Expired',
+  verify_code: 'Verify Code',
+  invalid_verify_code: 'Invalid Verify Code',
 
   header: {
     user: 'User',
@@ -87,6 +93,7 @@ export default {
     'We will send a verification code to your email address.',
   change_psw: 'Change password',
   change_psw_caption: 'Change your password.',
+  pwd_changed_succ: 'Password changed successfully!',
 
   switch_theme: 'Switch theme',
   switch_theme_caption: 'Switch theme in Dark, Light or Auto',

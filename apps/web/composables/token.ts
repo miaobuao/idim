@@ -21,6 +21,7 @@ export const useTokenStore = defineStore('token', () => {
         .then((data) => {
           user.self.id = data.id
           user.self.username = data.username
+          user.self.email = data.email
         })
         .catch(clearJwtToken)
     }

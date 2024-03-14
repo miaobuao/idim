@@ -32,6 +32,7 @@ const [ _, pagesMap ] = createPages(
         .addLabel({
           title: $text.change_psw(),
           caption: $text.change_psw_caption(),
+          to: { name: 'user-update-password' },
         })
         .addBtn({
           text: $text.logout(),

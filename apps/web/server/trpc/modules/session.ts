@@ -30,6 +30,7 @@ export default router({
           return {
             id,
             username,
+            email: input.email,
             token: await signToken({ id }),
           }
         }
@@ -43,6 +44,7 @@ export default router({
       return {
         id: ctx.user.id,
         username: ctx.user.username,
+        email: ctx.user.email,
       }
     }),
   },

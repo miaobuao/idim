@@ -12,7 +12,7 @@ export async function signToken(payload: JwtPayloadData) {
   return await new SignJWT({ data: payload })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuer(config.JWT_ISSUER)
-    .setExpirationTime(config.JWT_EXPIRES_IN)
+    .setExpirationTime(config.OAUTH_JWT_EXPIRES_IN)
     .sign(secret)
 }
 

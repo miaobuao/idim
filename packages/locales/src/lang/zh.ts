@@ -51,6 +51,8 @@ export default {
   logout: '登出',
   register: '注册',
   password: '密码',
+  new_password: '新密码',
+  forgot_password: '忘记密码',
   username: '用户名',
   email: '邮箱',
   ok: '确定',
@@ -67,13 +69,16 @@ export default {
   whether_keep_logged_in: '是否保持登录',
 
   internal_server_error: '内部服务器错误',
+  too_many_requests: '请求过多',
   invalid_email_or_password: '无效的邮箱或密码',
   invalid_email: '无效的邮箱',
   email_already_exists: '邮箱已存在',
   name_already_exists: '用户名已存在',
   email_or_name_alreay_exists: '邮箱或用户名已存在',
-
+  email_not_registered: '邮箱未注册',
   expired: '会话已过期',
+  verify_code: '验证码',
+  invalid_verify_code: '无效的验证码',
 
   header: {
     user: '用户',
@@ -85,6 +90,7 @@ export default {
   verify_mail_caption: '我们会发送一个验证码到你填写的邮箱地址.',
   change_psw: '修改密码',
   change_psw_caption: '你可以修改密码',
+  pwd_changed_succ: '密码修改成功!',
 
   switch_theme: '主题',
   switch_theme_caption: '切换主题, 可以选择深色, 浅色或自动',
@@ -98,7 +104,7 @@ export default {
   },
 
   send_post: '发帖',
-  send_succ: '发帖成功',
+  send_succ: '发送成功',
   title: '标题',
   content: '内容',
 

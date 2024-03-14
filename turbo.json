@@ -33,6 +33,7 @@
       "cache": false,
       "persistent": true
     },
-    "@repo/db#migrate": {}
+    "@repo/db#migrate": {},
+    "smtp-forwarder#dev": {}
   }
 }
