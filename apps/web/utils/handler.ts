@@ -38,19 +38,20 @@ function commonErrorHandler(err: Error) {
 function trpcErrorHandler(err: TRPCError) {
   if (!err.message)
     throw err
-
   try {
     var msg = JSON.parse(err.message)
   }
   catch {
-    if (isArray(msg))
-      return msg.forEach(({ message }) => trpcErrorMessageHandler(message))
-    return trpcErrorMessageHandler(msg)
+    msg = err.message
   }
-  throw err
+  if (isArray(msg))
+    return msg.forEach(({ message }) => trpcErrorMessageHandler(message))
+  return trpcErrorMessageHandler(msg)
 }
 
 export function trpcErrorMessageHandler(msg: string) {
+  if (!msg)
+    return
   const app = useNuxtApp()
   const { t } = app.$i18n
   pubNotify({

@@ -5,7 +5,6 @@ import AutoImport from 'unplugin-auto-import/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
 const vite: NuxtConfig['vite'] = {
   optimizeDeps: {
     include:
@@ -74,8 +73,12 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     JWT_SECRET: process.env.JWT_SECRET,
-    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
+    OAUTH_JWT_EXPIRES_IN: process.env.OAUTH_JWT_EXPIRES_IN,
+    SMTP_JWT_EXPIRES_IN: process.env.SMTP_JWT_EXPIRES_IN,
     JWT_ISSUER: process.env.JWT_ISSUER,
+    SMTP_API_URL: process.env.SMTP_API_URL,
+    SMTP_API_AES_KEY: process.env.SMTP_API_AES_KEY,
+    SMTP_API_AES_IV: process.env.SMTP_API_AES_IV,
     public: {
       BBS: {
         TITLE_MAX_LENGTH: 100,

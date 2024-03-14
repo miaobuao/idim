@@ -43,6 +43,7 @@ async function onLogin() {
         token.updateJwtToken(data.token)
         user.self.id = data.id
         user.self.username = data.username
+        user.self.email = data.email
         pubDialog({
           type: 'success',
           title: $text.login_success(),
@@ -122,8 +123,8 @@ function onRegister() {
 </script>
 
 <template>
-  <div class="flex flex-col hfull justify-center">
-    <n-card class="w-[90%] max-w-[400px] my-0 mx-auto">
+  <div class="flex flex-col hfull justify-center items-center">
+    <n-card class="w-[90%] max-w-[400px]">
       <n-tabs v-model:value="tab" size="large" justify-content="space-evenly">
         <n-tab-pane name="signin" :tab="$text.login()">
           <n-form
@@ -141,6 +142,13 @@ function onRegister() {
               />
             </n-form-item-row>
           </n-form>
+
+          <div class="float-right mb-1">
+            <nuxt-link to="update-password">
+              {{ $text.forgot_password() }}
+            </nuxt-link>
+          </div>
+
           <n-button
             :loading="btnLoading"
             type="primary"
@@ -177,6 +185,7 @@ function onRegister() {
               />
             </n-form-item-row>
           </n-form>
+
           <n-button
             :loading="btnLoading"
             type="primary"

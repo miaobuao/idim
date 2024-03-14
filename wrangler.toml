@@ -1,0 +1,21 @@
+[[d1_databases]]
+binding = "D1"
+database_name = "idim"
+database_id = "09c09f70-78b7-42b9-934b-8f384f16607e"
+migrations_dir = "packages/db/migrations"
+
+[[d1_databases]]
+binding = "D1_PROD"
+database_name = "idim-prod"
+database_id = "2c466235-8af0-4298-9147-62e92b1b8bec"
+migrations_dir = "packages/db/migrations"
+
+[[d1_databases]]
+binding = "D1_PREV"
+database_name = "idim-prev"
+database_id = "2e21c324-f99b-4d92-8f27-fede65d67af2"
+migrations_dir = "packages/db/migrations"
+
+[[kv_namespaces]]
+binding = "KV_API_RATE_LIMIT"
+id = "a8d149782f724c49a2a9ff689574e4a8"

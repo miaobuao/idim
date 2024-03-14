@@ -1,0 +1,17 @@
+{
+  "name": "smtp-forwarder",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "eslint . --fix",
+    "lint-staged": "lint-staged",
+    "build": "tsup src/index.ts --dts --minify",
+    "dev": "tsup src/index.ts --dts --watch --onSuccess \"node ./dist/index.js\""
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/crypto-js": "^4.2.2",
+    "@types/nodemailer": "^6.4.14",
+    "crypto-js": "^4.2.0",
+    "nodemailer": "^6.9.12"
+  }
+}
