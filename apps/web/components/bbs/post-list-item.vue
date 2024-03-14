@@ -1,10 +1,22 @@
 <script setup lang="ts">
 const props = defineProps<{
   offset: number
+  holderHeight?: number
 }>()
 
 const posts = usePostsStore()
-const post = computed(() => posts.getByOffset(props.offset).value)
+const query = ref(posts.getByOffset(props.offset))
+const post = computed(() => query.value.data)
+
+watch(
+  () => props.offset,
+  (n, o) => {
+    if (n !== o) {
+      query.value.abort()
+      query.value = posts.getByOffset(n) as unknown as typeof query.value
+    }
+  },
+)
 </script>
 
 <template>
@@ -47,8 +59,11 @@ const post = computed(() => posts.getByOffset(props.offset).value)
       </n-thing>
     </n-card>
 
-    <n-card v-else>
-      <n-skeleton text :repeat="3" />
+    <n-card
+      v-else
+      :style="{ height: holderHeight ? `${holderHeight}px` : 'auto' }"
+    >
+      <n-skeleton text :repeat="5" />
     </n-card>
   </div>
 </template>

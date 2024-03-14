@@ -88,7 +88,7 @@ onBeforeMount(() => {
   <BbsSendPostForm ref="sendForm" :sending="sending" @submit="sendPost" />
   <n-virtual-list
     class="bbs_posts-list"
-    :item-size="120"
+    :item-size="156"
     :items="
       Array.from({ length: posts.total }).map((_, i) => ({
         offset: posts.total - i - 1,
@@ -97,7 +97,7 @@ onBeforeMount(() => {
     item-resizable
   >
     <template #default="{ item }">
-      <BbsPostListItem class="m-1" :offset="item.offset" />
+      <BbsPostListItem :holder-height="156" class="m-1" :offset="item.offset" />
     </template>
   </n-virtual-list>
 </template>

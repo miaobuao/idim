@@ -4,10 +4,14 @@ import { screen } from '~/utils/screen'
 const route = useRoute()
 
 const posts = usePostsStore()
-const data = computed(() => {
+const query = computed(() => {
   const pid = Number.parseInt(route.params.pid as string)
-  return posts.get(pid).value
+  return posts.get(pid)
 })
+onUnmounted(() => {
+  query.value.abort()
+})
+const data = computed(() => query.value.data.value)
 const cardSize = computed(() => (screen.gt.md ? 'medium' : 'small'))
 </script>
 

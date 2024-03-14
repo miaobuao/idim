@@ -1,5 +1,7 @@
 import dayjs from 'dayjs'
 
+import { Batcher } from '~/utils/batcher'
+
 export interface PostDto {
   id: number
   title: string
@@ -12,10 +14,14 @@ export interface PostDto {
   }
 }
 
+const batch = new Batcher(750)
+
 export const usePostsStore = defineStore('posts', () => {
   const posts = reactive<Map<number, PostDto>>(new Map())
   const offsetMap = reactive<Map<number, number>>(new Map())
   const total = ref(-1)
+  const queryByOffsetPendingMap: Map<number, boolean> = new Map()
+  const queryByIdPendingMap: Map<number, boolean> = new Map()
 
   async function refresh() {
     const { $trpc } = useNuxtApp()
@@ -23,7 +29,12 @@ export const usePostsStore = defineStore('posts', () => {
   }
 
   function get(id: number) {
-    if (!posts.has(id)) {
+    batch.start()
+    const abort = batch.push(() => {
+      if (posts.has(id) || queryByIdPendingMap.has(id))
+        return
+      queryByIdPendingMap.set(id, true)
+
       const { $trpc } = useNuxtApp()
       $trpc.post.get.query(id)
         .then(post => posts.set(post.id, {
@@ -32,12 +43,21 @@ export const usePostsStore = defineStore('posts', () => {
           mtime: dayjs(post.mtime),
         }))
         .catch(errorHandler)
+        .finally(() => queryByIdPendingMap.delete(id))
+    })
+    return {
+      abort,
+      data: computed(() => posts.get(id)),
     }
-    return computed(() => posts.get(id))
   }
 
   function getByOffset(offset: number) {
-    if (!offsetMap.has(offset)) {
+    batch.start()
+    const abort = batch.push(() => {
+      if (offsetMap.has(offset) || queryByOffsetPendingMap.has(offset))
+        return
+      queryByOffsetPendingMap.set(offset, true)
+
       const { $trpc } = useNuxtApp()
       $trpc.post.getByOffset.query(offset)
         .then((post) => {
@@ -49,12 +69,14 @@ export const usePostsStore = defineStore('posts', () => {
           })
         })
         .catch(errorHandler)
-    }
-    return computed(() => {
+        .finally(() => queryByOffsetPendingMap.delete(offset))
+    })
+    const data = computed(() => {
       if (offsetMap.has(offset))
         return posts.get(offsetMap.get(offset)!)
       return undefined
     })
+    return { abort, data }
   }
 
   return {
