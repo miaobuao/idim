@@ -10,9 +10,10 @@ import {
   LogoXbox as XboxIcon,
 } from '@vicons/ionicons5'
 import { vElementHover } from '@vueuse/components'
-import { NAvatar, NEllipsis, NIcon, useThemeVars } from 'naive-ui'
+import { NEllipsis, NIcon, useThemeVars } from 'naive-ui'
 import { RouterLink } from 'vue-router'
 
+import Avatar from './components/avatar.vue'
 import { screen } from './utils/screen'
 
 const themeVars = useThemeVars()
@@ -38,7 +39,7 @@ const menuOptions = computed(() => [
         key: 'me',
         icon: () =>
           h(
-            NAvatar,
+            Avatar,
             {
               size: 25,
               color: themeVars.value.primaryColor,

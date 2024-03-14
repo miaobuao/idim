@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { index, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 export const User = sqliteTable('user', {
@@ -6,7 +6,7 @@ export const User = sqliteTable('user', {
   username: text('username').notNull().unique(),
   email: text('email').notNull().unique(),
   pwd: text('pwd').notNull(),
-  ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
   return {
     emailIdx: index('user_email_idx').on(table.email),
@@ -14,13 +14,13 @@ export const User = sqliteTable('user', {
 })
 
 export const Currency = sqliteTable('currency', {
-  id: integer('id').primaryKey().references(() => User.id).notNull(),
+  id: integer('id').primaryKey().references(() => User.id, { onDelete: 'cascade' }).notNull(),
   soap: integer('soap').notNull().default(0),
   pants: integer('pants').notNull().default(0),
 })
 
 export const RelativeAccount = sqliteTable('relative_account', {
-  id: integer('id').primaryKey().references(() => User.id).notNull(),
+  id: integer('id').primaryKey().references(() => User.id, { onDelete: 'cascade' }).notNull(),
   qq: text('qq'),
   tel: text('tel'),
   xbox: text('xbox'),
@@ -37,9 +37,9 @@ export const Post = sqliteTable('bbs_post', {
   authorId: integer('author_id').references(() => User.id).notNull(),
   title: text('title').notNull(),
   content: text('content').notNull(),
-  visible: integer('visible').notNull().default(1),
-  ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
-  mtime: integer('mtime').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  visible: integer('visible', { mode: 'boolean' }).notNull().default(true),
+  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
+  mtime: integer('mtime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
   return {
     authorIdx: index('post_author_idx').on(table.authorId),
@@ -52,8 +52,8 @@ export const PostComment = sqliteTable('bbs_post_comment', {
   id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
   authorId: integer('author_id').references(() => User.id).notNull(),
   content: text('content').notNull(),
-  ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
-  mtime: integer('mtime').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
+  mtime: integer('mtime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
   return {
     authorIdx: index('post_comment_author_idx').on(table.authorId),
@@ -74,9 +74,9 @@ export const PostCommentLink = sqliteTable('bbs_post_comment_link', {
 })
 
 export const PostLike = sqliteTable('bbs_post_like', {
-  postId: integer('post_id').references(() => Post.id).notNull(),
+  postId: integer('post_id').references(() => Post.id, { onDelete: 'cascade' }).notNull(),
   userId: integer('user_id').references(() => User.id).notNull(),
-  ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
   return {
     pk: primaryKey({ columns: [ table.postId, table.userId ] }),
@@ -84,9 +84,9 @@ export const PostLike = sqliteTable('bbs_post_like', {
 })
 
 export const PostCommentLike = sqliteTable('bbs_post_comment_like', {
-  commentId: integer('post_id').references(() => PostComment.id).notNull(),
+  commentId: integer('post_id').references(() => PostComment.id, { onDelete: 'cascade' }).notNull(),
   userId: integer('user_id').references(() => User.id).notNull(),
-  ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
   return {
     pk: primaryKey({ columns: [ table.commentId, table.userId ] }),
@@ -95,10 +95,11 @@ export const PostCommentLike = sqliteTable('bbs_post_comment_like', {
 
 export const ForumDailyCheckinRecord = sqliteTable('bbs_daily_checkin_record', {
   userId: integer('user_id').references(() => User.id).notNull(),
-  ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
   return {
-    pk: primaryKey({ columns: [ table.userId, table.ctime ] }),
+    userIdx: index('forum_daily_checkin_user_id_idx').on(table.userId),
+    ctimeIdx: index('forum_daily_checkin_ctime_idx').on(table.ctime),
   }
 })
 
@@ -109,7 +110,7 @@ export interface ForumBadgeMetadata {
 
 export const ForumUserBadge = sqliteTable('bbs_user_badge', {
   id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
-  userId: integer('user_id').references(() => User.id).notNull(),
+  userId: integer('user_id').references(() => User.id, { onDelete: 'cascade' }).notNull(),
   metadata: text('metadata').$type<ForumBadgeMetadata>().notNull(),
 }, (table) => {
   return {
@@ -127,24 +128,41 @@ export const EmailPool = sqliteTable('email_pool', {
 })
 
 export const ActivityThrowSoap = sqliteTable('activity_throw_soap', {
-  userId: integer('user_id').references(() => User.id).notNull(),
+  userId: integer('user_id').references(() => User.id, { onDelete: 'cascade' }).notNull(),
   count: integer('count').notNull(),
-  ctime: integer('ctime').default(sql`CURRENT_TIMESTAMP`).notNull(),
+  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
   return {
     pk: primaryKey({ columns: [ table.userId, table.ctime ] }),
   }
 })
 
-export const VerifyCode = sqliteTable('verify_code', {
-  type: text('type').notNull(),
-  email: text('email').notNull(),
-  code: text('code').notNull(),
-  expiresAt: integer('expires_at').notNull(),
-}, (table) => {
-  return {
-    typeIdx: index('verify_code_type_idx').on(table.type),
-    emailIdx: index('verify_code_email_idx').on(table.email),
-    expiresAtIdx: index('verify_code_expires_at_idx').on(table.expiresAt),
-  }
-})
+export const userRelations = relations(User, ({ many }) => ({
+  posts: many(Post),
+}))
+
+export const postRelations = relations(Post, ({ one, many }) => ({
+  author: one(User, {
+    fields: [ Post.authorId ],
+    references: [ User.id ],
+  }),
+  comments: many(PostCommentLink),
+}))
+
+export const postCommentLinkRelations = relations(PostCommentLink, ({ one }) => ({
+  prevComment: one(PostComment, {
+    fields: [ PostCommentLink.prevId ],
+    references: [ PostComment.id ],
+  }),
+  post: one(Post, {
+    fields: [ PostCommentLink.postId ],
+    references: [ Post.id ],
+  }),
+}))
+
+export const commentRelations = relations(PostComment, ({ one }) => ({
+  author: one(User, {
+    fields: [ PostComment.authorId ],
+    references: [ User.id ],
+  }),
+}))

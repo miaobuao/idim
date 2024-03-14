@@ -9,6 +9,7 @@ import BbsSendPostForm from '../../components/bbs/send-post-form.vue'
 const sending = ref(false)
 const sendForm = ref<InstanceType<typeof BbsSendPostForm> | null>(null)
 const { $trpc, $text } = useNuxtApp()
+const posts = usePostsStore()
 const source = buildLanguageSource()
 
 function sendPost(data: CreatePostType) {
@@ -21,64 +22,82 @@ function sendPost(data: CreatePostType) {
         content: $text.send_succ(),
         duration: 3000,
       })
+      posts.refresh()
       sendForm.value?.clearAll()
       sendForm.value?.toggle()
     })
-    .catch((e) => {
-      if (e.message) {
-        const msg = JSON.parse(e.message)
-        if (isArray(msg)) {
-          const config = useRuntimeConfig()
-          msg.forEach(({ message }) => {
-            if (message === source.titleMaxLenError) {
-              pubNotify({
-                type: 'error',
-                duration: 2000,
-                content: $text.titleMaxLenError({
-                  length: config.public.BBS.TITLE_MAX_LENGTH,
-                }),
-              })
-            }
-            else if (message === source.titleMinLenError) {
-              pubNotify({
-                type: 'error',
-                duration: 2000,
-                content: $text.titleMinLenError({
-                  length: config.public.BBS.TITLE_MIN_LENGTH,
-                }),
-              })
-            }
-            else if (message === source.contentMinLenError) {
-              pubNotify({
-                type: 'error',
-                duration: 2000,
-                content: $text.contentMinLenError({
-                  length: config.public.BBS.CONTENT_MIN_LENGTH,
-                }),
-              })
-            }
-            else if (message === source.contentMaxLenError) {
-              pubNotify({
-                type: 'error',
-                duration: 2000,
-                content: $text.contentMaxLenError({
-                  length: config.public.BBS.CONTENT_MAX_LENGTH,
-                }),
-              })
-            }
-            else {
-              trpcErrorMessageHandler(message)
-            }
-          })
-        }
-      }
-    })
+    .catch(handleSendPostError)
     .finally(() => {
       sending.value = false
     })
 }
+
+function handleSendPostError(e: any) {
+  if (!e.message)
+    return errorHandler(e)
+  const msg = JSON.parse(e.message)
+  if (!isArray(msg))
+    return errorHandler(e)
+
+  const config = useRuntimeConfig()
+  const publish = createPubNotify({
+    type: 'error',
+    duration: 2000,
+  })
+  msg.forEach(({ message }) => {
+    switch (message) {
+      case source.titleMaxLenError:
+        return publish({
+          content: $text.titleMaxLenError({
+            length: config.public.BBS.TITLE_MAX_LENGTH,
+          }),
+        })
+
+      case source.titleMinLenError:
+        return publish({
+          content: $text.titleMinLenError({
+            length: config.public.BBS.TITLE_MIN_LENGTH,
+          }),
+        })
+
+      case source.contentMinLenError:
+        return publish({
+          content: $text.contentMinLenError({
+            length: config.public.BBS.CONTENT_MIN_LENGTH,
+          }),
+        })
+
+      case source.contentMaxLenError:
+        return publish({
+          content: $text.contentMaxLenError({
+            length: config.public.BBS.CONTENT_MAX_LENGTH,
+          }),
+        })
+
+      default:
+        return trpcErrorMessageHandler(message)
+    }
+  })
+}
+onBeforeMount(() => {
+  posts.refresh()
+})
 </script>
 
 <template>
   <BbsSendPostForm ref="sendForm" :sending="sending" @submit="sendPost" />
+  <n-virtual-list
+    class="bbs_posts-list"
+    :item-size="120"
+    :items="
+      Array.from({ length: posts.total }).map((_, i) => ({
+        offset: posts.total - i - 1,
+      }))
+    "
+    item-resizable
+  >
+    <template #default="{ item }">
+      <BbsPostListItem class="m-1" :offset="item.offset" />
+    </template>
+  </n-virtual-list>
 </template>

@@ -1,21 +1,23 @@
+import type { MaybePromise } from '@trpc/server/unstable-core-do-not-import'
 import type { DrizzleD1Database } from 'drizzle-orm/d1'
 
 import { User } from '@repo/db'
 import { TRPCError } from '@trpc/server'
 import { eq } from 'drizzle-orm'
 import { pipe } from 'fp-ts/lib/function'
+import { isNil } from 'lodash-es'
 
 import { InternalServerError } from './errors'
 
-export function FindOneUserById(db: DrizzleD1Database) {
+export function FindOneUserById(db: DrizzleD1Database<any>) {
   return (id: number) => db.select().from(User).where(eq(User.id, id)).then(res => res[0]).catch(() => undefined)
 }
 
-export function FindOneUserByUsername(db: DrizzleD1Database) {
+export function FindOneUserByUsername(db: DrizzleD1Database<any>) {
   return (username: string) => db.select().from(User).where(eq(User.username, username)).then(res => res[0]).catch(() => undefined)
 }
 
-export function FindOneUserByEmail(db: DrizzleD1Database) {
+export function FindOneUserByEmail(db: DrizzleD1Database<any>) {
   return (email: string) => db.select().from(User).where(eq(User.email, email)).then(res => res[0]).catch(() => undefined)
 }
 
@@ -80,5 +82,17 @@ export function CallRateLimit(kv: KVNamespace, key: string, duration: number) {
       throw InternalServerError
     })
     return res
+  }
+}
+
+export function GetCacheOrQuery(kv: KVNamespace, key: string) {
+  return async<TValue extends string | ArrayBuffer | ArrayBufferView | ReadableStream<any>> (func: () => MaybePromise<TValue>) => {
+    const v = await kv.get(key)
+    if (isNil(v)) {
+      const v = await Promise.resolve(func())
+      await kv.put(key, v)
+      return v
+    }
+    return v
   }
 }
