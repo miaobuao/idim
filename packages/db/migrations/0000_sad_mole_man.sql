@@ -1,16 +1,16 @@
 CREATE TABLE `activity_throw_soap` (
 	`user_id` integer NOT NULL,
 	`count` integer NOT NULL,
-	`ctime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
 	PRIMARY KEY(`ctime`, `user_id`),
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `currency` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`soap` integer DEFAULT 0 NOT NULL,
 	`pants` integer DEFAULT 0 NOT NULL,
-	FOREIGN KEY (`id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `email_pool` (
@@ -24,8 +24,7 @@ CREATE TABLE `email_pool` (
 --> statement-breakpoint
 CREATE TABLE `bbs_daily_checkin_record` (
 	`user_id` integer NOT NULL,
-	`ctime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	PRIMARY KEY(`ctime`, `user_id`),
+	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -33,7 +32,7 @@ CREATE TABLE `bbs_user_badge` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` integer NOT NULL,
 	`metadata` text NOT NULL,
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `bbs_post` (
@@ -41,9 +40,9 @@ CREATE TABLE `bbs_post` (
 	`author_id` integer NOT NULL,
 	`title` text NOT NULL,
 	`content` text NOT NULL,
-	`visible` integer DEFAULT 1 NOT NULL,
-	`ctime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`mtime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`visible` integer DEFAULT true NOT NULL,
+	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
+	`mtime` integer DEFAULT UNIXEPOCH NOT NULL,
 	FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -51,17 +50,17 @@ CREATE TABLE `bbs_post_comment` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`author_id` integer NOT NULL,
 	`content` text NOT NULL,
-	`ctime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`mtime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
+	`mtime` integer DEFAULT UNIXEPOCH NOT NULL,
 	FOREIGN KEY (`author_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `bbs_post_comment_like` (
 	`post_id` integer NOT NULL,
 	`user_id` integer NOT NULL,
-	`ctime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
 	PRIMARY KEY(`post_id`, `user_id`),
-	FOREIGN KEY (`post_id`) REFERENCES `bbs_post_comment`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`post_id`) REFERENCES `bbs_post_comment`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -77,9 +76,9 @@ CREATE TABLE `bbs_post_comment_link` (
 CREATE TABLE `bbs_post_like` (
 	`post_id` integer NOT NULL,
 	`user_id` integer NOT NULL,
-	`ctime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
 	PRIMARY KEY(`post_id`, `user_id`),
-	FOREIGN KEY (`post_id`) REFERENCES `bbs_post`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`post_id`) REFERENCES `bbs_post`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
@@ -88,7 +87,7 @@ CREATE TABLE `relative_account` (
 	`qq` text,
 	`tel` text,
 	`xbox` text,
-	FOREIGN KEY (`id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `user` (
@@ -96,9 +95,11 @@ CREATE TABLE `user` (
 	`username` text NOT NULL,
 	`email` text NOT NULL,
 	`pwd` text NOT NULL,
-	`ctime` integer DEFAULT CURRENT_TIMESTAMP NOT NULL
+	`ctime` integer DEFAULT UNIXEPOCH NOT NULL
 );
 --> statement-breakpoint
+CREATE INDEX `forum_daily_checkin_user_id_idx` ON `bbs_daily_checkin_record` (`user_id`);--> statement-breakpoint
+CREATE INDEX `forum_daily_checkin_ctime_idx` ON `bbs_daily_checkin_record` (`ctime`);--> statement-breakpoint
 CREATE INDEX `forum_badge_user_id_idx` ON `bbs_user_badge` (`user_id`);--> statement-breakpoint
 CREATE INDEX `post_author_idx` ON `bbs_post` (`author_id`);--> statement-breakpoint
 CREATE INDEX `post_ctime_idx` ON `bbs_post` (`ctime`);--> statement-breakpoint

@@ -1,9 +1,14 @@
 import { Post } from '@repo/db'
 import { buildLanguageSource } from '@repo/locales'
+import { and, count, eq } from 'drizzle-orm'
+import { pipe } from 'fp-ts/lib/function'
 import { z } from 'zod'
 
-import { protectedProcedure, router } from '../trpc'
+import { protectedProcedure, publicProcedure, router } from '../trpc'
 import config from '../utils/config'
+import { PostNotFoundError } from '../utils/errors'
+import { GetCacheOrQuery, ThrowErrorIfPromiseNull } from '../utils/functions'
+import { IdDto } from '../utils/z'
 
 const source = buildLanguageSource()
 
@@ -18,10 +23,15 @@ export const CreatePostDto = z.object({
 
 export type CreatePostType = z.infer<typeof CreatePostDto>
 
+export const ListPostDto = z.object({
+  limit: z.number().int().gt(0).lt(20).optional(),
+  offset: z.number().int().optional(),
+}).optional()
+
 export default router({
   post: {
-    create: protectedProcedure.input(CreatePostDto).mutation(({ input, ctx: { db, user } }) => {
-      return db
+    create: protectedProcedure.input(CreatePostDto).mutation(async ({ input, ctx: { db, kv, user } }) => {
+      const res = db
         .insert(Post)
         .values({
           authorId: user.id,
@@ -30,6 +40,88 @@ export default router({
         })
         .returning()
         .then(res => res[0])
+
+      await pipe(
+        () => db.select({ count: count() }).from(Post).then(res => res[0].count.toString()),
+        GetCacheOrQuery(kv.cache, 'posts-count'),
+        async count => await kv.cache.put('posts-count', (Number.parseInt(await count) + 1).toString()),
+      )
+
+      return res
     }),
+
+    count: publicProcedure.query(({ ctx: { kv, db } }) => pipe(
+      () => db.select({ count: count() }).from(Post).then(res => res[0].count.toString()),
+      GetCacheOrQuery(kv.cache, 'posts-count'),
+      async v => Number.parseInt(await v),
+    )),
+
+    get: publicProcedure.input(IdDto.gt(0)).query(({ ctx: { db }, input: id }) =>
+      pipe(
+        db.query.Post.findFirst({
+          where: and(eq(Post.id, id), eq(Post.visible, true)),
+          columns: {
+            id: true,
+            title: true,
+            content: true,
+            ctime: true,
+            mtime: true,
+          },
+          with: {
+            author: {
+              columns: {
+                id: true,
+                username: true,
+              },
+            },
+          },
+        }),
+        ThrowErrorIfPromiseNull(PostNotFoundError),
+      ),
+    ),
+
+    getByOffset: publicProcedure.input(IdDto.gte(0)).query(({ ctx: { db }, input: offset }) =>
+      pipe(
+        db.query.Post.findFirst({
+          offset,
+          columns: {
+            id: true,
+            title: true,
+            content: true,
+            ctime: true,
+            mtime: true,
+          },
+          with: {
+            author: {
+              columns: {
+                id: true,
+                username: true,
+              },
+            },
+          },
+        }),
+        ThrowErrorIfPromiseNull(PostNotFoundError),
+      ),
+    ),
+
+    list: publicProcedure.input(ListPostDto).query(({ ctx: { db }, input }) =>
+      db.query.Post.findMany({
+        limit: input?.limit ?? 5,
+        offset: input?.offset ?? 0,
+        orderBy: (posts, { desc }) => [ desc(posts.id) ],
+        columns: {
+          id: true,
+          title: true,
+          content: true,
+        },
+        with: {
+          author: {
+            columns: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+      })),
   },
 })

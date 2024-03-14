@@ -4,9 +4,11 @@ import { TRPCClientError } from '@trpc/client'
 import { AxiosError } from 'axios'
 import { isArray } from 'lodash-es'
 
-import { pubMessage, pubNotify } from './pubsub'
-
 type TRPCError = TRPCClientError<AppRouter>
+const publisher = createPubMessage({
+  type: 'error',
+  duration: 2500,
+})
 
 export function errorHandler(err: AxiosError<string> | Error | TRPCError) {
   if (err instanceof AxiosError)
@@ -20,18 +22,16 @@ export function errorHandler(err: AxiosError<string> | Error | TRPCError) {
 function axiosErrorHandler(err: AxiosError<string>) {
   const { $i18n } = useNuxtApp()
   const { t } = $i18n
-  pubMessage({
+  publisher({
     content: t(err.response?.data ?? 'error.unknown'),
-    type: 'error',
   })
 }
 
 function commonErrorHandler(err: Error) {
   const app = useNuxtApp()
   const { t } = app.$i18n
-  pubMessage({
+  publisher({
     content: t(err.message),
-    type: 'error',
   })
 }
 
@@ -54,9 +54,7 @@ export function trpcErrorMessageHandler(msg: string) {
     return
   const app = useNuxtApp()
   const { t } = app.$i18n
-  pubNotify({
-    type: 'error',
+  publisher({
     content: t(msg),
-    duration: 5000,
   })
 }

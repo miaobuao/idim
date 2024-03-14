@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "ae869766-04e5-4402-b4a0-68193de30fd0",
+  "id": "f82b8b21-96c2-4ca7-9d2a-4129c795b0b3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "activity_throw_soap": {
@@ -27,7 +27,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         }
       },
       "indexes": {},
@@ -42,7 +42,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -96,7 +96,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -170,10 +170,25 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "forum_daily_checkin_user_id_idx": {
+          "name": "forum_daily_checkin_user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "forum_daily_checkin_ctime_idx": {
+          "name": "forum_daily_checkin_ctime_idx",
+          "columns": [
+            "ctime"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "bbs_daily_checkin_record_user_id_user_id_fk": {
           "name": "bbs_daily_checkin_record_user_id_user_id_fk",
@@ -189,15 +204,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "bbs_daily_checkin_record_user_id_ctime_pk": {
-          "columns": [
-            "ctime",
-            "user_id"
-          ],
-          "name": "bbs_daily_checkin_record_user_id_ctime_pk"
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "bbs_user_badge": {
@@ -245,7 +252,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -289,7 +296,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1
+          "default": true
         },
         "ctime": {
           "name": "ctime",
@@ -297,7 +304,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         },
         "mtime": {
           "name": "mtime",
@@ -305,7 +312,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         }
       },
       "indexes": {
@@ -379,7 +386,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         },
         "mtime": {
           "name": "mtime",
@@ -387,7 +394,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         }
       },
       "indexes": {
@@ -454,7 +461,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         }
       },
       "indexes": {},
@@ -469,7 +476,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "bbs_post_comment_like_user_id_user_id_fk": {
@@ -605,7 +612,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         }
       },
       "indexes": {},
@@ -620,7 +627,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "bbs_post_like_user_id_user_id_fk": {
@@ -714,7 +721,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -758,7 +765,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "UNIXEPOCH()"
         }
       },
       "indexes": {

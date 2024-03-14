@@ -78,6 +78,9 @@ export default {
   name_already_exists: 'Name Already Exists',
   email_or_name_alreay_exists: 'Email Or Name Already Exists',
   email_not_registered: 'Email Not Registered',
+  published_at_: 'Published At: {time}',
+  updated_at_: 'Updated At: {time}',
+  comments: 'Comments',
 
   expired: 'Session Expired',
   verify_code: 'Verify Code',
@@ -110,6 +113,7 @@ export default {
   send_succ: 'Send Success',
   title: 'Title',
   content: 'Content',
+  post_not_found: 'Post Not Found',
 
   titleMinLenError: 'Title must be at least {length} characters',
   titleMaxLenError: 'Title must not exceed {length} characters',

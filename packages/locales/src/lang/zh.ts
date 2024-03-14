@@ -61,6 +61,9 @@ export default {
   clearAll: '清除全部',
   send: '发送',
   clearAllConfirmMsg: '是否清除全部?',
+  published_at_: '发布于：{time}',
+  updated_at_: '最后更新于：{time}',
+  comments: '评论',
 
   retype_password: '重复密码',
   retype_password_error: '重复密码错误',
@@ -107,6 +110,7 @@ export default {
   send_succ: '发送成功',
   title: '标题',
   content: '内容',
+  post_not_found: '帖子不存在',
 
   titleMinLenError: '标题最少{length}个字符',
   titleMaxLenError: '标题最多{length}个字符',

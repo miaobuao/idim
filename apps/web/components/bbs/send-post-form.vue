@@ -4,8 +4,8 @@ import type { CreatePostType } from '~/server/trpc/modules/post'
 import { BulbOutline as SendIcon } from '@vicons/ionicons5'
 import { type FormInst, type FormRules, useThemeVars } from 'naive-ui'
 
-import { screen } from '#imports'
 import ActivityView from '../activity/view.vue'
+import { screen } from '~/utils/screen'
 
 defineProps<{
   sending: boolean

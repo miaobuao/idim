@@ -31,3 +31,8 @@ export const InvalidVerifyCodeError = new TRPCError({
   code: 'BAD_REQUEST',
   message: source.invalid_verify_code,
 })
+
+export const PostNotFoundError = new TRPCError({
+  code: 'NOT_FOUND',
+  message: source.postNodeFound,
+})

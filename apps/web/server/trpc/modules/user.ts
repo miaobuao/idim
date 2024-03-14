@@ -1,13 +1,13 @@
-import { User, VerifyCode } from '@repo/db'
-import { and, eq, gte } from 'drizzle-orm'
+import { User } from '@repo/db'
+import { eq } from 'drizzle-orm'
 import { pipe } from 'fp-ts/lib/function'
 import { z } from 'zod'
 
 import { EmailMiddleware } from '../middlewares/email'
 import { protectedProcedure, publicProcedure, router } from '../trpc'
 import { bcryptEncrypt } from '../utils/bcrypt'
-import { InternalServerError, InvalidVerifyCodeError, UserAlreadyExistsError, UserEmailNotRegisteredError } from '../utils/errors'
-import { CallRateLimit, SyncSelectOneOrThrowError, ThrowErrorIfPromiseNull } from '../utils/functions'
+import { InvalidVerifyCodeError, UserAlreadyExistsError, UserEmailNotRegisteredError } from '../utils/errors'
+import { CallRateLimit, ThrowErrorIfPromiseNull } from '../utils/functions'
 import { EmailDto, PwdDto } from '../utils/z'
 
 export const CreateUserDto = z.object({
@@ -48,54 +48,40 @@ export default router({
       .use(EmailMiddleware)
       .input(SendVerifyCodeDto)
       .mutation(async ({ input, ctx: { db, kv, useSendEmail } }) => {
-        const limiter = CallRateLimit(kv.rateLimit, verifyCodeKey(input.email), 60_000)
+        const limiter = CallRateLimit(kv.rateLimit, `verify-code:${input.email}`, 60_000)
         return await limiter(
           async () => {
-            const { email } = await db
-              .select({ email: User.email })
-              .from(User)
-              .where(eq(User.email, input.email))
-              .limit(1)
-              .then(SyncSelectOneOrThrowError(0, UserEmailNotRegisteredError))
+            const { email } = await pipe(
+              db.query.User.findFirst({
+                where: eq(User.email, input.email),
+                columns: {
+                  email: true,
+                },
+              }),
+              ThrowErrorIfPromiseNull(UserEmailNotRegisteredError),
+            )
             const sender = await useSendEmail()
             const code = Math.floor(Math.random() * 1000000).toString().padStart(6, '0')
-            const insertRes = await db.insert(VerifyCode).values({
-              type: 'change-pwd',
-              email: input.email,
-              code,
-              expiresAt: Date.now() + 10 * 60_000,
+            await kv.cache.put(`verify-code-change-pwd:${email}`, code, {
+              expiration: 600 + Math.round(Date.now() / 1000),
             })
-            if (insertRes.meta.changed_db) {
-              await sender({
-                type: 'html',
-                to: email,
-                subject: 'Verify code for change password',
-                body: `Your verify code is ${code}.`,
-              })
-              return true
-            }
-            throw InternalServerError
+            await sender({
+              to: email,
+              subject: 'Verify code for change password',
+              type: 'html',
+              body: `Your verify code is ${code}.`,
+            })
           },
         )
       }),
-    changePwd: publicProcedure.input(ChangeUserPwdFormDto).mutation(async ({ input: { email, code, password }, ctx: { db } }) => {
-      await pipe(
-        db.select().from(VerifyCode).where(
-          and(
-            eq(VerifyCode.type, 'change-pwd'),
-            eq(VerifyCode.email, email),
-            eq(VerifyCode.code, code),
-            gte(VerifyCode.expiresAt, Date.now()),
-          ),
-        ).limit(1),
+    changePwd: publicProcedure.input(ChangeUserPwdFormDto).mutation(async ({ input: { email, code, password }, ctx: { kv, db } }) => {
+      const realCode = await pipe(
+        kv.cache.get(`verify-code-change-pwd:${email}`),
         ThrowErrorIfPromiseNull(InvalidVerifyCodeError),
       )
-      await db.delete(VerifyCode).where(
-        and(
-          eq(VerifyCode.type, 'change-pwd'),
-          eq(VerifyCode.email, email),
-        ),
-      )
+      if (realCode !== code)
+        throw InvalidVerifyCodeError
+      await kv.cache.delete(`verify-code-change-pwd:${email}`)
       const pwd = await bcryptEncrypt(password)
       await db.update(User).set({ pwd }).where(eq(User.email, email))
     }),
@@ -109,7 +95,3 @@ export default router({
     }),
   },
 })
-
-function verifyCodeKey(email: string) {
-  return `VerifyCode:${email}`
-}

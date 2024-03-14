@@ -19,3 +19,7 @@ migrations_dir = "packages/db/migrations"
 [[kv_namespaces]]
 binding = "KV_API_RATE_LIMIT"
 id = "a8d149782f724c49a2a9ff689574e4a8"
+
+[[kv_namespaces]]
+binding = "KV_CACHE"
+id = "a0154b6a-ca3e-4e25-8b1c-fc1dd2f2b7c2"

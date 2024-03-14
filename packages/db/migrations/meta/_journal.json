@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1710339120918,
-      "tag": "0000_mysterious_blizzard",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1710363747647,
-      "tag": "0001_mixed_colleen_wing",
+      "when": 1710433627905,
+      "tag": "0000_sad_mole_man",
       "breakpoints": true
     }
   ]
