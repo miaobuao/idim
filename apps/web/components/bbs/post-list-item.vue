@@ -1,22 +1,22 @@
 <script setup lang="ts">
+import md from '@repo/markdown'
+
 const props = defineProps<{
   offset: number
   holderHeight?: number
+}>()
+
+defineEmits<{
+  (e: 'click', id: number, offset: number): void
 }>()
 
 const posts = usePostsStore()
 const query = ref(posts.getByOffset(props.offset))
 const post = computed(() => query.value.data)
 
-watch(
-  () => props.offset,
-  (n, o) => {
-    if (n !== o) {
-      query.value.abort()
-      query.value = posts.getByOffset(n) as unknown as typeof query.value
-    }
-  },
-)
+onUnmounted(() => {
+  query.value.abort()
+})
 </script>
 
 <template>
@@ -33,7 +33,7 @@ watch(
         </template>
 
         <div class="flex flex-col gap-y-2">
-          <div @click="$router.push(`/bbs/${post.id}`)">
+          <div @click="$emit('click', post.id, offset)">
             <n-ellipsis
               class="text-1.2rem font-600 hover:cursor-pointer hover:text-[#ee7623]"
               :tooltip="false"
@@ -42,12 +42,8 @@ watch(
               <span class="select-none font-700 text-1.25rem"># </span>{{ post.title }}
             </n-ellipsis>
           </div>
-          <n-ellipsis
-            line-clamp="1"
-            :tooltip="false"
-            class="leading-17.8px text-15px"
-          >
-            {{ post.content }}
+          <n-ellipsis line-clamp="1" :tooltip="false">
+            <div v-html="md.render(post.content)" />
           </n-ellipsis>
         </div>
 

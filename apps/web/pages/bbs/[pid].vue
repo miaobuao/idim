@@ -1,18 +1,22 @@
 <script setup lang="ts">
+import md from '@repo/markdown'
+
 import { screen } from '~/utils/screen'
 
 const route = useRoute()
-
+const pid = computed(() => Number.parseInt(route.params.pid as string))
 const posts = usePostsStore()
 const query = computed(() => {
-  const pid = Number.parseInt(route.params.pid as string)
-  return posts.get(pid)
+  return posts.get(pid.value)
 })
 onUnmounted(() => {
   query.value.abort()
 })
 const data = computed(() => query.value.data.value)
 const cardSize = computed(() => (screen.gt.md ? 'medium' : 'small'))
+
+const { $trpc } = useNuxtApp()
+const links = $trpc.post.getComments.useQuery(pid)
 </script>
 
 <template>
@@ -43,11 +47,25 @@ const cardSize = computed(() => (screen.gt.md ? 'medium' : 'small'))
         }}
       </p>
 
-      <div>
-        {{ data?.content }}
-      </div>
+      <div v-html="md.render(data?.content)" />
     </n-thing>
   </n-card>
 
-  <n-card class="m-2" :size="cardSize" :title="$text.comments()" />
+  <n-skeleton v-if="links.status.value === 'pending'" text :repeat="10" />
+  <div
+    v-else-if="links.data.value?.length ?? 0 > 0"
+    class="m-2 flex flex-col gap-y-2"
+  >
+    <div class="text-1.2rem font-600 ml-2">
+      {{ $text.comments() }} ({{ links.data.value?.length ?? 0 }})
+    </div>
+    <bbs-comment-list-item
+      v-for="link in links.data.value"
+      :id="link.id"
+      :key="link.id"
+      :author="link.comment.author"
+      :content="link.comment.content"
+      :mtime="link.comment.mtime"
+    />
+  </div>
 </template>

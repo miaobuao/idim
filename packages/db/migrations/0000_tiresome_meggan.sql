@@ -67,7 +67,7 @@ CREATE TABLE `bbs_post_comment_like` (
 CREATE TABLE `bbs_post_comment_link` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`post_id` integer NOT NULL,
-	`prev_id` integer NOT NULL,
+	`prev_id` integer,
 	FOREIGN KEY (`id`) REFERENCES `bbs_post_comment`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`post_id`) REFERENCES `bbs_post`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`prev_id`) REFERENCES `bbs_post_comment`(`id`) ON UPDATE no action ON DELETE no action

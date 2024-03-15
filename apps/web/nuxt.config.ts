@@ -48,6 +48,12 @@ const modules: NuxtConfig['modules'] = [
 ]
 
 export default defineNuxtConfig({
+  nitro: {
+    // @ts-expect-error
+    cloudflareDev: {
+      persistDir: '../../.wrangler/state/v3',
+    },
+  },
   devtools: { enabled: true },
   vite,
   modules,
