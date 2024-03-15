@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "f82b8b21-96c2-4ca7-9d2a-4129c795b0b3",
+  "id": "cb60615d-c863-4707-b1c8-61d188de95fe",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "activity_throw_soap": {
@@ -525,7 +525,7 @@
           "name": "prev_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         }
       },

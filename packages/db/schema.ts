@@ -65,7 +65,7 @@ export const PostComment = sqliteTable('bbs_post_comment', {
 export const PostCommentLink = sqliteTable('bbs_post_comment_link', {
   id: integer('id').primaryKey().references(() => PostComment.id).notNull(),
   postId: integer('post_id').references(() => Post.id).notNull(),
-  prevId: integer('prev_id').references(() => PostComment.id).notNull(),
+  prevId: integer('prev_id').references(() => PostComment.id),
 }, (table) => {
   return {
     postIdIdx: index('post_comment_link_post_id_idx').on(table.postId),
@@ -157,6 +157,10 @@ export const postCommentLinkRelations = relations(PostCommentLink, ({ one }) => 
   post: one(Post, {
     fields: [ PostCommentLink.postId ],
     references: [ Post.id ],
+  }),
+  comment: one(PostComment, {
+    fields: [ PostCommentLink.id ],
+    references: [ PostComment.id ],
   }),
 }))
 

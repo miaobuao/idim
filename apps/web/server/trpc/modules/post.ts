@@ -1,4 +1,4 @@
-import { Post } from '@repo/db'
+import { Post, PostCommentLink } from '@repo/db'
 import { buildLanguageSource } from '@repo/locales'
 import { and, count, eq } from 'drizzle-orm'
 import { pipe } from 'fp-ts/lib/function'
@@ -8,7 +8,7 @@ import { protectedProcedure, publicProcedure, router } from '../trpc'
 import config from '../utils/config'
 import { PostNotFoundError } from '../utils/errors'
 import { GetCacheOrQuery, ThrowErrorIfPromiseNull } from '../utils/functions'
-import { IdDto } from '../utils/z'
+import { IntDto } from '../utils/z'
 
 const source = buildLanguageSource()
 
@@ -24,9 +24,15 @@ export const CreatePostDto = z.object({
 export type CreatePostType = z.infer<typeof CreatePostDto>
 
 export const ListPostDto = z.object({
-  limit: z.number().int().gt(0).lt(20).optional(),
-  offset: z.number().int().optional(),
-}).optional()
+  limit: z.number().int().gt(0).lt(20),
+  offset: z.number().int(),
+})
+
+export const ListCommentsDto = z.object({
+  limit: z.number().int().gt(0).lt(20),
+  offset: z.number().int(),
+  postId: IntDto.gte(1),
+})
 
 export default router({
   post: {
@@ -56,7 +62,7 @@ export default router({
       async v => Number.parseInt(await v),
     )),
 
-    get: publicProcedure.input(IdDto.gt(0)).query(({ ctx: { db }, input: id }) =>
+    get: publicProcedure.input(IntDto.gt(0)).query(({ ctx: { db }, input: id }) =>
       pipe(
         db.query.Post.findFirst({
           where: and(eq(Post.id, id), eq(Post.visible, true)),
@@ -80,7 +86,7 @@ export default router({
       ),
     ),
 
-    getByOffset: publicProcedure.input(IdDto.gte(0)).query(({ ctx: { db }, input: offset }) =>
+    getByOffset: publicProcedure.input(IntDto.gte(0)).query(({ ctx: { db }, input: offset }) =>
       pipe(
         db.query.Post.findFirst({
           offset,
@@ -104,24 +110,32 @@ export default router({
       ),
     ),
 
-    list: publicProcedure.input(ListPostDto).query(({ ctx: { db }, input }) =>
-      db.query.Post.findMany({
-        limit: input?.limit ?? 5,
-        offset: input?.offset ?? 0,
-        orderBy: (posts, { desc }) => [ desc(posts.id) ],
+    getComments: publicProcedure.input(IntDto.gt(0)).query(async ({ input, ctx: { db } }) => {
+      return db.query.PostCommentLink.findMany({
+        where: eq(PostCommentLink.postId, input),
         columns: {
+          prevId: true,
           id: true,
-          title: true,
-          content: true,
         },
         with: {
-          author: {
+          comment: {
             columns: {
               id: true,
-              username: true,
+              content: true,
+              mtime: true,
+            },
+            with: {
+              author: {
+                columns: {
+                  id: true,
+                  username: true,
+                },
+              },
             },
           },
         },
-      })),
+      })
+    }),
   },
+
 })

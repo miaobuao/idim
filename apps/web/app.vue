@@ -16,6 +16,8 @@ import { RouterLink } from 'vue-router'
 import Avatar from './components/avatar.vue'
 import { screen } from './utils/screen'
 
+import('./assets/css/main.sass')
+
 const themeVars = useThemeVars()
 const user = useUserStore()
 const token = useTokenStore()

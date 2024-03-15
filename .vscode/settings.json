@@ -71,5 +71,10 @@
     "jsonc",
     "yaml",
     "toml"
-  ]
+  ],
+  "files.exclude": {
+    "**/.nuxt": true,
+    "**/.output": true,
+    "**/.turbo": true
+  }
 }
