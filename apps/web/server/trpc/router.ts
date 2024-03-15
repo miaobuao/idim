@@ -1,3 +1,4 @@
+import comment from './modules/comment'
 import post from './modules/post'
 import session from './modules/session'
 import user from './modules/user'
@@ -7,6 +8,7 @@ export const appRouter = t.mergeRouters(
   user,
   post,
   session,
+  comment,
   router({
     hi: publicProcedure.query(() => 'hi'),
   }),

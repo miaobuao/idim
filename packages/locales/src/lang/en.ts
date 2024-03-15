@@ -81,6 +81,8 @@ export default {
   published_at_: 'Published At: {time}',
   updated_at_: 'Updated At: {time}',
   comments: 'Comments',
+  comment: 'Comment',
+  edit_comment: 'Edit Comment',
 
   expired: 'Session Expired',
   verify_code: 'Verify Code',
@@ -120,4 +122,6 @@ export default {
   contentMinLenError: 'Content must be at least {length} characters',
   contentMaxLenError: 'Content must not exceed {length} characters',
 
+  postNotFound: 'Post Not Found',
+  userNotFound: 'User Not Found',
 }

@@ -1,6 +1,6 @@
-import dayjs from 'dayjs'
-
+import dayjs from '../utils/dayjs'
 import { Batcher } from '~/utils/batcher'
+import { useTrpc } from '~/utils/uses'
 
 export interface PostDto {
   id: number
@@ -24,7 +24,7 @@ export const usePostsStore = defineStore('posts', () => {
   const queryByIdPendingMap: Map<number, boolean> = new Map()
 
   async function refresh() {
-    const { $trpc } = useNuxtApp()
+    const $trpc = useTrpc()
     total.value = await $trpc.post.count.query()
   }
 
@@ -35,7 +35,7 @@ export const usePostsStore = defineStore('posts', () => {
         return
       queryByIdPendingMap.set(id, true)
 
-      const { $trpc } = useNuxtApp()
+      const $trpc = useTrpc()
       $trpc.post.get.query(id)
         .then(post => posts.set(post.id, {
           ...post,
@@ -58,7 +58,7 @@ export const usePostsStore = defineStore('posts', () => {
         return
       queryByOffsetPendingMap.set(offset, true)
 
-      const { $trpc } = useNuxtApp()
+      const $trpc = useTrpc()
       $trpc.post.getByOffset.query(offset)
         .then((post) => {
           offsetMap.set(offset, post.id)

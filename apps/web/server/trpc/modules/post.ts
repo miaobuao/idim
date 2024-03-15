@@ -1,4 +1,4 @@
-import { Post, PostCommentLink } from '@repo/db'
+import { Post } from '@repo/db'
 import { buildLanguageSource } from '@repo/locales'
 import { and, count, eq } from 'drizzle-orm'
 import { pipe } from 'fp-ts/lib/function'
@@ -109,33 +109,5 @@ export default router({
         ThrowErrorIfPromiseNull(PostNotFoundError),
       ),
     ),
-
-    getComments: publicProcedure.input(IntDto.gt(0)).query(async ({ input, ctx: { db } }) => {
-      return db.query.PostCommentLink.findMany({
-        where: eq(PostCommentLink.postId, input),
-        columns: {
-          prevId: true,
-          id: true,
-        },
-        with: {
-          comment: {
-            columns: {
-              id: true,
-              content: true,
-              mtime: true,
-            },
-            with: {
-              author: {
-                columns: {
-                  id: true,
-                  username: true,
-                },
-              },
-            },
-          },
-        },
-      })
-    }),
   },
-
 })

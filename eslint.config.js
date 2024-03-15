@@ -28,6 +28,7 @@ export default antfu(
     files: [ 'apps/web/**' ],
     rules: {
       'node/prefer-global/process': 0,
+      'no-sequences': 0,
     },
   },
   {

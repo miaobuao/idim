@@ -34,5 +34,10 @@ export const InvalidVerifyCodeError = new TRPCError({
 
 export const PostNotFoundError = new TRPCError({
   code: 'NOT_FOUND',
-  message: source.postNodeFound,
+  message: source.postNotFound,
+})
+
+export const UserNotFoundError = new TRPCError({
+  code: 'NOT_FOUND',
+  message: source.userNotFound,
 })

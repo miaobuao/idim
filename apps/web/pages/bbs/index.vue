@@ -7,6 +7,7 @@ import { isArray } from 'lodash-es'
 
 import BbsSendPostForm from '../../components/bbs/send-post-form.vue'
 
+const user = useUserStore()
 const sending = ref(false)
 const sendForm = ref<InstanceType<typeof BbsSendPostForm> | null>(null)
 const { $trpc, $text } = useNuxtApp()
@@ -109,7 +110,12 @@ definePageMeta({
 </script>
 
 <template>
-  <BbsSendPostForm ref="sendForm" :sending="sending" @submit="sendPost" />
+  <BbsSendPostForm
+    v-if="user.self.username"
+    ref="sendForm"
+    :sending="sending"
+    @submit="sendPost"
+  />
   <n-virtual-list
     ref="virtualListInst"
     class="bbs_posts-list"

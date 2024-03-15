@@ -4,11 +4,11 @@ import { pipe } from 'fp-ts/lib/function'
 import { z } from 'zod'
 
 import { EmailMiddleware } from '../middlewares/email'
-import { protectedProcedure, publicProcedure, router } from '../trpc'
+import { publicProcedure, router } from '../trpc'
 import { bcryptEncrypt } from '../utils/bcrypt'
-import { InvalidVerifyCodeError, UserAlreadyExistsError, UserEmailNotRegisteredError } from '../utils/errors'
+import { InvalidVerifyCodeError, UserAlreadyExistsError, UserEmailNotRegisteredError, UserNotFoundError } from '../utils/errors'
 import { CallRateLimit, ThrowErrorIfPromiseNull } from '../utils/functions'
-import { EmailDto, PwdDto } from '../utils/z'
+import { EmailDto, IntDto, PwdDto } from '../utils/z'
 
 export const CreateUserDto = z.object({
   username: z.string().min(2),
@@ -86,12 +86,15 @@ export default router({
       await db.update(User).set({ pwd }).where(eq(User.email, email))
     }),
 
-    getUserInfo: protectedProcedure.query(({ ctx }) => {
-      return {
-        id: ctx.user.id,
-        username: ctx.user.username,
-        email: ctx.user.email,
-      }
-    }),
+    getInfo: publicProcedure.input(z.object({ userId: IntDto.gte(0) })).query(({ input, ctx: { db } }) => pipe(
+      db.query.User.findFirst({
+        where: eq(User.id, input.userId),
+        columns: {
+          id: true,
+          username: true,
+        },
+      }),
+      ThrowErrorIfPromiseNull(UserNotFoundError),
+    )),
   },
 })

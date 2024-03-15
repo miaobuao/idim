@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { CreatePostType } from '~/server/trpc/modules/post'
-
 import { BulbOutline as SendIcon } from '@vicons/ionicons5'
 import { type FormInst, type FormRules, useThemeVars } from 'naive-ui'
 
@@ -11,42 +9,21 @@ defineProps<{
   sending: boolean
 }>()
 
-const emits = defineEmits<{
-  (e: 'submit', value: CreatePostType): void
+defineEmits<{
+  (e: 'submit', content: string): void
 }>()
 
 const activityViewRef = ref<InstanceType<typeof ActivityView>>()
-const runtimeConfig = useRuntimeConfig()
 const { $text } = useNuxtApp()
+const runtimeConfig = useRuntimeConfig()
 const themeVars = useThemeVars()
 const triggerSize = computed(() => (screen.gt.sm.value ? 'large' : 'small'))
 
 const formRef = ref<FormInst | null>(null)
-const model = ref<CreatePostType>({
-  title: '',
+const model = ref({
   content: '',
 })
 const formRules = {
-  title: {
-    required: true,
-    trigger: [ 'input', 'blur' ],
-    validator(_, value: string) {
-      if (value.length > runtimeConfig.public.BBS.TITLE_MAX_LENGTH) {
-        return new Error(
-          $text.titleMaxLenError({
-            length: runtimeConfig.public.BBS.TITLE_MAX_LENGTH,
-          }),
-        )
-      }
-      if (value.length < runtimeConfig.public.BBS.TITLE_MIN_LENGTH) {
-        return new Error(
-          $text.titleMinLenError({
-            length: runtimeConfig.public.BBS.TITLE_MIN_LENGTH,
-          }),
-        )
-      }
-    },
-  },
   content: {
     required: true,
     trigger: [ 'input', 'blur' ],
@@ -69,22 +46,12 @@ const formRules = {
   },
 } satisfies FormRules
 
-function submit() {
-  formRef.value?.validate(async (errors) => {
-    if (!errors)
-      emits('submit', model.value)
-  })
-}
-
-function clearAll() {
-  model.value = {
-    title: '',
-    content: '',
-  }
+function clear() {
+  model.value.content = ''
 }
 
 defineExpose({
-  clearAll,
+  clear,
   toggle() {
     activityViewRef.value?.toggle()
   },
@@ -95,7 +62,7 @@ defineExpose({
   <ActivityView
     ref="activityViewRef"
     :trigger="{
-      label: $text.send_post(),
+      label: $text.comment(),
       color: themeVars.primaryColor,
       bordered: true,
       size: triggerSize,
@@ -108,14 +75,6 @@ defineExpose({
 
     <n-card embedded>
       <n-form ref="formRef" :model="model" :rules="formRules">
-        <n-form-item path="title" :label="$text.title()">
-          <n-input
-            v-model:value="model.title"
-            show-count
-            :minlength="$config.public.BBS.TITLE_MIN_LENGTH"
-            :maxlength="$config.public.BBS.TITLE_MAX_LENGTH"
-          />
-        </n-form-item>
         <n-form-item path="content" :label="$text.content()">
           <n-input
             v-model:value="model.content"
@@ -131,7 +90,7 @@ defineExpose({
           />
         </n-form-item>
         <div class="flex justify-end gap-x-2">
-          <n-popconfirm @positive-click="clearAll">
+          <n-popconfirm @positive-click="clear">
             <template #trigger>
               <n-button round>
                 {{ $text.clearAll() }}
@@ -140,11 +99,11 @@ defineExpose({
             {{ $text.clearAllConfirmMsg() }}
           </n-popconfirm>
           <n-button
-            :disabled="!model.content || !model.title"
+            :disabled="!model.content"
             round
             type="primary"
             :loading="sending"
-            @click="submit"
+            @click="$emit('submit', model.content)"
           >
             {{ $text.send_post() }}
           </n-button>
