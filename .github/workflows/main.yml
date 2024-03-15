@@ -8,8 +8,8 @@ jobs:
   build:
     strategy:
       matrix:
-        node-version: [20.x]
-        os: [ubuntu-latest, windows-latest]
+        node-version: [21.x, 20.x, 18.x]
+        os: [ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
 
