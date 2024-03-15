@@ -37,9 +37,11 @@ export default router({
         throw InvalidEmailOrPasswordError
       })
     }),
+
     renew: protectedProcedure.mutation(async ({ ctx }) => {
       return await signToken({ id: ctx.user.id })
     }),
+
     auth: protectedProcedure.query(({ ctx }) => {
       return {
         id: ctx.user.id,
@@ -47,5 +49,6 @@ export default router({
         email: ctx.user.email,
       }
     }),
+
   },
 })

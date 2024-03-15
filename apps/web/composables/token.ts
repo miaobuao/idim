@@ -3,6 +3,8 @@ import type { JwtPayload } from '~/server/trpc/utils/jwt'
 import { isClient } from '@vueuse/core'
 import { decodeJwt } from 'jose'
 
+import { useTrpc } from '~/utils/uses'
+
 const JWT_TOKEN_KEY = 'user-token'
 
 export const useTokenStore = defineStore('token', () => {
@@ -14,7 +16,7 @@ export const useTokenStore = defineStore('token', () => {
   if (isClient) {
     load()
     if (token.value) {
-      const { $trpc } = useNuxtApp()
+      const $trpc = useTrpc()
       const user = useUserStore()
       $trpc.session.auth
         .query()

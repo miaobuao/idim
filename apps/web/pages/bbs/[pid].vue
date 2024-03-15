@@ -1,25 +1,75 @@
 <script setup lang="ts">
+import type { CommentProps } from '~/components/bbs/comment-list-item.vue'
+
 import md from '@repo/markdown'
 
+import BbsSendCommentForm from '@/components/bbs/send-comment-form.vue'
 import { screen } from '~/utils/screen'
+import { useTrpc } from '~/utils/uses'
 
 const route = useRoute()
-const pid = computed(() => Number.parseInt(route.params.pid as string))
+const user = useUserStore()
+const sending = ref(false)
+const editingRef = ref<typeof BbsSendCommentForm>()
+const pid = Number.parseInt(route.params.pid as string)
 const posts = usePostsStore()
-const query = computed(() => {
-  return posts.get(pid.value)
-})
+const query = posts.get(pid)
+
 onUnmounted(() => {
-  query.value.abort()
+  query.abort()
 })
-const data = computed(() => query.value.data.value)
+const data = computed(() => query.data.value)
 const cardSize = computed(() => (screen.gt.md ? 'medium' : 'small'))
 
-const { $trpc } = useNuxtApp()
-const links = $trpc.post.getComments.useQuery(pid)
+const $trpc = useTrpc()
+const $text = useText()
+const links = $trpc.comment.getAll.useQuery({ postId: pid })
+const comments = ref<CommentProps[]>([])
+
+watch(links.data, (value) => {
+  if (!value)
+    return
+  comments.value = value.map(d => ({
+    id: d.id,
+    author: d.comment.author,
+    content: d.comment.content,
+    mtime: d.comment.mtime,
+  }))
+})
+
+function sendComment(content: string) {
+  $trpc.comment.create
+    .mutate({
+      content,
+      postId: pid,
+    })
+    .then((d) => {
+      editingRef.value?.clear()
+      editingRef.value?.toggle()
+      pubNotify({
+        type: 'success',
+        duration: 1000,
+        content: $text.send_succ(),
+      })
+      comments.value = [
+        {
+          ...d,
+          author: { id: d.authorId },
+        },
+        ...comments.value,
+      ]
+    })
+    .catch(errorHandler)
+}
 </script>
 
 <template>
+  <BbsSendCommentForm
+    v-if="user.self.username"
+    ref="editingRef"
+    :sending="sending"
+    @submit="sendComment"
+  />
   <n-card class="m-2" :size="cardSize" :title="data?.title">
     <n-skeleton v-if="!data" :repeat="10" text />
 
@@ -60,12 +110,12 @@ const links = $trpc.post.getComments.useQuery(pid)
       {{ $text.comments() }} ({{ links.data.value?.length ?? 0 }})
     </div>
     <bbs-comment-list-item
-      v-for="link in links.data.value"
-      :id="link.id"
-      :key="link.id"
-      :author="link.comment.author"
-      :content="link.comment.content"
-      :mtime="link.comment.mtime"
+      v-for="comment in comments"
+      :id="comment.id"
+      :key="comment.id"
+      :author="comment.author"
+      :content="comment.content"
+      :mtime="comment.mtime"
     />
   </div>
 </template>

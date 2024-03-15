@@ -1,10 +1,21 @@
 <script setup lang="ts">
-defineProps<{
+import md from '@repo/markdown'
+
+export interface CommentProps {
   id: number
-  author: { username: string, id: number }
+  author: { username?: string, id: number }
   content: string
   mtime: Date | string
-}>()
+}
+
+const props = defineProps<CommentProps>()
+
+const user = useUserStore()
+const username = computed(() =>
+  props.author.username === undefined
+    ? user.getInfo(props.author.id).data.value?.username
+    : props.author.username,
+)
 </script>
 
 <template>
@@ -12,12 +23,12 @@ defineProps<{
     <n-thing content-class="m-0!">
       <template #avatar>
         <avatar color="#ee7623" size="small">
-          {{ author.username.slice(0, 1) }}
+          {{ username?.slice(0, 1) }}
         </avatar>
       </template>
       <template #header>
         <n-ellipsis :line-clamp="1" :tooltip="false">
-          {{ author.username }}
+          {{ username }}
         </n-ellipsis>
       </template>
 

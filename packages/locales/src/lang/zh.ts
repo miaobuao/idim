@@ -64,6 +64,8 @@ export default {
   published_at_: '发布于：{time}',
   updated_at_: '最后更新于：{time}',
   comments: '评论',
+  comment: '评论',
+  edit_comment: '编辑评论',
 
   retype_password: '重复密码',
   retype_password_error: '重复密码错误',
@@ -116,4 +118,7 @@ export default {
   titleMaxLenError: '标题最多{length}个字符',
   contentMinLenError: '内容最少{length}个字符',
   contentMaxLenError: '内容最多{length}个字符',
+
+  postNotFound: '帖子不存在',
+  userNotFound: '用户不存在',
 }
