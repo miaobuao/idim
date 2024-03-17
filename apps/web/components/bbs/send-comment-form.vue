@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type ActivityView from '../activity/view.vue'
+
 import { BulbOutline as SendIcon } from '@vicons/ionicons5'
 import { type FormInst, type FormRules, useThemeVars } from 'naive-ui'
 
-import ActivityView from '../activity/view.vue'
 import { screen } from '~/utils/screen'
 
 defineProps<{
@@ -56,23 +57,38 @@ defineExpose({
     activityViewRef.value?.toggle()
   },
 })
+
+const triggerX = ref(0)
+const triggerY = ref(0)
+const triggerHeight = ref(0)
+const triggerWidth = ref(0)
+watch([ triggerWidth, triggerHeight ], ([ w, h ]) => {
+  if (!window)
+    return
+  const { innerHeight, innerWidth } = window
+  triggerX.value = innerWidth - w
+  triggerY.value = (innerHeight - h) * 0.75
+})
 </script>
 
 <template>
-  <ActivityView
+  <ActivityLayout
     ref="activityViewRef"
+    v-model:trigger-x="triggerX"
+    v-model:trigger-y="triggerY"
+    v-model:trigger-height="triggerHeight"
+    v-model:trigger-width="triggerWidth"
+    :label="$text.comment()"
     :trigger="{
-      label: $text.comment(),
       color: themeVars.primaryColor,
       bordered: true,
       size: triggerSize,
+      position: 'right',
     }"
-    bordered
   >
     <template #icon>
       <SendIcon />
     </template>
-
     <n-card embedded>
       <n-form ref="formRef" :model="model" :rules="formRules">
         <n-form-item path="content" :label="$text.content()">
@@ -110,5 +126,5 @@ defineExpose({
         </div>
       </n-form>
     </n-card>
-  </ActivityView>
+  </ActivityLayout>
 </template>

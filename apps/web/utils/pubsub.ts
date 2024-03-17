@@ -4,51 +4,30 @@ import type {
   NotificationOptions,
 } from 'naive-ui'
 
-import PubSub from 'pubsub-js'
+import { Subject } from 'rxjs'
 
-export enum PubSubEvents {
-  Notification = 'notification',
-  Dialog = 'dialog',
-  Message = 'message',
-  Loading = 'loading',
-}
-
-export function pubNotify(opt: NotificationOptions) {
-  PubSub.publish(PubSubEvents.Notification, opt)
-}
+export const notify = new Subject<NotificationOptions>()
+export const dialog = new Subject<DialogOptions>()
+export const message = new Subject<MsgOptions>()
+export const startLoading = new Subject<void>()
+export const stopLoading = new Subject<void>()
 
 export function createPubNotify<TPreset extends Partial<NotificationOptions>>(preset: TPreset) {
   return (opts: Omit<NotificationOptions, keyof TPreset>) => {
-    return pubNotify({ ...preset, ...opts })
+    return notify.next({ ...preset, ...opts })
   }
-}
-
-export function pubDialog(opt: DialogOptions) {
-  PubSub.publish(PubSubEvents.Dialog, opt)
 }
 
 export function createPubDialog<TPreset extends Partial<DialogOptions>>(preset: TPreset) {
   return (opts: Omit<DialogOptions, keyof TPreset>) => {
-    return pubDialog({ ...preset, ...opts })
+    return dialog.next({ ...preset, ...opts })
   }
-}
-
-export function pubMessage(opt: MsgOptions) {
-  PubSub.publish(PubSubEvents.Message, opt)
 }
 
 export function createPubMessage<TPreset extends Partial<MsgOptions>>(preset: TPreset) {
   return (opts: Omit<MsgOptions, keyof TPreset> & Pick<MsgOptions, 'content'>) => {
-    return pubMessage({ ...preset, ...opts })
+    return message.next({ ...preset, ...opts })
   }
 }
 
 export type MsgOptions = { content: string } & MessageOptions
-
-export function pubStartLoading() {
-  PubSub.publish(PubSubEvents.Loading, true)
-}
-
-export function pubStopLoading() {
-  PubSub.publish(PubSubEvents.Loading, false)
-}

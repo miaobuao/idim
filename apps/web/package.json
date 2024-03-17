@@ -12,8 +12,7 @@
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20240222.0",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/pubsub-js": "^1.8.6"
+    "@types/bcryptjs": "^2.4.6"
   },
   "devDependencies": {
     "@css-render/vue3-ssr": "^0.15.12",
@@ -45,7 +44,7 @@
     "nitro-cloudflare-dev": "^0.1.1",
     "nuxt": "^3.10.3",
     "pinia": "^2.1.7",
-    "pubsub-js": "^1.9.4",
+    "rxjs": "^7.8.1",
     "smtp-forwarder": "workspace:*",
     "trpc-nuxt": "0.11.0-beta.0",
     "unplugin-auto-import": "^0.17.5",

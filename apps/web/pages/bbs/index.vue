@@ -3,10 +3,11 @@ import type { VirtualListInst } from 'naive-ui'
 import type { CreatePostType } from '~/server/trpc/modules/post'
 
 import { buildLanguageSource } from '@repo/locales'
-import { isArray } from 'lodash-es'
+import { isArray, mean } from 'lodash-es'
 
-import BbsSendPostForm from '../../components/bbs/send-post-form.vue'
+import BbsSendPostForm from '~/components/bbs/send-post-form.vue'
 
+const ITEM_SIZE = 156
 const user = useUserStore()
 const sending = ref(false)
 const sendForm = ref<InstanceType<typeof BbsSendPostForm> | null>(null)
@@ -24,7 +25,7 @@ function sendPost(data: CreatePostType) {
   $trpc.post.create
     .mutate(data)
     .then(() => {
-      pubMessage({
+      message.next({
         type: 'success',
         content: $text.send_succ(),
         duration: 3000,
@@ -87,23 +88,47 @@ function handleSendPostError(e: any) {
   })
 }
 
-const router = useRouter()
-const lastClickedPostOffset = useState('lastClickedPostOffset', () => 0)
-function onClick(id: number, offset: number) {
-  lastClickedPostOffset.value = offset
-  router.push(`/bbs/${id}`)
-}
-
+const lastViewedPostOffsets = useState<number[]>(
+  'lastViewedPostOffset',
+  () => [],
+)
+let freezed = true
 const virtualListInst = ref<VirtualListInst>()
-onMounted(() => {
-  virtualListInst.value?.scrollTo({
-    key: Math.max(0, lastClickedPostOffset.value - 2).toString(),
-  })
-})
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  freezed = true
   posts.refresh()
 })
+onMounted(() => {
+  try {
+    if (lastViewedPostOffsets.value.length > 0) {
+      const key = Math.ceil(
+        mean(lastViewedPostOffsets.value) - window.innerHeight / ITEM_SIZE / 2,
+      )
+      virtualListInst.value?.scrollTo({
+        key: key.toString(),
+      })
+    }
+  }
+  finally {
+    freezed = false
+  }
+})
+onBeforeUnmount(() => {
+  freezed = true
+})
 
+function pushViewing(offset: number) {
+  if (freezed)
+    return
+  lastViewedPostOffsets.value = [ ...lastViewedPostOffsets.value, offset ]
+}
+function removeViewing(offset: number) {
+  if (freezed)
+    return
+  lastViewedPostOffsets.value = lastViewedPostOffsets.value.filter(
+    v => v !== offset,
+  )
+}
 definePageMeta({
   keepalive: true,
 })
@@ -119,7 +144,7 @@ definePageMeta({
   <n-virtual-list
     ref="virtualListInst"
     class="bbs_posts-list"
-    :item-size="156"
+    :item-size="ITEM_SIZE"
     :items="items"
     item-resizable
   >
@@ -128,7 +153,9 @@ definePageMeta({
         :holder-height="156"
         class="m-1"
         :offset="item.offset"
-        @click="onClick"
+        @vue:mounted="pushViewing(item.offset)"
+        @vue:unmounted="removeViewing(item.offset)"
+        @click="(id) => $router.push(`bbs/${id}`)"
       />
     </template>
   </n-virtual-list>

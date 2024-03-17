@@ -16,6 +16,7 @@ const vite: NuxtConfig['vite'] = {
 
 const modules: NuxtConfig['modules'] = [
   '@unocss/nuxt',
+  '@formkit/auto-animate/nuxt',
   'nitro-cloudflare-dev',
   [
     '@nuxtjs/i18n',
@@ -49,7 +50,6 @@ const modules: NuxtConfig['modules'] = [
 
 export default defineNuxtConfig({
   nitro: {
-    // @ts-expect-error
     cloudflareDev: {
       persistDir: '../../.wrangler/state/v3',
     },

@@ -44,7 +44,7 @@ async function onLogin() {
         user.self.id = data.id
         user.self.username = data.username
         user.self.email = data.email
-        pubDialog({
+        dialog.next({
           type: 'success',
           title: $text.login_success(),
           content: $text.whether_keep_logged_in(),
@@ -108,7 +108,7 @@ function onRegister() {
       })
       .then(() => {
         tab.value = Tabs.SIGNIN
-        pubNotify({
+        notify.next({
           type: 'success',
           duration: 1500,
           content: $text.reg_succ(),
@@ -123,7 +123,7 @@ function onRegister() {
 </script>
 
 <template>
-  <div class="flex flex-col hfull justify-center items-center">
+  <div class="flex flex-col justify-center hfull items-center">
     <n-card class="w-[90%] max-w-[400px]">
       <n-tabs v-model:value="tab" size="large" justify-content="space-evenly">
         <n-tab-pane name="signin" :tab="$text.login()">

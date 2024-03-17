@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import type {
-  ConfigProviderProps,
-  DialogOptions,
-  NotificationOptions,
-} from 'naive-ui'
+import type { ConfigProviderProps } from 'naive-ui'
 
 import { useNavigatorLanguage } from '@vueuse/core'
 import {
@@ -16,7 +12,7 @@ import {
   useOsTheme,
   zhCN,
 } from 'naive-ui'
-import PubSub from 'pubsub-js'
+import { Subject } from 'rxjs'
 
 const ZhLanguagePack = {
   locale: zhCN,
@@ -70,8 +66,10 @@ watch(
   lang,
   (value) => {
     const locale = value?.locale.name.substring(0, 2)
-    if (locale)
+    if (locale) {
       $i18n.setLocale(locale)
+      dayjs.locale(locale)
+    }
   },
   {
     immediate: true,
@@ -84,27 +82,44 @@ const configProviderPropsRef = computed<ConfigProviderProps>(() => {
   }
 })
 
-const { message, notification, dialog, loadingBar } = createDiscreteApi(
-  [ 'message', 'dialog', 'notification', 'loadingBar' ],
-  {
-    configProviderProps: configProviderPropsRef,
-  },
-)
-
-PubSub.subscribe(PubSubEvents.Dialog, (_: string, opts: DialogOptions) => {
-  dialog.create(opts)
+const {
+  message: msger,
+  notification: notifier,
+  dialog: dialoger,
+  loadingBar: loadingBarer,
+} = createDiscreteApi([ 'message', 'dialog', 'notification', 'loadingBar' ], {
+  configProviderProps: configProviderPropsRef,
 })
-PubSub.subscribe(
-  PubSubEvents.Notification,
-  (_: string, opts: NotificationOptions) => notification.create(opts),
-)
-PubSub.subscribe(PubSubEvents.Message, (_: string, opts: MsgOptions) =>
-  message.create(opts.content, opts))
-PubSub.subscribe(PubSubEvents.Loading, (_: string, status: boolean) =>
-  status ? loadingBar.start() : loadingBar.finish())
 
-onMounted(() => {
+const unmounted = new Subject<void>()
+onBeforeMount(() => {
   preferences.load()
+
+  const subscribers = [
+    notify.subscribe((opt) => {
+      notifier.create(opt)
+    }),
+    message.subscribe((opt) => {
+      msger.create(opt.content, opt)
+    }),
+    dialog.subscribe((opt) => {
+      dialoger.create(opt)
+    }),
+    startLoading.subscribe(() => {
+      loadingBarer.start()
+    }),
+    stopLoading.subscribe(() => {
+      loadingBarer.finish()
+    }),
+  ]
+
+  unmounted.subscribe(() => {
+    subscribers.forEach(s => s.unsubscribe())
+  })
+})
+
+onBeforeUnmount(() => {
+  unmounted.next()
 })
 </script>
 

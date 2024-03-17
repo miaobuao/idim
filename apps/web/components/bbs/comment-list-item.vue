@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import type dayjs from 'dayjs'
+
 import md from '@repo/markdown'
 
 export interface CommentProps {
   id: number
   author: { username?: string, id: number }
   content: string
-  mtime: Date | string
+  mtime: dayjs.Dayjs
 }
 
 const props = defineProps<CommentProps>()
@@ -35,6 +37,10 @@ const username = computed(() =>
       <n-ellipsis :line-clamp="3" :tooltip="false" expand-trigger="click">
         <div v-html="md.render(content)" />
       </n-ellipsis>
+
+      <div class="op50 text-12px">
+        {{ mtime.fromNow() }}
+      </div>
     </n-thing>
   </n-card>
 </template>

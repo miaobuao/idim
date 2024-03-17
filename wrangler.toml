@@ -7,13 +7,13 @@ migrations_dir = "packages/db/migrations"
 [[d1_databases]]
 binding = "D1_PROD"
 database_name = "idim-prod"
-database_id = "2c466235-8af0-4298-9147-62e92b1b8bec"
+database_id = "f5356adb-0fe4-4e81-a4ea-68844e2847b4"
 migrations_dir = "packages/db/migrations"
 
 [[d1_databases]]
 binding = "D1_PREV"
 database_name = "idim-prev"
-database_id = "2e21c324-f99b-4d92-8f27-fede65d67af2"
+database_id = "c84256f2-475e-4942-8443-2e011c957045"
 migrations_dir = "packages/db/migrations"
 
 [[kv_namespaces]]

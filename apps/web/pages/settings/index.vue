@@ -85,7 +85,7 @@ const currentPage = computed(
 )
 
 function logout() {
-  pubDialog({
+  dialog.next({
     type: 'warning',
     title: $text.logout(),
     content: $text.logout_confirm(),
@@ -114,7 +114,7 @@ function pushRouter(v: string) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-1 m-1">
+  <div class="flex flex-col m-1 gap-y-1">
     <settings-view
       :pop="settingsRouter.length > 0 ? popRouter : undefined"
       :page="currentPage"

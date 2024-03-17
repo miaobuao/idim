@@ -1,10 +1,27 @@
 <script setup lang="ts">
+import type { FloatingBtnProps } from '../floating-btn.vue'
+
 import { CloseOutline as MinimizeIcon } from '@vicons/ionicons5'
 import { useDraggable } from '@vueuse/core'
 import { useThemeVars } from 'naive-ui'
 
-const hidden = ref(false)
+defineProps<{
+  label?: string
+  trigger: {
+    color: string
+    bordered?: boolean
+    size: string
+    bound?: FloatingBtnProps['bound']
+    position?: FloatingBtnProps['position']
+  }
+}>()
 
+const triggerX = defineModel<number>('triggerX')
+const triggerY = defineModel<number>('triggerY')
+const triggerWidth = defineModel<number>('triggerWidth')
+const triggerHeight = defineModel<number>('triggerHeight')
+
+const hidden = ref(false)
 const themeVars = useThemeVars()
 
 defineExpose({
@@ -17,19 +34,6 @@ function toggleHidden() {
   hidden.value = !hidden.value
 }
 
-const triggerRef = ref<HTMLElement>()
-const { position: triggerPosition, y: triggerY } = useDraggable(triggerRef, {
-  onMove({ y }) {
-    const { clientHeight: h } = triggerRef.value!
-    const { innerHeight } = window
-    triggerY.value = Math.max(Math.min(y, innerHeight - h), 0)
-  },
-})
-
-const triggerStyle = computed(
-  () => `right:0px;top:${triggerPosition.value.y}px`,
-)
-
 const windowRef = ref<HTMLElement>()
 const draggableBarRef = ref<HTMLElement>()
 const { x: windowX, y: windowY } = useDraggable(windowRef, {
@@ -41,47 +45,57 @@ const { x: windowX, y: windowY } = useDraggable(windowRef, {
     windowY.value = Math.max(Math.min(y, innerHeight - h), 0)
   },
 })
+function onWindowResize() {
+  if (!windowRef.value)
+    return
+  const { innerHeight, innerWidth } = window
+  const { clientWidth: windowWidth, clientHeight: windowHeight }
+    = windowRef.value
+  const windowRight = windowX.value + windowWidth
+  const windowBottom = windowY.value + windowHeight
+  if (windowRight > innerWidth)
+    windowX.value = innerWidth - windowRef.value!.clientWidth
+
+  if (windowBottom > innerHeight)
+    windowY.value = innerHeight - windowRef.value!.clientHeight
+}
 
 onMounted(() => {
   nextTick(() => {
     hidden.value = true
   })
   const { innerHeight, innerWidth } = window
-  triggerY.value = (innerHeight * 2) / 3
-
   const { clientHeight, clientWidth } = windowRef.value!
   windowX.value = (innerWidth - clientWidth) / 2
   windowY.value = (innerHeight - clientHeight) / 2
 
-  window.addEventListener('resize', () => {
-    if (!windowRef.value)
-      return
-    const { innerHeight, innerWidth } = window
-    const { clientWidth: windowWidth, clientHeight: windowHeight }
-      = windowRef.value
+  window.addEventListener('resize', onWindowResize)
+})
 
-    const windowRight = windowX.value + windowWidth
-    const windowBottom = windowY.value + windowHeight
-    if (windowRight > innerWidth)
-      windowX.value = innerWidth - windowRef.value!.clientWidth
-
-    if (windowBottom > innerHeight)
-      windowY.value = innerHeight - windowRef.value!.clientHeight
-  })
+onUnmounted(() => {
+  window.removeEventListener('resize', onWindowResize)
 })
 </script>
 
 <template>
-  <div
+  <floating-btn
     v-show="hidden"
-    v-click="toggleHidden"
-    class="fixed select-none cursor-move z-31"
-    :style="triggerStyle"
+    v-model:x="triggerX"
+    v-model:y="triggerY"
+    v-model:height="triggerHeight"
+    v-model:width="triggerWidth"
+    :bound="trigger.bound"
+    v-bind="trigger"
+    @click="toggleHidden"
   >
-    <div ref="triggerRef" style="touch-action: none">
-      <slot name="trigger" />
-    </div>
-  </div>
+    <template #icon>
+      <n-icon>
+        <slot name="icon" />
+      </n-icon>
+    </template>
+    {{ label }}
+  </floating-btn>
+
   <div
     v-show="!hidden"
     ref="windowRef"
@@ -111,7 +125,9 @@ onMounted(() => {
         </n-button>
       </n-layout-header>
       <n-layout-content :native-scrollbar="false">
-        <slot name="window" />
+        <div>
+          <slot />
+        </div>
       </n-layout-content>
     </n-card>
   </div>

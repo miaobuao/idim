@@ -4,7 +4,7 @@ import type { CreatePostType } from '~/server/trpc/modules/post'
 import { BulbOutline as SendIcon } from '@vicons/ionicons5'
 import { type FormInst, type FormRules, useThemeVars } from 'naive-ui'
 
-import ActivityView from '../activity/view.vue'
+import ActivityLayout from '../activity/layout.vue'
 import { screen } from '~/utils/screen'
 
 defineProps<{
@@ -15,7 +15,7 @@ const emits = defineEmits<{
   (e: 'submit', value: CreatePostType): void
 }>()
 
-const activityViewRef = ref<InstanceType<typeof ActivityView>>()
+const activityRef = ref<InstanceType<typeof ActivityLayout>>()
 const runtimeConfig = useRuntimeConfig()
 const { $text } = useNuxtApp()
 const themeVars = useThemeVars()
@@ -86,21 +86,37 @@ function clearAll() {
 defineExpose({
   clearAll,
   toggle() {
-    activityViewRef.value?.toggle()
+    activityRef.value?.toggle()
   },
+})
+
+const triggerX = ref(0)
+const triggerY = ref(0)
+const triggerHeight = ref(0)
+const triggerWidth = ref(0)
+watch([ triggerWidth, triggerHeight ], ([ w, h ]) => {
+  if (!window)
+    return
+  const { innerHeight, innerWidth } = window
+  triggerX.value = innerWidth - w
+  triggerY.value = (innerHeight - h) * 0.75
 })
 </script>
 
 <template>
-  <ActivityView
-    ref="activityViewRef"
+  <ActivityLayout
+    ref="activityRef"
+    v-model:trigger-x="triggerX"
+    v-model:trigger-y="triggerY"
+    v-model:trigger-height="triggerHeight"
+    v-model:trigger-width="triggerWidth"
+    :label="$text.send_post()"
     :trigger="{
-      label: $text.send_post(),
       color: themeVars.primaryColor,
       bordered: true,
       size: triggerSize,
+      position: 'right',
     }"
-    bordered
   >
     <template #icon>
       <SendIcon />
@@ -151,5 +167,5 @@ defineExpose({
         </div>
       </n-form>
     </n-card>
-  </ActivityView>
+  </ActivityLayout>
 </template>

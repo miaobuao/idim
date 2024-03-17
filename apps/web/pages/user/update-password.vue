@@ -67,7 +67,7 @@ async function onSubmit() {
         password: hashed,
       })
       .then(() => {
-        pubNotify({
+        notify.next({
           type: 'success',
           duration: 1500,
           content: $text.pwd_changed_succ(),
@@ -89,7 +89,7 @@ function onClickSendCode(startCd: Function) {
     })
     .then(() => {
       startCd()
-      pubNotify({
+      notify.next({
         type: 'success',
         duration: 2000,
         content: $text.send_succ(),
