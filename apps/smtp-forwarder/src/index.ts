@@ -46,10 +46,11 @@ const server = createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'POST')
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
     try {
+      decryptor.reset()
       const smtp: SMTPRequest = JSON.parse(
         decryptor.finalize(
           enc.Base64.parse(data),
-        ).toString(),
+        ).toString(enc.Utf8),
       )
       createTransport({
         host: smtp.host,
