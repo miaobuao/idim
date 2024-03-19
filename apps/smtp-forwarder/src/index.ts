@@ -1,4 +1,5 @@
 import { algo, enc } from 'crypto-js'
+import { pipe } from 'fp-ts/function'
 import { createServer } from 'node:http'
 import process from 'node:process'
 import { createTransport } from 'nodemailer'
@@ -47,10 +48,12 @@ const server = createServer((req, res) => {
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
     try {
       decryptor.reset()
-      const smtp: SMTPRequest = JSON.parse(
-        decryptor.finalize(
-          enc.Base64.parse(data),
-        ).toString(enc.Utf8),
+      const smtp: SMTPRequest = pipe(
+        data,
+        enc.Base64.parse,
+        enc.Utf8.stringify,
+        d => decryptor.finalize(d).toString(),
+        JSON.parse,
       )
       createTransport({
         host: smtp.host,

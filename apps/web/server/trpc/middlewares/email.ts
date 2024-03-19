@@ -21,12 +21,13 @@ export const EmailMiddleware = (async ({ next, ctx: { db } }) => {
     )
     return (req: Omit<SMTPRequest, keyof typeof email>) => pipe(
       JSON.stringify({ ...email, ...req }),
-      (v) => {
+      (v): string => {
         encryptor.reset()
-        const res = encryptor
-          .finalize(v)
-          .toString(crypto.enc.Base64)
-        return res
+        return pipe(
+          encryptor.finalize(v).toString(),
+          crypto.enc.Utf8.parse,
+          crypto.enc.Base64.stringify,
+        )
       },
       body => () => fetch(config.SMTP_API_URL, {
         method: 'POST',
