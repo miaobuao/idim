@@ -17,13 +17,18 @@ export async function createContext(ctx: H3Event) {
   try {
     return {
       ...await abstractPayloadFromHeaders(ctx.headers),
-      ...ctx.context,
+      kv: ctx.context.kv,
+      db: ctx.context.db,
+      event: ctx,
     }
   }
+
   catch {
     return {
       token: null,
-      ...ctx.context,
+      kv: ctx.context.kv,
+      db: ctx.context.db,
+      event: ctx,
     }
   }
 }

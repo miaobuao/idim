@@ -13,7 +13,7 @@ const KEY = crypto.enc.Hex.parse(config.SMTP_API_AES_KEY)
 const IV = crypto.enc.Hex.parse(config.SMTP_API_AES_IV)
 const encryptor = crypto.algo.AES.createEncryptor(KEY, { iv: IV })
 
-export const EmailMiddleware = (async ({ next, ctx: { db } }) => {
+export const EmailMiddleware = (async ({ next, ctx: { db, event } }) => {
   async function useSendEmail() {
     const email = await pipe(
       db.select().from(EmailPool).limit(1),
@@ -21,19 +21,17 @@ export const EmailMiddleware = (async ({ next, ctx: { db } }) => {
     )
     return (req: Omit<SMTPRequest, keyof typeof email>) => pipe(
       JSON.stringify({ ...email, ...req }),
-      (v) => {
+      (v): string => {
         encryptor.reset()
-        const res = encryptor.finalize(v).toString(crypto.enc.Base64)
+        const res = pipe(
+          crypto.enc.Utf8.parse(v),
+          v => encryptor.finalize(v).toString(crypto.enc.Base64),
+        )
         return res
       },
-      body => () => fetch(config.SMTP_API_URL, {
+      body => () => event.$fetch(config.SMTP_API_URL, {
         method: 'POST',
-        mode: 'cors',
         body,
-      }).then((d) => {
-        if (!d.ok)
-          throw InternalServerError
-        return d
       }),
       RetryAsyncFunc(3),
     )

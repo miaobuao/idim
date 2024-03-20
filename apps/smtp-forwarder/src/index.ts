@@ -1,4 +1,5 @@
 import { algo, enc } from 'crypto-js'
+import { pipe } from 'fp-ts/function'
 import { createServer } from 'node:http'
 import process from 'node:process'
 import { createTransport } from 'nodemailer'
@@ -46,10 +47,11 @@ const server = createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'POST')
     res.setHeader('Content-Type', 'application/json; charset=utf-8')
     try {
-      const smtp: SMTPRequest = JSON.parse(
-        decryptor.finalize(
-          enc.Base64.parse(data),
-        ).toString(),
+      decryptor.reset()
+      const smtp: SMTPRequest = pipe(
+        enc.Base64.parse(data),
+        d => decryptor.finalize(d).toString(enc.Utf8),
+        JSON.parse,
       )
       createTransport({
         host: smtp.host,
@@ -68,9 +70,8 @@ const server = createServer((req, res) => {
       }).then(() => {
         res.statusCode = 200
         res.end(SUCCESS_RESULT)
-      }).catch((reason) => {
+      }).catch(() => {
         res.statusCode = 500
-        logger.error(reason)
         res.end()
       })
     }
