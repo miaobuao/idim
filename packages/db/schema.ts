@@ -63,7 +63,7 @@ export const PostComment = sqliteTable('bbs_post_comment', {
 })
 
 export const PostCommentLink = sqliteTable('bbs_post_comment_link', {
-  id: integer('id').primaryKey().references(() => PostComment.id).notNull(),
+  commentId: integer('comment_id').primaryKey().references(() => PostComment.id).notNull(),
   postId: integer('post_id').references(() => Post.id).notNull(),
   prevId: integer('prev_id').references(() => PostComment.id),
 }, (table) => {
@@ -94,6 +94,7 @@ export const PostCommentLike = sqliteTable('bbs_post_comment_like', {
 })
 
 export const ForumDailyCheckinRecord = sqliteTable('bbs_daily_checkin_record', {
+  id: integer('id').primaryKey({ autoIncrement: true }).notNull(),
   userId: integer('user_id').references(() => User.id).notNull(),
   ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
 }, (table) => {
@@ -127,16 +128,6 @@ export const EmailPool = sqliteTable('email_pool', {
   from: text('from').notNull(),
 })
 
-export const ActivityThrowSoap = sqliteTable('activity_throw_soap', {
-  userId: integer('user_id').references(() => User.id, { onDelete: 'cascade' }).notNull(),
-  count: integer('count').notNull(),
-  ctime: integer('ctime', { mode: 'timestamp' }).default(sql`UNIXEPOCH()`).notNull(),
-}, (table) => {
-  return {
-    pk: primaryKey({ columns: [ table.userId, table.ctime ] }),
-  }
-})
-
 export const userRelations = relations(User, ({ many }) => ({
   posts: many(Post),
 }))
@@ -159,7 +150,7 @@ export const postCommentLinkRelations = relations(PostCommentLink, ({ one }) => 
     references: [ Post.id ],
   }),
   comment: one(PostComment, {
-    fields: [ PostCommentLink.id ],
+    fields: [ PostCommentLink.commentId ],
     references: [ PostComment.id ],
   }),
 }))

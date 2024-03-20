@@ -30,6 +30,7 @@ const SysLanguagePack = computed(() => {
     case 'zh':
       return ZhLanguagePack
     case 'en':
+    default:
       return EnLanguagePack
   }
 })

@@ -23,7 +23,7 @@ export default router({
       SyncSelectOneOrThrowError(0, InternalServerError),
       async comment => pipe(
         await db.insert(PostCommentLink).values({
-          id: comment.id,
+          commentId: comment.id,
           postId: input.postId,
           prevId: input.prevId,
         }).returning(),
@@ -39,7 +39,7 @@ export default router({
         where: eq(PostCommentLink.postId, input.postId),
         columns: {
           prevId: true,
-          id: true,
+          commentId: true,
         },
         with: {
           comment: {
@@ -58,7 +58,7 @@ export default router({
             },
           },
         },
-        orderBy: [ desc(PostCommentLink.id) ],
+        orderBy: [ desc(PostCommentLink.commentId) ],
       })
     }),
   },

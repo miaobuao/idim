@@ -1,11 +1,3 @@
-CREATE TABLE `activity_throw_soap` (
-	`user_id` integer NOT NULL,
-	`count` integer NOT NULL,
-	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
-	PRIMARY KEY(`ctime`, `user_id`),
-	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
 CREATE TABLE `currency` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`soap` integer DEFAULT 0 NOT NULL,
@@ -23,6 +15,7 @@ CREATE TABLE `email_pool` (
 );
 --> statement-breakpoint
 CREATE TABLE `bbs_daily_checkin_record` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` integer NOT NULL,
 	`ctime` integer DEFAULT UNIXEPOCH NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action
@@ -65,10 +58,10 @@ CREATE TABLE `bbs_post_comment_like` (
 );
 --> statement-breakpoint
 CREATE TABLE `bbs_post_comment_link` (
-	`id` integer PRIMARY KEY NOT NULL,
+	`comment_id` integer PRIMARY KEY NOT NULL,
 	`post_id` integer NOT NULL,
 	`prev_id` integer,
-	FOREIGN KEY (`id`) REFERENCES `bbs_post_comment`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`comment_id`) REFERENCES `bbs_post_comment`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`post_id`) REFERENCES `bbs_post`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`prev_id`) REFERENCES `bbs_post_comment`(`id`) ON UPDATE no action ON DELETE no action
 );

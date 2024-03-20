@@ -38,7 +38,7 @@ watch(links.data, (value) => {
   if (!value)
     return
   comments.value = value.map(d => ({
-    id: d.id,
+    id: d.commentId,
     author: d.comment.author,
     content: d.comment.content,
     mtime: dayjs(d.comment.mtime),
