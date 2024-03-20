@@ -8,6 +8,7 @@ import { pipe } from 'fp-ts/lib/function'
 import config from '../utils/config'
 import { InternalServerError } from '../utils/errors'
 import { AsyncSelectOneOrThrowError, RetryAsyncFunc } from '../utils/functions'
+import logger from '../utils/logger'
 
 const KEY = crypto.enc.Hex.parse(config.SMTP_API_AES_KEY)
 const IV = crypto.enc.Hex.parse(config.SMTP_API_AES_IV)
@@ -23,11 +24,12 @@ export const EmailMiddleware = (async ({ next, ctx: { db } }) => {
       JSON.stringify({ ...email, ...req }),
       (v): string => {
         encryptor.reset()
-        return pipe(
-          encryptor.finalize(v).toString(),
-          crypto.enc.Utf8.parse,
-          crypto.enc.Base64.stringify,
+        const res = pipe(
+          crypto.enc.Utf8.parse(v),
+          v => encryptor.finalize(v).toString(crypto.enc.Base64),
         )
+        logger.info(res)
+        return res
       },
       body => () => fetch(config.SMTP_API_URL, {
         method: 'POST',

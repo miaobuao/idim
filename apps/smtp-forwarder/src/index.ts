@@ -45,14 +45,13 @@ const server = createServer((req, res) => {
   req.on('end', () => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Methods', 'POST')
-    res.setHeader('Content-Type', 'application/json; charset=utf-8')
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+    logger.info(data)
     try {
       decryptor.reset()
       const smtp: SMTPRequest = pipe(
-        data,
-        enc.Base64.parse,
-        enc.Utf8.stringify,
-        d => decryptor.finalize(d).toString(),
+        enc.Base64.parse(data),
+        d => decryptor.finalize(d).toString(enc.Utf8),
         JSON.parse,
       )
       createTransport({
