@@ -9,7 +9,6 @@ import footnotePlugin from 'markdown-it-footnote'
 import githubTocPlugin from 'markdown-it-github-toc'
 import highlight from 'markdown-it-highlight'
 import insPlugin from 'markdown-it-ins'
-import markdownItLinkAttributes from 'markdown-it-link-attributes'
 import markPlugin from 'markdown-it-mark'
 import mathPlugin from 'markdown-it-mathjax3'
 import sourceMapPlugin from 'markdown-it-source-map'
@@ -38,7 +37,6 @@ const md = MarkdownIt({
   .use(deflist)
   .use(githubTocPlugin)
   .use(highlight)
-  .use(markdownItLinkAttributes)
 
 md.linkify.set({ fuzzyLink: false })
 
