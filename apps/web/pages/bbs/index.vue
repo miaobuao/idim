@@ -149,7 +149,7 @@ definePageMeta({
     item-resizable
   >
     <template #default="{ item }">
-      <BbsPostListItem
+      <bbs-post-list-item
         :holder-height="156"
         class="m-1"
         :offset="item.offset"

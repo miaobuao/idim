@@ -2,23 +2,9 @@ import dayjs from '../utils/dayjs'
 import { Batcher } from '~/utils/batcher'
 import { useTrpc } from '~/utils/uses'
 
-export interface PostDto {
-  id: number
-  title: string
-  content: string
-  ctime: dayjs.Dayjs
-  mtime: dayjs.Dayjs
-  author: {
-    id: number
-    username: string
-  }
-}
-
 const batch = new Batcher(750)
 
 export const usePostsStore = defineStore('posts', () => {
-  const posts = reactive<Map<number, PostDto>>(new Map())
-  const offsetMap = reactive<Map<number, number>>(new Map())
   const total = ref(-1)
   const queryByOffsetPendingMap: Map<number, boolean> = new Map()
   const queryByIdPendingMap: Map<number, boolean> = new Map()
@@ -28,55 +14,84 @@ export const usePostsStore = defineStore('posts', () => {
     total.value = await $trpc.post.count.query()
   }
 
-  function get(id: number) {
-    batch.start()
-    const abort = batch.push(() => {
-      if (posts.has(id) || queryByIdPendingMap.has(id))
-        return
-      queryByIdPendingMap.set(id, true)
-
+  function get(
+    id: number,
+    options?: {
+      duration?: number
+    },
+  ) {
+    batch.start(options?.duration ?? undefined)
+    const [ data, update ] = useRequestCache(`post-${id}`, () => {
       const $trpc = useTrpc()
-      $trpc.post.get.query(id)
-        .then(post => posts.set(post.id, {
-          ...post,
-          ctime: dayjs(post.ctime),
-          mtime: dayjs(post.mtime),
-        }))
+      return $trpc.post.get.query(id)
         .catch(errorHandler)
         .finally(() => queryByIdPendingMap.delete(id))
     })
+    const abort = batch.push(() => {
+      if (queryByIdPendingMap.has(id))
+        return
+      queryByIdPendingMap.set(id, true)
+      update()
+    })
     return {
       abort,
-      data: computed(() => posts.get(id)),
+      data: computed(() => {
+        if (data.data) {
+          return {
+            ...data,
+            data: {
+              ...data.data,
+              ctime: dayjs(data.data.ctime),
+              mtime: dayjs(data.data.mtime),
+            },
+          }
+        }
+        return {
+          ...data,
+          data: undefined,
+        }
+      }),
     }
   }
 
-  function getByOffset(offset: number) {
-    batch.start()
-    const abort = batch.push(() => {
-      if (offsetMap.has(offset) || queryByOffsetPendingMap.has(offset))
-        return
-      queryByOffsetPendingMap.set(offset, true)
-
+  function getByOffset(
+    offset: number,
+    options?: {
+      duration?: number
+    },
+  ) {
+    batch.start(options?.duration ?? undefined)
+    const [ data, update ] = useRequestCache(`post-by-offset-${offset}`, () => {
       const $trpc = useTrpc()
-      $trpc.post.getByOffset.query(offset)
-        .then((post) => {
-          offsetMap.set(offset, post.id)
-          posts.set(post.id, {
-            ...post,
-            ctime: dayjs(post.ctime),
-            mtime: dayjs(post.mtime),
-          })
-        })
+      return $trpc.post.getByOffset.query(offset)
         .catch(errorHandler)
         .finally(() => queryByOffsetPendingMap.delete(offset))
     })
-    const data = computed(() => {
-      if (offsetMap.has(offset))
-        return posts.get(offsetMap.get(offset)!)
-      return undefined
+    const abort = batch.push(() => {
+      if (queryByOffsetPendingMap.has(offset))
+        return
+      queryByOffsetPendingMap.set(offset, true)
+      update()
     })
-    return { abort, data }
+    return {
+      abort,
+      data: computed(() => {
+        if (data.data) {
+          return {
+            ...data,
+            data: {
+              ...data.data,
+              ctime: dayjs(data.data.ctime),
+              mtime: dayjs(data.data.mtime),
+            },
+          }
+        }
+        return {
+          ...data,
+          data: undefined,
+        }
+      }),
+    }
   }
 
   return {

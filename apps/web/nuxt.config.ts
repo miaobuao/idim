@@ -78,6 +78,7 @@ export default defineNuxtConfig({
     ],
   },
   runtimeConfig: {
+    NODE_ENV: process.env.NODE_ENV,
     JWT_SECRET: process.env.JWT_SECRET,
     OAUTH_JWT_EXPIRES_IN: process.env.OAUTH_JWT_EXPIRES_IN,
     SMTP_JWT_EXPIRES_IN: process.env.SMTP_JWT_EXPIRES_IN,
