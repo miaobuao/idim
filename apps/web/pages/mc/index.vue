@@ -1,0 +1,3 @@
+<template>
+  mc design
+</template>

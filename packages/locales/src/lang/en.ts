@@ -11,9 +11,9 @@ export default {
       handle: 'Find Something Funny',
     },
     418: {
-      title: "418 I'm a teapot",
+      title: '418 I\'m a teapot',
       description:
-        "In Chinese, teapot is a kind of 'Beiju', which means 'tragedy'.",
+        'In Chinese, teapot is a kind of \'Beiju\', which means \'tragedy\'.',
       handle: 'It Is Easy to Take the Truth',
     },
     500: {
@@ -35,7 +35,7 @@ export default {
     warning: {
       title: 'Warning',
       description: 'People seldom see it until it comes true.',
-      handle: "Hmm, Truly Sad, Isn't It?",
+      handle: 'Hmm, Truly Sad, Isn\'t It?',
     },
   },
 
@@ -53,10 +53,16 @@ export default {
   logout: 'Logout',
   register: 'Register',
   password: 'Password',
+  new_password: 'New Password',
+  forgot_password: 'Forgot Password',
   username: 'Username',
   email: 'Email',
   ok: 'OK',
   cancel: 'Cancel',
+  reset: 'Reset',
+  clearAll: 'Clear All',
+  send: 'Send',
+  clearAllConfirmMsg: 'Do you want to clear all?',
 
   retype_password: 'Retype Password',
   retype_password_error: 'Retype Password Error',
@@ -65,10 +71,57 @@ export default {
   whether_keep_logged_in: 'Whether Keep Logged In',
 
   internal_server_error: 'Internal Server Error',
+  too_many_requests: 'Too Many Requests',
   invalid_email_or_password: 'Invalid Email Or Password',
   invalid_email: 'Invalid Email',
   email_already_exists: 'Email Already Exists',
   name_already_exists: 'Name Already Exists',
+  email_or_name_alreay_exists: 'Email Or Name Already Exists',
+  email_not_registered: 'Email Not Registered',
+  published_at_: 'Published At: {time}',
+  updated_at_: 'Updated At: {time}',
+  comments: 'Comments',
+  comment: 'Comment',
+  edit_comment: 'Edit Comment',
 
   expired: 'Session Expired',
-};
+  verify_code: 'Verify Code',
+  invalid_verify_code: 'Invalid Verify Code',
+
+  header: {
+    user: 'User',
+    general: 'General',
+  },
+
+  verify_mail: 'Verify Mail',
+  verify_mail_caption:
+    'We will send a verification code to your email address.',
+  change_psw: 'Change password',
+  change_psw_caption: 'Change your password.',
+  pwd_changed_succ: 'Password changed successfully!',
+
+  switch_theme: 'Switch theme',
+  switch_theme_caption: 'Switch theme in Dark, Light or Auto',
+  main: 'Main',
+  logout_confirm: 'Do you want to logout?',
+
+  theme: {
+    dark: 'Dark Theme',
+    light: 'Light Theme',
+    auto: 'Follow System',
+  },
+
+  send_post: 'Send Post',
+  send_succ: 'Send Success',
+  title: 'Title',
+  content: 'Content',
+  post_not_found: 'Post Not Found',
+
+  titleMinLenError: 'Title must be at least {length} characters',
+  titleMaxLenError: 'Title must not exceed {length} characters',
+  contentMinLenError: 'Content must be at least {length} characters',
+  contentMaxLenError: 'Content must not exceed {length} characters',
+
+  postNotFound: 'Post Not Found',
+  userNotFound: 'User Not Found',
+}

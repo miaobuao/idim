@@ -1,0 +1,759 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "id": "aa396b28-7060-4fb3-851b-21ffbcf1d0fe",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "currency": {
+      "name": "currency",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "soap": {
+          "name": "soap",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "pants": {
+          "name": "pants",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "currency_id_user_id_fk": {
+          "name": "currency_id_user_id_fk",
+          "tableFrom": "currency",
+          "tableTo": "user",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "email_pool": {
+      "name": "email_pool",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "host": {
+          "name": "host",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "port": {
+          "name": "port",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "from": {
+          "name": "from",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "bbs_daily_checkin_record": {
+      "name": "bbs_daily_checkin_record",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ctime": {
+          "name": "ctime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        }
+      },
+      "indexes": {
+        "forum_daily_checkin_user_id_idx": {
+          "name": "forum_daily_checkin_user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        },
+        "forum_daily_checkin_ctime_idx": {
+          "name": "forum_daily_checkin_ctime_idx",
+          "columns": [
+            "ctime"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "bbs_daily_checkin_record_user_id_user_id_fk": {
+          "name": "bbs_daily_checkin_record_user_id_user_id_fk",
+          "tableFrom": "bbs_daily_checkin_record",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "bbs_user_badge": {
+      "name": "bbs_user_badge",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "forum_badge_user_id_idx": {
+          "name": "forum_badge_user_id_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "bbs_user_badge_user_id_user_id_fk": {
+          "name": "bbs_user_badge_user_id_user_id_fk",
+          "tableFrom": "bbs_user_badge",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "bbs_post": {
+      "name": "bbs_post",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "visible": {
+          "name": "visible",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "ctime": {
+          "name": "ctime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        },
+        "mtime": {
+          "name": "mtime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        }
+      },
+      "indexes": {
+        "post_author_idx": {
+          "name": "post_author_idx",
+          "columns": [
+            "author_id"
+          ],
+          "isUnique": false
+        },
+        "post_ctime_idx": {
+          "name": "post_ctime_idx",
+          "columns": [
+            "ctime"
+          ],
+          "isUnique": false
+        },
+        "post_mtime_idx": {
+          "name": "post_mtime_idx",
+          "columns": [
+            "mtime"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "bbs_post_author_id_user_id_fk": {
+          "name": "bbs_post_author_id_user_id_fk",
+          "tableFrom": "bbs_post",
+          "tableTo": "user",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "bbs_post_comment": {
+      "name": "bbs_post_comment",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ctime": {
+          "name": "ctime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        },
+        "mtime": {
+          "name": "mtime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        }
+      },
+      "indexes": {
+        "post_comment_author_idx": {
+          "name": "post_comment_author_idx",
+          "columns": [
+            "author_id"
+          ],
+          "isUnique": false
+        },
+        "post_comment_ctime_idx": {
+          "name": "post_comment_ctime_idx",
+          "columns": [
+            "ctime"
+          ],
+          "isUnique": false
+        },
+        "post_comment_mtime_idx": {
+          "name": "post_comment_mtime_idx",
+          "columns": [
+            "mtime"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "bbs_post_comment_author_id_user_id_fk": {
+          "name": "bbs_post_comment_author_id_user_id_fk",
+          "tableFrom": "bbs_post_comment",
+          "tableTo": "user",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "bbs_post_comment_like": {
+      "name": "bbs_post_comment_like",
+      "columns": {
+        "post_id": {
+          "name": "post_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ctime": {
+          "name": "ctime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bbs_post_comment_like_post_id_bbs_post_comment_id_fk": {
+          "name": "bbs_post_comment_like_post_id_bbs_post_comment_id_fk",
+          "tableFrom": "bbs_post_comment_like",
+          "tableTo": "bbs_post_comment",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bbs_post_comment_like_user_id_user_id_fk": {
+          "name": "bbs_post_comment_like_user_id_user_id_fk",
+          "tableFrom": "bbs_post_comment_like",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bbs_post_comment_like_post_id_user_id_pk": {
+          "columns": [
+            "post_id",
+            "user_id"
+          ],
+          "name": "bbs_post_comment_like_post_id_user_id_pk"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "bbs_post_comment_link": {
+      "name": "bbs_post_comment_link",
+      "columns": {
+        "comment_id": {
+          "name": "comment_id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "post_id": {
+          "name": "post_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "prev_id": {
+          "name": "prev_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "post_comment_link_post_id_idx": {
+          "name": "post_comment_link_post_id_idx",
+          "columns": [
+            "post_id"
+          ],
+          "isUnique": false
+        },
+        "post_comment_link_prev_id_idx": {
+          "name": "post_comment_link_prev_id_idx",
+          "columns": [
+            "prev_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "bbs_post_comment_link_comment_id_bbs_post_comment_id_fk": {
+          "name": "bbs_post_comment_link_comment_id_bbs_post_comment_id_fk",
+          "tableFrom": "bbs_post_comment_link",
+          "tableTo": "bbs_post_comment",
+          "columnsFrom": [
+            "comment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bbs_post_comment_link_post_id_bbs_post_id_fk": {
+          "name": "bbs_post_comment_link_post_id_bbs_post_id_fk",
+          "tableFrom": "bbs_post_comment_link",
+          "tableTo": "bbs_post",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bbs_post_comment_link_prev_id_bbs_post_comment_id_fk": {
+          "name": "bbs_post_comment_link_prev_id_bbs_post_comment_id_fk",
+          "tableFrom": "bbs_post_comment_link",
+          "tableTo": "bbs_post_comment",
+          "columnsFrom": [
+            "prev_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "bbs_post_like": {
+      "name": "bbs_post_like",
+      "columns": {
+        "post_id": {
+          "name": "post_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ctime": {
+          "name": "ctime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bbs_post_like_post_id_bbs_post_id_fk": {
+          "name": "bbs_post_like_post_id_bbs_post_id_fk",
+          "tableFrom": "bbs_post_like",
+          "tableTo": "bbs_post",
+          "columnsFrom": [
+            "post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bbs_post_like_user_id_user_id_fk": {
+          "name": "bbs_post_like_user_id_user_id_fk",
+          "tableFrom": "bbs_post_like",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "bbs_post_like_post_id_user_id_pk": {
+          "columns": [
+            "post_id",
+            "user_id"
+          ],
+          "name": "bbs_post_like_post_id_user_id_pk"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "relative_account": {
+      "name": "relative_account",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "qq": {
+          "name": "qq",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tel": {
+          "name": "tel",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "xbox": {
+          "name": "xbox",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "user_qq_idx": {
+          "name": "user_qq_idx",
+          "columns": [
+            "qq"
+          ],
+          "isUnique": false
+        },
+        "user_tel_idx": {
+          "name": "user_tel_idx",
+          "columns": [
+            "tel"
+          ],
+          "isUnique": false
+        },
+        "user_xbox_idx": {
+          "name": "user_xbox_idx",
+          "columns": [
+            "xbox"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "relative_account_id_user_id_fk": {
+          "name": "relative_account_id_user_id_fk",
+          "tableFrom": "relative_account",
+          "tableTo": "user",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "user": {
+      "name": "user",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "pwd": {
+          "name": "pwd",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ctime": {
+          "name": "ctime",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "UNIXEPOCH()"
+        }
+      },
+      "indexes": {
+        "user_username_unique": {
+          "name": "user_username_unique",
+          "columns": [
+            "username"
+          ],
+          "isUnique": true
+        },
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        },
+        "user_email_idx": {
+          "name": "user_email_idx",
+          "columns": [
+            "email"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

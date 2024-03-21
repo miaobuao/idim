@@ -51,10 +51,21 @@ export default {
   logout: '登出',
   register: '注册',
   password: '密码',
+  new_password: '新密码',
+  forgot_password: '忘记密码',
   username: '用户名',
   email: '邮箱',
   ok: '确定',
   cancel: '取消',
+  reset: '重置',
+  clearAll: '清除全部',
+  send: '发送',
+  clearAllConfirmMsg: '是否清除全部?',
+  published_at_: '发布于：{time}',
+  updated_at_: '最后更新于：{time}',
+  comments: '评论',
+  comment: '评论',
+  edit_comment: '编辑评论',
 
   retype_password: '重复密码',
   retype_password_error: '重复密码错误',
@@ -63,10 +74,51 @@ export default {
   whether_keep_logged_in: '是否保持登录',
 
   internal_server_error: '内部服务器错误',
+  too_many_requests: '请求过多',
   invalid_email_or_password: '无效的邮箱或密码',
   invalid_email: '无效的邮箱',
   email_already_exists: '邮箱已存在',
   name_already_exists: '用户名已存在',
-
+  email_or_name_alreay_exists: '邮箱或用户名已存在',
+  email_not_registered: '邮箱未注册',
   expired: '会话已过期',
-};
+  verify_code: '验证码',
+  invalid_verify_code: '无效的验证码',
+
+  header: {
+    user: '用户',
+    general: '通用',
+  },
+
+  verify_mail: '验证邮箱',
+
+  verify_mail_caption: '我们会发送一个验证码到你填写的邮箱地址.',
+  change_psw: '修改密码',
+  change_psw_caption: '你可以修改密码',
+  pwd_changed_succ: '密码修改成功!',
+
+  switch_theme: '主题',
+  switch_theme_caption: '切换主题, 可以选择深色, 浅色或自动',
+  main: '设置',
+  logout_confirm: '确定要退出登录吗?',
+
+  theme: {
+    dark: '黑暗模式',
+    light: '浅色模式',
+    auto: '跟随系统',
+  },
+
+  send_post: '发帖',
+  send_succ: '发送成功',
+  title: '标题',
+  content: '内容',
+  post_not_found: '帖子不存在',
+
+  titleMinLenError: '标题最少{length}个字符',
+  titleMaxLenError: '标题最多{length}个字符',
+  contentMinLenError: '内容最少{length}个字符',
+  contentMaxLenError: '内容最多{length}个字符',
+
+  postNotFound: '帖子不存在',
+  userNotFound: '用户不存在',
+}

@@ -1,34 +1,57 @@
 {
   "name": "idim",
+  "type": "module",
   "private": true,
-  "scripts": {
-    "build": "dotenv -- turbo build",
-    "dev": "dotenv -e .env.devel -- turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky",
-    "db:migrate": "turbo @repo/db#migrate",
-    "db:studio": "cd ./packages/db && pnpm prisma studio"
-  },
-  "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@types/lodash-es": "^4.17.12",
-    "dotenv-cli": "latest",
-    "eslint": "^8.56.0",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
-    "prettier": "^3.1.1",
-    "tsup": "^8.0.2",
-    "tsx": "^4.7.1",
-    "turbo": "latest"
-  },
   "packageManager": "pnpm@8.15.3",
   "engines": {
     "node": ">=20"
   },
+  "scripts": {
+    "build": "turbo build",
+    "dev": "dotenv -e .env.devel -- turbo dev",
+    "lint": "turbo lint",
+    "lint-staged": "lint-staged",
+    "type-check": "turbo type-check",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky",
+    "dev:smtp-forwarder": "dotenv -e .env.devel -- turbo smtp-forwarder#dev",
+    "deploy:smtp-forwarder": "dotenv -e .env.production.local -- turbo smtp-forwarder#dev",
+    "db:migrate:dev": "cd packages/db && pnpm migrate && wrangler d1 migrations apply --local idim",
+    "db:migrate:prev": "wrangler d1 migrations apply idim-prev --remote",
+    "db:migrate:prod": "wrangler d1 migrations apply idim-prod --remote",
+    "db:studio:dev": "cd packages/db && pnpm dev:studio",
+    "db:studio:prod": "cd packages/db && pnpm prod:studio",
+    "preview": "NITRO_PRESET=cloudflare-pages dotenv -e .env.devel -- pnpm build && cd apps/web && wrangler pages dev dist"
+  },
   "dependencies": {
+    "@antfu/eslint-config": "^2.8.3",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.11.30",
+    "eslint": "^8.57.0",
+    "eslint-config-turbo": "^1.12.5",
+    "eslint-plugin-format": "^0.1.0",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5",
+    "prettier-eslint": "^16.3.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@unocss/eslint-plugin": "^0.58.6",
+    "consola": "^3.2.3",
+    "dotenv-cli": "^7.4.1",
+    "drizzle-kit": "^0.20.14",
+    "drizzle-orm": "^0.29.5",
+    "fp-ts": "^2.16.4",
+    "lint-staged": "^15.2.2",
     "lodash-es": "^4.17.21",
-    "sass": "^1.70.0"
+    "sass": "^1.72.0",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.2",
+    "tsx": "^4.7.1",
+    "turbo": "^1.12.5",
+    "typescript": "^5.4.2",
+    "unocss": "^0.58.6",
+    "wrangler": "^3.34.2"
   }
 }

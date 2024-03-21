@@ -23,10 +23,17 @@
         "^lint"
       ]
     },
+    "lint-staged": {},
+    "type-check": {
+      "dependsOn": [
+        "^type-check"
+      ]
+    },
     "dev": {
       "cache": false,
       "persistent": true
     },
-    "@repo/db#migrate": {}
+    "@repo/db#migrate": {},
+    "smtp-forwarder#dev": {}
   }
 }

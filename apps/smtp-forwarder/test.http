@@ -1,0 +1,6 @@
+POST http://127.0.0.1:20028
+content-type: application/json
+
+{
+    "hi": "test"
+}

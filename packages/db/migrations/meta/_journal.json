@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710965986009,
+      "tag": "0000_peaceful_wrecker",
+      "breakpoints": true
+    }
+  ]
+}
