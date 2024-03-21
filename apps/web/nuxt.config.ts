@@ -6,6 +6,9 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 
 const vite: NuxtConfig['vite'] = {
+  build: {
+    target: 'esnext',
+  },
   optimizeDeps: {
     include:
       process.env.NODE_ENV === 'development'
