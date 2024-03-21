@@ -15,7 +15,7 @@ const props = defineProps<CommentProps>()
 const user = useUserStore()
 const username = computed(() =>
   props.author.username === undefined
-    ? user.getInfo(props.author.id).data.value?.username
+    ? user.getInfo(props.author.id).data.data?.username
     : props.author.username,
 )
 </script>

@@ -14,14 +14,14 @@ export class Batcher {
     }
   }
 
-  start() {
+  start(duration?: number) {
     if (this._running)
       clearInterval(this._interval)
     this._running = true
     this._interval = setInterval(() => {
       this._queue.forEach(fn => fn())
       this._queue.clear()
-    }, this.duration) as unknown as number
+    }, duration ?? this.duration) as unknown as number
   }
 
   end() {
