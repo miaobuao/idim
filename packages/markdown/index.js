@@ -9,8 +9,8 @@ import footnotePlugin from 'markdown-it-footnote'
 import githubTocPlugin from 'markdown-it-github-toc'
 import highlight from 'markdown-it-highlight'
 import insPlugin from 'markdown-it-ins'
+import katex from 'markdown-it-katex'
 import markPlugin from 'markdown-it-mark'
-import mathPlugin from 'markdown-it-mathjax3'
 import sourceMapPlugin from 'markdown-it-source-map'
 import subPlugin from 'markdown-it-sub'
 import supPlugin from 'markdown-it-sup'
@@ -26,7 +26,6 @@ const md = MarkdownIt({
   .use(MarkdownItAttrs)
   .use(emojiPlugin)
   .use(anchorPlugin)
-  .use(mathPlugin)
   .use(containerPlugin)
   .use(footnotePlugin)
   .use(taskListsPlugin)
@@ -37,6 +36,7 @@ const md = MarkdownIt({
   .use(deflist)
   .use(githubTocPlugin)
   .use(highlight)
+  .use(katex)
 
 md.linkify.set({ fuzzyLink: false })
 
