@@ -25,11 +25,12 @@ export default router({
         input.email,
         FindOneUserByEmail(ctx.db),
         ThrowErrorIfPromiseNull(InvalidEmailOrPasswordError),
-      ).then(async ({ pwd, id, username }) => {
+      ).then(async ({ pwd, id, username, ctime }) => {
         if (await bcryptVerify(input.password, pwd)) {
           return {
             id,
             username,
+            ctime,
             email: input.email,
             token: await signToken({ id }),
           }
@@ -47,6 +48,7 @@ export default router({
         id: ctx.user.id,
         username: ctx.user.username,
         email: ctx.user.email,
+        ctime: ctx.user.ctime,
       }
     }),
 

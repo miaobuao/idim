@@ -11,6 +11,7 @@ import { screen } from '~/utils/screen'
 import { useTrpc } from '~/utils/uses'
 
 const route = useRoute()
+const router = useRouter()
 const user = useUserStore()
 const themeVars = useThemeVars()
 const sending = ref(false)
@@ -45,6 +46,10 @@ watch(links, (links) => {
     mtime: dayjs(d.comment.mtime),
   }))
 })
+
+function back() {
+  router.push({ name: 'bbs' })
+}
 
 function sendComment(content: string) {
   $trpc.comment.create
@@ -85,7 +90,7 @@ function sendComment(content: string) {
     :size="cardSize"
     :title="post.data?.title"
     closable
-    @close="$router.push({ name: 'bbs' })"
+    @close="back"
   >
     <n-skeleton v-if="!post.data" :repeat="10" text />
 
@@ -120,7 +125,7 @@ function sendComment(content: string) {
   <client-only>
     <n-skeleton v-if="links.loading" text :repeat="10" />
     <div v-else-if="comments.length > 0" class="m-2 flex flex-col gap-y-2">
-      <div class="flex text-1.2rem font-600 items-stretch mx-2 justify-between">
+      <div class="flex text-1.2rem font-600 items-stretch justify-between mx-2">
         <div>{{ $text.comments() }} ({{ comments.length }})</div>
         <div
           :style="{ height: 'inhreit' }"

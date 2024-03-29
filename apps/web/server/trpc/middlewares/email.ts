@@ -29,7 +29,7 @@ export const EmailMiddleware = (async ({ next, ctx: { db, event } }) => {
         )
         return res
       },
-      body => () => event.$fetch(config.SMTP_API_URL, {
+      body => () => fetch(config.SMTP_API_URL, {
         method: 'POST',
         body,
       }),
