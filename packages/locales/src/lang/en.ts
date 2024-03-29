@@ -39,6 +39,7 @@ export default {
     },
   },
 
+  ctime: 'Created Time',
   login_or_register: 'Login / Register',
   bookmark: 'Bookmark',
   minecraft: 'Minecraft',

@@ -7,18 +7,19 @@ import { UnauthorizedError } from '../utils/errors'
 
 export const AuthMiddleware = (async ({ ctx, next }) => {
   if (ctx.token?.id) {
-    const user = await ctx.db.select({
-      id: User.id,
-      username: User.username,
-      email: User.email,
-      ctime: User.ctime,
-    }).from(User).where(
-      eq(User.id, ctx.token.id),
-    ).limit(1)
-    if (user && user[0]) {
+    const user = await ctx.db.query.User.findFirst({
+      where: eq(User.id, ctx.token.id),
+      columns: {
+        id: true,
+        username: true,
+        email: true,
+        ctime: true,
+      },
+    })
+    if (user) {
       return next({
         ctx: {
-          user: user[0],
+          user,
         },
       })
     }

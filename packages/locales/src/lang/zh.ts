@@ -37,6 +37,7 @@ export default {
     },
   },
 
+  ctime: '创建时间',
   login_or_register: '登录 / 注册',
   bookmark: '书签',
   minecraft: 'Minecraft',

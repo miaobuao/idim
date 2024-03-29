@@ -34,6 +34,7 @@ export interface SMTPRequest {
 }
 
 const server = createServer((req, res) => {
+  logger.info('recv')
   if (req.method !== 'POST' || req.url !== '/') {
     res.statusCode = 405
     res.end()
@@ -41,6 +42,7 @@ const server = createServer((req, res) => {
   }
 
   let data = ''
+
   req.on('data', chunk => data += chunk)
   req.on('end', () => {
     res.setHeader('Access-Control-Allow-Origin', '*')

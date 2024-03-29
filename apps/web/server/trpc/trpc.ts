@@ -1,10 +1,13 @@
 import type { Context } from './context'
 
 import { initTRPC } from '@trpc/server'
+import superjson from 'superjson'
 
 import { AuthMiddleware } from './middlewares/auth'
 
-export const t = initTRPC.context<Context>().create({})
+export const t = initTRPC.context<Context>().create({
+  transformer: superjson,
+})
 export type TRPCErrorSchema = ReturnType<
   (typeof t)['_config']['errorFormatter']
 >

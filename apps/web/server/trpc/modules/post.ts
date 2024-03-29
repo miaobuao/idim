@@ -1,7 +1,10 @@
+import type { SQL } from 'drizzle-orm'
+
 import { Post } from '@repo/db'
 import { buildLanguageSource } from '@repo/locales'
-import { and, count, eq } from 'drizzle-orm'
+import { and, asc, count, desc, eq } from 'drizzle-orm'
 import { pipe } from 'fp-ts/lib/function'
+import { isNil } from 'lodash-es'
 import { z } from 'zod'
 
 import { protectedProcedure, publicProcedure, router } from '../trpc'
@@ -62,7 +65,40 @@ export default router({
       async v => Number.parseInt(await v),
     )),
 
-    get: publicProcedure.input(IntDto.gt(0)).query(({ ctx: { db }, input: id }) =>
+    get: protectedProcedure.input(z.object({
+      id: IntDto.gte(1).optional(),
+      authorId: IntDto.gte(0).optional(),
+      visible: z.boolean().optional(),
+      pageSize: z.number().int().gt(0).lte(20).optional(),
+      pageIndex: z.number().int().optional(),
+      reverse: z.boolean().optional(),
+    })).query(({ input, ctx: { db } }) => {
+      const conditions: SQL[] = [ ]
+      if (!isNil(input.id))
+        conditions.push(eq(Post.id, input.id))
+      if (!isNil(input.authorId))
+        conditions.push(eq(Post.authorId, input.authorId))
+      if (!isNil(input.visible))
+        conditions.push(eq(Post.visible, input.visible))
+      return db.query.Post.findMany({
+        where: and(...conditions),
+        with: {
+          author: {
+            columns: {
+              id: true,
+              username: true,
+            },
+          },
+        },
+        ...(isNil(input.pageSize) || isNil(input.pageIndex))
+          ? {}
+          : { offset: input.pageIndex * input.pageSize },
+        limit: input.pageSize,
+        orderBy: [ input.reverse ? desc(Post.id) : asc(Post.id) ],
+      })
+    }),
+
+    getById: publicProcedure.input(IntDto.gt(0)).query(({ ctx: { db }, input: id }) =>
       pipe(
         db.query.Post.findFirst({
           where: and(eq(Post.id, id), eq(Post.visible, true)),

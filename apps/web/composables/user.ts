@@ -5,6 +5,7 @@ export const useUserStore = defineStore('user', () => {
     id: -1,
     username: '',
     email: '',
+    ctime: dayjs(),
   })
   const pendingMap = new Map<number, boolean>()
   function clear() {
@@ -43,9 +44,16 @@ export const useUserStore = defineStore('user', () => {
     return { abort, data }
   }
 
+  function updateSelf(
+    value: Exclude<typeof self, 'ctime'> & { ctime: number | Date | string },
+  ) {
+    Object.assign(self, { ...value, ctime: dayjs(value.ctime) })
+  }
+
   return {
     self,
     clear,
     getInfo,
+    updateSelf,
   }
 })

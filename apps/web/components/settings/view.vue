@@ -62,8 +62,7 @@ function LabelOption(props: LabelProps) {
           return
         if (typeof props.to === 'string')
           emits('push', props.to)
-        else
-          router.push(props.to)
+        else router.push(props.to)
       }}
     >
       <NThing title={props.title} contentClass="m-0!">
@@ -102,7 +101,7 @@ function RadioOption(props: RadioProps) {
           </n-icon>
         </template>
       </NButton>
-      <div class="text-lg font-600">
+      <div class="font-600 text-lg">
         {{ page.label }}
       </div>
     </n-flex>

@@ -21,9 +21,8 @@ export const useTokenStore = defineStore('token', () => {
       $trpc.session.auth
         .query()
         .then((data) => {
-          user.self.id = data.id
-          user.self.username = data.username
-          user.self.email = data.email
+          // @ts-expect-error
+          user.updateSelf(data)
         })
         .catch(clearJwtToken)
     }
