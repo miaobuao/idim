@@ -22,6 +22,7 @@ export default antfu(
         'error',
         'before',
       ],
+      'unocss/order': 0,
     },
   },
   {

@@ -23,7 +23,7 @@ export const usePostsStore = defineStore('posts', () => {
     batch.start(options?.duration ?? undefined)
     const [ data, update ] = useRequestCache(`post-${id}`, () => {
       const $trpc = useTrpc()
-      return $trpc.post.get.query(id)
+      return $trpc.post.getById.query(id)
         .catch(errorHandler)
         .finally(() => queryByIdPendingMap.delete(id))
     })
