@@ -23,5 +23,5 @@ jobs:
 
       - name: Build
         run: |
-          npm i -g pnpm && pnpm i
+          npm i -g pnpm@9.0.6 && pnpm i
           pnpm run build
