@@ -1,8 +1,10 @@
 import type { NDateLocale, NLocale } from 'naive-ui'
 
-import { isClient } from '@vueuse/core'
+import { isClient, usePreferredDark } from '@vueuse/core'
 
 export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
+  const isPreferredDark = usePreferredDark()
+
   const preferences = ref<GuiPreferences>({
     theme: ThemeKind.OS,
     language: LanguageKind.OS,
@@ -35,6 +37,11 @@ export const useGuiPreferencesStore = defineStore('gui-preferences', () => {
     update,
     save,
     load,
+    isDark: computed(() => {
+      if (preferences.value.theme === ThemeKind.OS)
+        return isPreferredDark.value
+      return preferences.value.theme === ThemeKind.Dark
+    }),
     value: computed(() => preferences.value),
   }
 })

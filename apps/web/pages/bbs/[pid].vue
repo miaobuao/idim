@@ -2,6 +2,7 @@
 import type { CommentProps } from '~/components/bbs/comment-list-item.vue'
 
 import { vAutoAnimate } from '@formkit/auto-animate'
+import { dayjs } from '@repo/common'
 import md from '@repo/markdown'
 import { SwapVerticalOutline as ReverseIcon } from '@vicons/ionicons5'
 import { useThemeVars } from 'naive-ui'

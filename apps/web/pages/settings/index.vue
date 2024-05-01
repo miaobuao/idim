@@ -24,7 +24,7 @@ const [ _, pagesMap ] = createPages(
     )
     .addCard(
       new CardBuilder($text.header.user())
-        .hidden(() => !user.self.id)
+        .hidden(() => user.self.id === -1)
         .addLabel({
           title: $text.verify_mail(),
           caption: $text.verify_mail_caption(),

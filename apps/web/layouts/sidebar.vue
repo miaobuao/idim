@@ -3,7 +3,7 @@ import type { MenuOption } from 'naive-ui'
 
 import {
   ChatboxOutline as BBSIcon,
-  BookmarkOutline as BookmarkIcon,
+  CalendarClearOutline as CalendarIcon,
   PlayForwardOutline as PlayerIcon,
   SettingsOutline as SettingsIcon,
   PersonOutline as UserIcon,
@@ -63,9 +63,9 @@ const UserLoginOption = renderComputedMenuOption(
   UserIcon,
 )
 const BookOption = renderComputedMenuOption(
-  $text.bookmark(),
+  $text.schedule(),
   'index',
-  BookmarkIcon,
+  CalendarIcon,
 )
 const BBSOption = renderComputedMenuOption($text.bbs(), 'bbs', BBSIcon)
 const McOption = renderComputedMenuOption($text.minecraft(), 'mc', XboxIcon)

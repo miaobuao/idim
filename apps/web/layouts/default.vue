@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ConfigProviderProps } from 'naive-ui'
 
+import { dayjs } from '@repo/common'
 import { useNavigatorLanguage } from '@vueuse/core'
 import {
   createDiscreteApi,

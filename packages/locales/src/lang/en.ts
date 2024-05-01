@@ -42,6 +42,7 @@ export default {
   ctime: 'Created Time',
   login_or_register: 'Login / Register',
   bookmark: 'Bookmark',
+  schedule: 'Schedule',
   minecraft: 'Minecraft',
   bbs: 'BBS',
   settings: 'Settings',

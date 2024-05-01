@@ -17,40 +17,6 @@ const vite: NuxtConfig['vite'] = {
   },
 }
 
-const modules: NuxtConfig['modules'] = [
-  '@unocss/nuxt',
-  '@formkit/auto-animate/nuxt',
-  'nitro-cloudflare-dev',
-  [
-    '@nuxtjs/i18n',
-    {
-      i18n: {
-        vueI18n: './i18n.config.ts',
-      },
-    },
-  ],
-  '@vue-macros/nuxt',
-  (_options, nuxt) => {
-    nuxt.hooks.hook('vite:extendConfig', (config) => {
-      config.plugins?.push(
-        AutoImport({
-          imports: [ 'vue', 'vue-router', '@vueuse/core' ],
-        }),
-        Components({
-          resolvers: [ NaiveUiResolver() ],
-        }),
-        ReactivityTransform(),
-      )
-    })
-  },
-  [
-    '@pinia/nuxt',
-    {
-      autoImports: [ 'defineStore', [ 'defineStore', 'definePiniaStore' ] ],
-    },
-  ],
-]
-
 export default defineNuxtConfig({
   nitro: {
     cloudflareDev: {
@@ -59,7 +25,39 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   vite,
-  modules,
+  modules: [
+    '@unocss/nuxt',
+    '@formkit/auto-animate/nuxt',
+    'nitro-cloudflare-dev',
+    [
+      '@nuxtjs/i18n',
+      {
+        i18n: {
+          vueI18n: './i18n.config.ts',
+        },
+      },
+    ],
+    '@vue-macros/nuxt',
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        config.plugins?.push(
+          AutoImport({
+            imports: [ 'vue', 'vue-router', '@vueuse/core' ],
+          }),
+          Components({
+            resolvers: [ NaiveUiResolver() ],
+          }),
+          ReactivityTransform(),
+        )
+      })
+    },
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: [ 'defineStore', [ 'defineStore', 'definePiniaStore' ] ],
+      },
+    ],
+  ],
   ssr: false,
   components: [
     {

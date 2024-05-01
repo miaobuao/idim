@@ -4,6 +4,7 @@ import type { FormInst, FormItemRule } from 'naive-ui'
 import { kdf } from '~/utils/crypto'
 
 const token = useTokenStore()
+const preferences = useGuiPreferencesStore()
 const btnLoading = ref(false)
 const user = useUserStore()
 const { $text, $trpc } = useNuxtApp()
@@ -145,17 +146,21 @@ function onRegister() {
           </n-form>
 
           <div class="float-right mb-1">
-            <nuxt-link to="update-password">
-              {{ $text.forgot_password() }}
-            </nuxt-link>
+            <n-button text>
+              <nuxt-link
+                :class="{ 'text-coolGray': preferences.isDark }"
+                to="update-password"
+              >
+                {{ $text.forgot_password() }}
+              </nuxt-link>
+            </n-button>
           </div>
 
           <n-button
             :loading="btnLoading"
             type="primary"
-            block
-            secondary
-            strong
+
+            secondary strong block
             @click="onLogin"
           >
             {{ $text.login() }}
@@ -190,9 +195,8 @@ function onRegister() {
           <n-button
             :loading="btnLoading"
             type="primary"
-            block
-            secondary
-            strong
+
+            secondary strong block
             @click="onRegister"
           >
             {{ $text.register() }}
