@@ -42,6 +42,7 @@ export default {
   bookmark: '书签',
   minecraft: 'Minecraft',
   bbs: '论坛',
+  activity: '活动',
   settings: '设置',
   video: {
     player: {

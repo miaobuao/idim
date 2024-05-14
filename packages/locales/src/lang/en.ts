@@ -44,6 +44,7 @@ export default {
   bookmark: 'Bookmark',
   minecraft: 'Minecraft',
   bbs: 'BBS',
+  activity: 'Activity',
   settings: 'Settings',
   video: {
     player: {

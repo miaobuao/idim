@@ -2,6 +2,7 @@
 import type { MenuOption } from 'naive-ui'
 
 import {
+  BowlingBallOutline as ActivityIcon,
   ChatboxOutline as BBSIcon,
   BookmarkOutline as BookmarkIcon,
   PlayForwardOutline as PlayerIcon,
@@ -67,6 +68,11 @@ const BookOption = renderComputedMenuOption(
   'index',
   BookmarkIcon,
 )
+const ActivityOption = renderComputedMenuOption(
+  $text.activity(),
+  'activity',
+  ActivityIcon,
+)
 const BBSOption = renderComputedMenuOption($text.bbs(), 'bbs', BBSIcon)
 const McOption = renderComputedMenuOption($text.minecraft(), 'mc', XboxIcon)
 const VideoPlayerOption = renderComputedMenuOption(
@@ -84,6 +90,7 @@ const menuOptions = computed(() => [
   token.payload === undefined ? UserLoginOption.value : IndividualOption.value,
   BookOption.value,
   BBSOption.value,
+  ActivityOption.value,
   McOption.value,
   VideoPlayerOption.value,
   SettingsOption.value,
@@ -136,7 +143,7 @@ function onSelectKey(key: string) {
         <n-menu
           :value="$route.name?.toString()"
           :collapsed-width="54"
-          :collapsed-icon-size="24"
+          :collapsed-icon-size="22"
           :options="menuOptions"
           @update:value="onSelectKey"
         />
